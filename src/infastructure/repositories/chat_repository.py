@@ -1,3 +1,7 @@
+
+
+
+
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -16,16 +20,18 @@ logging.basicConfig(
 )
 
 
-class ChatResponse:
+class ChatResponseRepository:
 
     def __init__(self) -> None:
-        pass
+        self.temperature = 0.7
+        self.max_tokens = 150
+        self.model= "gpt-4o"
 
     def chat_response(self, _query):
 
         # Create a completion
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model=self.model,
             messages=[
                 {
                     "role": "system",
@@ -33,16 +39,18 @@ class ChatResponse:
                 },
                 {"role": "user", "content": _query},
             ],
-            max_tokens=150,
-            temperature=0.7,
+            max_tokens=self.max_tokens,
+            temperature=self.temperature,
         )
+
+        # Get the response
         response =response.choices[0].message.content
 
         return response
 
         
 if __name__ == "__main__":
-    chat_response = ChatResponse()
+    chat_response = ChatResponseRepository()
     gen = chat_response.chat_response("Tell me something about India")
     while True:
         try:
