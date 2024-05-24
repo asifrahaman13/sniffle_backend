@@ -1,11 +1,11 @@
-import asyncio
-import websockets
-from src.deepgream_text_to_speech import TextToSpeech
-from src.open_ai_llm_response import ChatResponse
-import time
 import logging
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from src.ConnectionManager.ConnectionManager import ConnectionManager
+from fastapi import FastAPI
+from src.application.web.controllers.socket_controller import websocket_router
+from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi.responses import JSONResponse
+from src.infastructure.middleware.logging_middleware import (
+    log_middleware,
+)
 
 # Configure logging
 logging.basicConfig(
@@ -14,23 +14,16 @@ logging.basicConfig(
 
 app = FastAPI()
 
-manager = ConnectionManager()
+app.include_router(
+    websocket_router, prefix="/websocket", tags=["websocket connection "]
+)
 
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
-    await manager.connect(websocket)
-    try:
-        while True:
-            data = await websocket.receive_text()
-            logging.info(f"Client #{client_id} sent: {data}")
-            _chat_response=ChatResponse()
-            response= _chat_response.chat_response(data)
 
-            await manager.send_personal_message(str(response), websocket)
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
-        await manager.broadcast(f"Client #{client_id} left the chat")
-    
+# Include the middleware.
+app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
 
-if __name__ == "__main__":
-    asyncio.run(websockets.serve(websocket_endpoint, "localhost", 8000))
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return JSONResponse(status_code=200, content={"status": "healthy"})
