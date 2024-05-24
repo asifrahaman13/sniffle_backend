@@ -1,7 +1,6 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
-import time
 import logging
 
 # Load the environment variables
@@ -24,11 +23,8 @@ class ChatResponse:
 
     def chat_response(self, _query):
 
-        # Record the start time
-        start_time = time.time()
-
         # Create a completion
-        stream = client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {
@@ -37,38 +33,14 @@ class ChatResponse:
                 },
                 {"role": "user", "content": _query},
             ],
-            stream=True,
             max_tokens=150,
             temperature=0.7,
         )
+        response =response.choices[0].message.content
 
-        # Initialize a buffer to store the sentence
-        sentence_buffer = ""
+        return response
 
-        # Iterate over the stream of chunks
-        for chunk in stream:
-
-            # Check if the completion is a message
-            if chunk.choices[0].delta.content is not None:
-
-                # Append the chunk to the buffer
-                sentence_buffer += chunk.choices[0].delta.content
-
-                # Check if the sentence is complete
-                if sentence_buffer.endswith((".", "!", "?")):
-                    # Record the end time
-                    end_time = time.time()
-
-                    # Calculate the elapsed time
-                    elapsed_time = end_time - start_time
-
-                    logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
-
-                    # Yield the sentence
-                    yield sentence_buffer.strip()
-                    sentence_buffer = ""
-
-
+        
 if __name__ == "__main__":
     chat_response = ChatResponse()
     gen = chat_response.chat_response("Tell me something about India")
