@@ -17,7 +17,7 @@ manager = ConnectionManager()
 
 @websocket_router.websocket("/ws/{client_id}")
 async def websocket_endpoint(
-    websocket: WebSocket, client_id: int, chat_interface=Depends(chat_service)
+    websocket: WebSocket, client_id: str, chat_interface=Depends(chat_service)
 ):
     # Connect the websocket
     await manager.connect(websocket)
@@ -25,13 +25,16 @@ async def websocket_endpoint(
     try:
         while True:
             # Wait for the message from the client
-            data = await websocket.receive_text()
+            data = await websocket.receive_json()
+            
+
+            logging.info(type(data))
 
             # Log the message
             logging.info(f"Client #{client_id} sent: {data}")
 
             # Create a chat response
-            chat_response = chat_interface.chat_response(data)
+            chat_response = chat_interface.chat_response(data['query'])
 
             # Send the response to the client
             await manager.send_personal_message(chat_response, websocket)
