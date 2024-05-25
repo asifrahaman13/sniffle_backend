@@ -1,6 +1,5 @@
 import json
 from openai import OpenAI
-from dotenv import load_dotenv
 import logging
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain_openai import ChatOpenAI
@@ -36,7 +35,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    "Format the user query into the schema provided to you. It will have systol and diastol blood_pressure, heart_rate, respiratory_rate, body_temperature. Only numerical values to consider no unit\n \n{question}"
+                    "Format the user query into the schema provided to you. It will have systol_blood_pressure and diastol_blood_pressure  pressure (give them separate), heart_rate, respiratory_rate, body_temperature. Only numerical values to consider no unit\n \n{question}"
                 )
             ],
             # Define the input variables
@@ -84,7 +83,7 @@ class ChatResponseRepository:
         messages.append(
             {
                 "role": "system",
-                "content": "You are a helpful assistant. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
+                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
             },
         )
 
