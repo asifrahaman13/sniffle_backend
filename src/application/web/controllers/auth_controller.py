@@ -38,7 +38,7 @@ async def google_sign_in(
         }
         database_interface.insert_one(user, "users")
 
-    access_token = auth_interface.create_access_token(data={"sub": id_info["email"]})
+    access_token = auth_interface.create_access_token(data={"sub": id_info["email"], "name": id_info["name"]})
 
     return {"token": access_token, "user": id_info}
 
