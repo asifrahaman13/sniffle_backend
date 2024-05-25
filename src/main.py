@@ -1,6 +1,7 @@
 import logging
 from fastapi import FastAPI
 from src.application.web.controllers.socket_controller import websocket_router
+from src.application.web.controllers.auth_controller import auth_router
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 from src.infastructure.middleware.logging_middleware import (
@@ -27,6 +28,7 @@ app.add_middleware(
 app.include_router(
     websocket_router, prefix="/websocket", tags=["websocket connection "]
 )
+app.include_router(auth_router, prefix="/auth", tags=["Auth router"])
 
 
 # Include the middleware.
