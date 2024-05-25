@@ -22,10 +22,18 @@ async def websocket_endpoint(
     # Connect the websocket
     await manager.connect(websocket)
 
+    all_messages=[]
+
     try:
         while True:
             # Wait for the message from the client
             data = await websocket.receive_json()
+
+            received_data={
+                "role": "user",
+                "content": data['query']
+            }
+            all_messages.append(received_data)
             
 
             logging.info(type(data))
@@ -34,7 +42,16 @@ async def websocket_endpoint(
             logging.info(f"Client #{client_id} sent: {data}")
 
             # Create a chat response
-            chat_response = chat_interface.chat_response(data['query'])
+            chat_response = chat_interface.chat_response(data['query'], all_messages)
+
+            # Log the response
+            llm_response={
+                "role": "system",
+                "content": chat_response
+            }
+            
+            # Append the response to the all_messages list
+            all_messages.append(llm_response)
 
             # Send the response to the client
             await manager.send_personal_message(chat_response, websocket)

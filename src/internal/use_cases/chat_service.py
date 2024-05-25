@@ -9,5 +9,5 @@ class ChatService:
         self.chat_repository = chat_repository
 
 
-    def chat_response(self, _query):
-        return self.chat_repository.chat_response(_query)
+    def chat_response(self, _query, all_messages):
+        return self.chat_repository.chat_response(_query, all_messages)
