@@ -19,9 +19,9 @@ manager = ConnectionManager()
 async def websocket_endpoint(
     websocket: WebSocket, client_id: int, chat_interface=Depends(chat_service)
 ):
-
     # Connect the websocket
     await manager.connect(websocket)
+
     try:
         while True:
             # Wait for the message from the client
@@ -31,10 +31,14 @@ async def websocket_endpoint(
             logging.info(f"Client #{client_id} sent: {data}")
 
             # Create a chat response
-            _chat_response = chat_interface.chat_response(data)
+            chat_response = chat_interface.chat_response(data)
 
             # Send the response to the client
-            await manager.send_personal_message(str(_chat_response), websocket)
+            await manager.send_personal_message(chat_response, websocket)
+          
     except WebSocketDisconnect:
+
+        # Disconnect the websocket
         manager.disconnect(websocket)
+        # Broadcast the message to all clients
         await manager.broadcast(f"Client #{client_id} left the chat")

@@ -1,7 +1,3 @@
-
-
-
-
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -24,7 +20,7 @@ class ChatResponseRepository:
 
     def __init__(self) -> None:
         self.temperature = 0.7
-        self.max_tokens = 150
+        self.max_tokens = 200
         self.model= "gpt-4o"
 
     def chat_response(self, _query):
@@ -35,7 +31,7 @@ class ChatResponseRepository:
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a helpful assistant. help to make the text in points. a. b. etc should be the ordered list bullet points. Your response should be to the point concise and crisp clear.",
+                    "content": "You are a helpful assistant. Give meaningful responses. Try to answer in short in a very friendly manner as if you are talking to a friend.",
                 },
                 {"role": "user", "content": _query},
             ],

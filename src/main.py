@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from src.infastructure.middleware.logging_middleware import (
     log_middleware,
 )
+from starlette.middleware.cors import CORSMiddleware
 
 # Configure logging
 logging.basicConfig(
@@ -13,6 +14,15 @@ logging.basicConfig(
 )
 
 app = FastAPI()
+
+# Allow from any origin
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 app.include_router(
     websocket_router, prefix="/websocket", tags=["websocket connection "]
