@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from typing import Dict
 
 
 class DatabaseRepository:
@@ -83,6 +84,17 @@ class DatabaseRepository:
             a=collection.delete_one({field: field_value})
            
             # Return the data that was found
+            return True
+        except Exception as e:
+            return False
+        
+    def append_entity_to_array(self, field: str, field_value: str, array_field: str, data: Dict[str, int], collection_name: str):
+        try:
+            # Define the collection where the data will be stored
+            collection = self.db[collection_name]
+
+            # Append the data to the array
+            collection.update_one({field: field_value}, {"$push": {array_field: data}})
             return True
         except Exception as e:
             return False

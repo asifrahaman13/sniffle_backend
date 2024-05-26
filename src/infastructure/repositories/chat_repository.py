@@ -104,7 +104,9 @@ class ChatResponseRepository:
             health_data = assistant.run_health_assistant(response)
             logging.info(health_data)
 
-        return response
+            return {"summary":True, "response": response, "response_schema": health_data}
+
+        return {"summary":False, "response": response}
 
 
 if __name__ == "__main__":
