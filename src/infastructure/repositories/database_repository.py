@@ -1,4 +1,3 @@
-import pymongo
 from pymongo import MongoClient
 
 
@@ -7,13 +6,13 @@ class DatabaseRepository:
 
         # Connect to the database
         self.client = MongoClient("localhost", 27017)
-        self.db_knowledgebase = self.client["dophin"]
+        self.db = self.client["dophin"]
 
     def insert_single_document(self, data: str, collection_name: str):
 
         try:
             # Define the collection where the data will be stored
-            collection = self.db_knowledgebase[collection_name]
+            collection = self.db[collection_name]
 
             # Insert the data into the collection
             collection.insert_one(data)
@@ -26,21 +25,21 @@ class DatabaseRepository:
     def find_all(self, field: str, field_value: str, collection_name: str):
 
         # Create an empty list to store the data that will be found
-        all_pdfs_of_user = []
+        all_documents = []
         try:
 
             # Define the collection where the data will be stored
-            collection = self.db_knowledgebase[collection_name]
+            collection = self.db[collection_name]
 
             # Find all the data that matches the username
-            pdf_data = collection.find({field: field_value})
+            data = collection.find({field: field_value})
 
-            for item in pdf_data:
+            for item in data:
                 item["_id"] = str(item["_id"])
-                all_pdfs_of_user.append(item)
+                all_documents.append(item)
 
             # Return the data that was found
-            return all_pdfs_of_user
+            return all_documents
         except Exception as e:
             return None
 
@@ -48,11 +47,10 @@ class DatabaseRepository:
         try:
 
             # Define the collection where the data will be stored
-            collection = self.db_knowledgebase["pdfs"]
+            collection = self.db["pdfs"]
 
             # Find the data that matches the username and pdf name
             pdf_data = collection.find_one({"username": username, "pdf_name": pdf_name})
-            print(pdf_data)
 
             if pdf_data is not None:
                 return True
@@ -66,7 +64,7 @@ class DatabaseRepository:
         try:
 
             # Define the collection where the data will be stored
-            collection = self.db_knowledgebase[collection_name]
+            collection = self.db[collection_name]
 
             # Find the data that matches the username
             result = collection.find_one({field: field_value})
@@ -78,13 +76,11 @@ class DatabaseRepository:
 
     def delete_one(self, field: str, field_value: str, collection_name: str):
         try:
-            print("field",field, field_value, collection_name)
             # Define the collection where the data will be stored
-            collection = self.db_knowledgebase[collection_name]
+            collection = self.db[collection_name]
 
             # Delete the data that matches the username
             a=collection.delete_one({field: field_value})
-            print(a)
            
             # Return the data that was found
             return True
