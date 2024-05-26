@@ -1,4 +1,4 @@
-from src.internal.interfaces.data_interface import DatabaseInterface
+from src.internal.interfaces.database_interface import DatabaseInterface
 from src.infastructure.repositories.database_repository import DatabaseRepository
 
 

@@ -1,10 +1,10 @@
-from fastapi import FastAPI, APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from src.internal.entities.auth import Token
 from src.infastructure.repositories.database_repository import DatabaseRepository
 from src.infastructure.repositories.auth_repository import AuthRepository
 from src.internal.use_cases.auth_service import AuthService
 from src.internal.use_cases.database_service import DatabaseService
-from src.internal.interfaces.data_interface import DatabaseInterface
+from src.internal.interfaces.database_interface import DatabaseInterface
 from src.internal.interfaces.auth_interface import AuthInterface
 
 database_repository = DatabaseRepository()

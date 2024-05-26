@@ -70,6 +70,10 @@ class DatabaseRepository:
             # Find the data that matches the username
             result = collection.find_one({field: field_value})
 
+            if result is  None:
+                return None
+            result["_id"] = str(result["_id"])
+
             # Return the data that was found
             return result
         except Exception as e:
