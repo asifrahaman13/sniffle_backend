@@ -4,8 +4,6 @@ from src.internal.use_cases.auth_service import AuthService
 from src.internal.interfaces.auth_interface import AuthInterface
 from src.internal.interfaces.data_interface import DataInterface
 from src.internal.use_cases.data_service import DataService
-from src.internal.entities.auth import Token
-
 
 # Create a new router
 data_router = APIRouter()
@@ -38,3 +36,27 @@ async def get_general_metrics(
     except Exception as e:
         # Log the error
         raise HTTPException(status_code=500, detail="Failed to get general metrics")
+
+@data_router.get("/assessment_metrics/{token}")
+async def get_assessment_metrics(
+    token: str,
+    auth_interface: AuthInterface = Depends(auth_service),
+    data_interface: DataInterface = Depends(data_service),
+):
+    try:
+        # Decode the token
+        id_info = auth_interface.decode_access_token(token)
+
+        # Check if the token is valid
+        if id_info is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+
+        # Get the assessment metrics for the user
+        assessment_metrics =data_interface.get_assessment_metrics(id_info["sub"])
+
+        # Return the assessment metrics
+        return assessment_metrics
+    except Exception as e:
+        # Log the error
+        raise HTTPException(status_code=500, detail="Failed to get assessment metrics")
+

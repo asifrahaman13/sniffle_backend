@@ -10,15 +10,20 @@ class DataService:
     def __init__(self):
         self.database_repository = DatabaseRepository()
 
-
     def get_general_metrics(self, user):
         try:
-
             # Get the general metrics for the user
             general_metrics = self.database_repository.find_single_document("email", user, "general_metrics")
-
-
             # Return the general metrics
             return general_metrics
         except Exception as e:
             logging.error(f"Failed to get general metrics: {e}")
+
+    def get_assessment_metrics(self, user):
+        try:
+            # Get the assessment metrics for the user
+            assessment_metrics = self.database_repository.find_single_document("email", user, "assessment_metrics")
+            # Return the assessment metrics
+            return assessment_metrics
+        except Exception as e:
+            logging.error(f"Failed to get assessment metrics: {e}")
