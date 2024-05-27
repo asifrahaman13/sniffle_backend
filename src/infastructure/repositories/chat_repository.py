@@ -107,6 +107,40 @@ class ChatResponseRepository:
             return {"summary":True, "response": response, "response_schema": health_data}
 
         return {"summary":False, "response": response}
+    
+    def llm_assessment(self, _query, previous_messages=[]):
+            
+            messages = previous_messages
+            messages.append(
+                {"role": "user", "content": _query},
+            )
+            messages.append(
+                {
+                    "role": "system",
+                    "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to ask follow up questions to the users to get meaninful insights on mental health,, stress level, mood, anxiety level, sleep quality. If some data needs more clarification ask followup questions. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than one entities at a time. If the user does not wish to question anymore or the user have provided enough information ie total number of follow up questions exceeds 10 (ten) then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
+                },
+            )
+    
+            # Create a completion
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
+            )
+    
+            # Get the response
+            response = response.choices[0].message.content
+
+            if detect_summary(response):
+                logging.info("Detected sunmmary ...")
+
+                summary={"summary":response}
+
+                # Extract the JSON content and return the data.
+                return {"summary":True, "response": response, "response_schema": summary}
+    
+            return {"summary":False, "response": response}
 
 
 if __name__ == "__main__":
