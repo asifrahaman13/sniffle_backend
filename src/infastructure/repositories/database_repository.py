@@ -77,6 +77,7 @@ class DatabaseRepository:
             if result is  None:
                 return None
             result["_id"] = str(result["_id"])
+            
 
             # Return the data that was found
             return result
