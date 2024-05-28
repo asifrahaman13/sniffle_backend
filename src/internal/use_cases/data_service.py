@@ -55,11 +55,11 @@ class DataService:
                 # check if the user exists in the database
                 if_data_exists=self.database_repository.find_single_document("email", user, "recommendations")
 
-                if if_data_exists is not None:
-                    # Append the recommendations to the existing document
-                    self.database_repository.append_entity_to_array("email", user, "data", recommendations["recommendations"], "recommendations", )
-                else:
-                    self.database_repository.insert_single_document({"email": user, "data": [recommendations]}, "recommendations")
+                # if if_data_exists is not None:
+                #     # Append the recommendations to the existing document
+                #     self.database_repository.append_entity_to_array("email", user, "data", recommendations["recommendations"], "recommendations", )
+                # else:
+                self.database_repository.insert_single_document({"email": user, "data": [recommendations]}, "recommendations")
 
             # Return the recommendations
             # return recommendations
@@ -72,6 +72,7 @@ class DataService:
             # Get the recommendations for the user
             recommendations = self.database_repository.find_single_document("email", user, "recommendations")
             # Return the recommendations
-            return recommendations["data"]
+            return recommendations["data"][0]
         except Exception as e:
             logging.error(f"Failed to get recommendations: {e}")
+            return None

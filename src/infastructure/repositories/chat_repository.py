@@ -63,7 +63,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    """Format the user query into the json schema provided to you. It will have medications_recommended, diet_recommended, exercise_recommended, lifestyle_changes_recommended, stress_management_techniques_recommended, sleep_hygiene_techniques_recommended, mental_health_techniques_recommended,  relaxation_techniques_recommended, social_support_techniques_recommended, other_recommendations. Each of the entity should have only two subheader ie 'title' and 'details'
+                    """Format the user query into the json schema provided to you. It will have medications_recommended, diet_recommended, exercise_recommended, lifestyle_changes_recommended, stress_management_techniques_recommended, sleep_hygiene_techniques_recommended, mental_health_techniques_recommended,  relaxation_techniques_recommended, social_support_techniques_recommended, other_recommendations. Each of the entity should have only two subheader ie 'title' and 'details' only.
                     The user query is as follows: 
 
                      \n \n{question}"""
