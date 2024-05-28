@@ -95,7 +95,7 @@ class HealthAssistant:
         output = self.chat_model.invoke(input_prompt.to_messages())
 
         logging.info(
-            "The output is******************************************************************",
+            "The output is",
             output,
         )
         # Process the output

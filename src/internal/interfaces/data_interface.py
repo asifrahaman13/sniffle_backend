@@ -11,5 +11,9 @@ class DataInterface(ABC):
         pass
 
     @abstractmethod
+    def schedule_recommendations(self):
+        pass
+
+    @abstractmethod
     def get_recommendations(self, user: str):
         pass

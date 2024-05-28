@@ -69,17 +69,10 @@ async def get_recommendations(
     auth_interface: AuthInterface = Depends(auth_service),
     data_interface: DataInterface = Depends(data_service),
 ):
-    
-    print("............................", token)
-    recommendations = data_interface.get_recommendations("asifrahaman162@gmail.com")
-
-        # Return the recommendations
-    return recommendations
     try:
         # Decode the token
         id_info = auth_interface.decode_access_token(token)
-        print("............................", int(id_info["sub"]))
-        # return {"message": id_info["sub"]}
+        
 
         # Check if the token is valid
         if id_info is None:

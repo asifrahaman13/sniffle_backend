@@ -47,6 +47,26 @@ class DatabaseRepository:
             logging.error(f"Failed to find data: {e}")
             return None
 
+    def find_all_documents(self, collection_name: str):
+        # Create an empty list to store the data that will be found
+        all_documents = []
+        try:
+            # Define the collection where the data will be stored
+            collection = self.db[collection_name]
+
+            # Find all the data that matches the username
+            data = collection.find()
+
+            for item in data:
+                item["_id"] = str(item["_id"])
+                all_documents.append(item)
+
+            # Return the data that was found
+            return all_documents
+        except Exception as e:
+            logging.error(f"Failed to find data: {e}")
+            return None
+
     def check_if_file_belongs_to_user(self, username: str, pdf_name: str):
         try:
 
@@ -64,7 +84,7 @@ class DatabaseRepository:
         except Exception as e:
             logging.error(f"Failed to find data: {e}")
             return False
-        
+
     def find_single_document(self, field: str, field_value: str, collection_name: str):
         try:
 
@@ -74,10 +94,9 @@ class DatabaseRepository:
             # Find the data that matches the username
             result = collection.find_one({field: field_value})
 
-            if result is  None:
+            if result is None:
                 return None
             result["_id"] = str(result["_id"])
-            
 
             # Return the data that was found
             return result
@@ -92,14 +111,21 @@ class DatabaseRepository:
 
             # Delete the data that matches the username
             collection.delete_one({field: field_value})
-           
+
             # Return the data that was found
             return True
         except Exception as e:
             logging.error(f"Failed to delete data: {e}")
             return False
-        
-    def append_entity_to_array(self, field: str, field_value: str, array_field: str, data: Dict[str, int], collection_name: str):
+
+    def append_entity_to_array(
+        self,
+        field: str,
+        field_value: str,
+        array_field: str,
+        data: Dict[str, int],
+        collection_name: str,
+    ):
         try:
             # Define the collection where the data will be stored
             collection = self.db[collection_name]
