@@ -1,6 +1,6 @@
 ## About the application
 
-First pull the repository. `git clone https://github.com/Evva-Health/DeepgramStream`
+First pull the repository. `git clone https://github.com/asifrahaman13/sniffle_backend.git`
 
 Go to the root directory. `cd DeepgramStream`
 
@@ -14,4 +14,4 @@ Give the proper configuration by giving the API keys. For example set the open a
 
 Next you need to run the application using the following script: `python3  src/index.py`
 
-To connect to the server hit the link in websocket: `ws://localhost:8000`
+To connect to the server hit the link `http://localhost:8000`
