@@ -45,7 +45,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    "Format the user query into the schema provided to you. It will have systol_blood_pressure and diastol_blood_pressure  pressure (give them separate), heart_rate, respiratory_rate, bod_temperature, step_count, body_temperature, calories_burned, distance_travelled, sleep_duration, water_consumed, caffeine_consumed, alchohol_consumed. Only numerical values to consider no unit\n \n{question}"
+                    "Format the user query into the schema provided to you. It will have systol_blood_pressure and diastol_blood_pressure  pressure (give them separate), heart_rate, respiratory_rate, bod_temperature, step_count, body_temperature, calories_burned, distance_travelled, sleep_duration, water_consumed, caffeine_consumed, alcohol_consumed. Only numerical values to consider no unit\n \n{question}"
                 )
             ],
             # Define the input variables
@@ -119,7 +119,7 @@ class ChatResponseRepository:
         messages.append(
             {
                 "role": "system",
-                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature, step count, calories burnt, distance travelled, sleep duration, water consumed, cofeine_consumed, alchohol consumed etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than two entities at a time. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
+                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature, step count, calories burnt, distance travelled, sleep duration, water consumed, cofeine_consumed, alcohol consumed etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than two entities at a time. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
             },
         )
 
