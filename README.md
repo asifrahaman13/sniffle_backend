@@ -1,17 +1,24 @@
 ## About the application
 
-First pull the repository. `git clone https://github.com/asifrahaman13/sniffle_backend.git`
+Backend repository for the mobile application server which aims at making the health of the users better leveraging the use of AI.
 
-Go to the root directory. `cd DeepgramStream`
 
-create a virtual environment. `virtualenv .venv`
+## How to run the code
 
-Now install the dependencies. `pip install -r requirements.txt`
+- First pull the repository. `git clone https://github.com/asifrahaman13/sniffle_backend.git`
 
-Now rename the .env.example. `mv .env.example .env`. 
+- Go to the root directory. `cd sniffle_backend`
 
-Give the proper configuration by giving the API keys. For example set the open ai key, mapbox api key etc.
+- create a virtual environment. `virtualenv .venv`
 
-Next you need to run the application using the following script: `python3  src/index.py`
+- Now install the dependencies. `pip install -r requirements.txt`
+
+- Now rename the .env.example. `mv .env.example .env`. 
+
+- Give the proper configuration by giving the API keys. For example set the open ai key, mapbox api key etc.
+
+- Next you need to run the application using the following script: `python3  src/index.py`
+
+## PORT
 
 To connect to the server hit the link `http://localhost:8000`
