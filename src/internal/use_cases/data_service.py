@@ -17,7 +17,7 @@ class DataService:
         try:
             # Get the general metrics for the user
             general_metrics = self.database_repository.find_single_document(
-                "email", user, "general_metrics"
+                "email", user, "quantitative_metrics"
             )
             # Return the general metrics
             return general_metrics
@@ -45,10 +45,10 @@ class DataService:
                 # return {"message":"Recommendations are not available at the moment"}
                 # Get the general and assessment metrics for the user
                 general_metrics = self.database_repository.find_single_document(
-                    "email", user, "general_metrics"
+                    "email", user, "quantitative_metrics"
                 )
 
-                logging.info(f"general_metrics: {general_metrics}")
+                logging.info(f"quantitative_metrics: {quantitative_metrics}")
 
                 assessment_metrics = self.database_repository.find_single_document(
                     "email", user, "assessment_metrics"
