@@ -5,6 +5,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from config.config import GOOGLE_CLIENT_ID, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
+
 class AuthRepository:
 
     def __init__(self) -> None:
@@ -24,7 +25,7 @@ class AuthRepository:
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
         return encoded_jwt
-    
+
     def verify_google_access_token(self, token):
         try:
             # Verify the access token
@@ -35,7 +36,7 @@ class AuthRepository:
         except ValueError:
             # Invalid token
             return None
-        
+
     def decode_access_token(self, token):
         try:
             # Decode the access token

@@ -21,30 +21,30 @@ manager = ConnectionManager()
 auth_repository = AuthRepository()
 auth_service = AuthService(auth_repository)
 
+
 @websocket_router.websocket("/health_metrics/{client_id}")
 async def websocket_endpoint(
-    websocket: WebSocket, client_id: str, chat_interface: ChatInterface=Depends(chat_service), auth_interface: AuthInterface = Depends(auth_service)
+    websocket: WebSocket,
+    client_id: str,
+    chat_interface: ChatInterface = Depends(chat_service),
+    auth_interface: AuthInterface = Depends(auth_service),
 ):
     # Connect the websocket
     await manager.connect(websocket)
 
     logging.info(f"Client #{client_id} connected for health metrics")
 
-    user_info=auth_interface.decode_access_token(client_id)
+    user_info = auth_interface.decode_access_token(client_id)
 
-    all_messages=[]
+    all_messages = []
 
     try:
         while True:
             # Wait for the message from the client
             data = await websocket.receive_json()
 
-            received_data={
-                "role": "user",
-                "content": data['query']
-            }
+            received_data = {"role": "user", "content": data["query"]}
             all_messages.append(received_data)
-            
 
             logging.info(type(data))
 
@@ -52,20 +52,19 @@ async def websocket_endpoint(
             logging.info(f"Client #{client_id} sent: {data}")
 
             # Create a chat response
-            chat_response = chat_interface.chat_response(user_info['sub'],data['query'], all_messages)
+            chat_response = chat_interface.chat_response(
+                user_info["sub"], data["query"], all_messages
+            )
 
             # Log the response
-            llm_response={
-                "role": "system",
-                "content": chat_response
-            }
-            
+            llm_response = {"role": "system", "content": chat_response}
+
             # Append the response to the all_messages list
             all_messages.append(llm_response)
 
             # Send the response to the client
             await manager.send_personal_message(chat_response, websocket)
-          
+
     except WebSocketDisconnect:
 
         # Disconnect the websocket
@@ -76,28 +75,27 @@ async def websocket_endpoint(
 
 @websocket_router.websocket("/assessment/{client_id}")
 async def websocket_endpoint(
-    websocket: WebSocket, client_id: str, chat_interface: ChatInterface=Depends(chat_service), auth_interface: AuthInterface = Depends(auth_service)
+    websocket: WebSocket,
+    client_id: str,
+    chat_interface: ChatInterface = Depends(chat_service),
+    auth_interface: AuthInterface = Depends(auth_service),
 ):
     # Connect the websocket
     await manager.connect(websocket)
 
     logging.info(f"Client #{client_id} connected for assessment")
 
-    user_info=auth_interface.decode_access_token(client_id)
+    user_info = auth_interface.decode_access_token(client_id)
 
-    all_messages=[]
+    all_messages = []
 
     try:
         while True:
             # Wait for the message from the client
             data = await websocket.receive_json()
 
-            received_data={
-                "role": "user",
-                "content": data['query']
-            }
+            received_data = {"role": "user", "content": data["query"]}
             all_messages.append(received_data)
-            
 
             logging.info(type(data))
 
@@ -105,20 +103,70 @@ async def websocket_endpoint(
             logging.info(f"Client #{client_id} sent: {data}")
 
             # Create a chat response
-            chat_response = chat_interface.llm_assessment(user_info['sub'],data['query'], all_messages)
+            chat_response = chat_interface.llm_assessment(
+                user_info["sub"], data["query"], all_messages
+            )
 
             # Log the response
-            llm_response={
-                "role": "system",
-                "content": chat_response
-            }
-            
+            llm_response = {"role": "system", "content": chat_response}
+
             # Append the response to the all_messages list
             all_messages.append(llm_response)
 
             # Send the response to the client
             await manager.send_personal_message(chat_response, websocket)
-          
+
+    except WebSocketDisconnect:
+
+        # Disconnect the websocket
+        manager.disconnect(websocket)
+        # Broadcast the message to all clients
+        await manager.broadcast(f"Client #{client_id} left the chat")
+
+
+@websocket_router.websocket("/general_metrics/{client_id}")
+async def websocket_endpoint(
+    websocket: WebSocket,
+    client_id: str,
+    chat_interface: ChatInterface = Depends(chat_service),
+    auth_interface: AuthInterface = Depends(auth_service),
+):
+    # Connect the websocket
+    await manager.connect(websocket)
+
+    logging.info(f"Client #{client_id} connected for health metrics")
+
+    user_info = auth_interface.decode_access_token(client_id)
+
+    all_messages = []
+
+    try:
+        while True:
+            # Wait for the message from the client
+            data = await websocket.receive_json()
+
+            received_data = {"role": "user", "content": data["query"]}
+            all_messages.append(received_data)
+
+            logging.info(type(data))
+
+            # Log the message
+            logging.info(f"Client #{client_id} sent: {data}")
+
+            # Create a chat response
+            chat_response = chat_interface.llm_user_general_metrics(
+                user_info["sub"], data["query"], all_messages
+            )
+
+            # Log the response
+            llm_response = {"role": "system", "content": chat_response}
+
+            # Append the response to the all_messages list
+            all_messages.append(llm_response)
+
+            # Send the response to the client
+            await manager.send_personal_message(chat_response, websocket)
+
     except WebSocketDisconnect:
 
         # Disconnect the websocket

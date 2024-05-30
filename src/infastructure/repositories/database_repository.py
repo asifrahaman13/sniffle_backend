@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from typing import Dict
+from typing import Any, Dict
 import logging
 
 
@@ -137,4 +137,24 @@ class DatabaseRepository:
             return True
         except Exception as e:
             logging.error(f"Failed to append data: {e}")
+            return False
+        
+    def update_single_document(self, field: str, field_value: str, data: Dict[str, Any], collection_name: str):
+        try:
+            # Define the collection where the data will be stored
+            collection = self.db[collection_name]
+
+            # Define the filter to find the document to update
+            filter = {field: field_value}
+
+            # Define the new values for the document
+            new_values = {"$set": data}
+
+            # Update the document
+            collection.update_one(filter, new_values)
+
+            # Return True to indicate success
+            return True
+        except Exception as e:
+            logging.error(f"Failed to update data: {e}")
             return False

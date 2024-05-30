@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class AuthInterface(ABC):
     @abstractmethod
     def create_access_token(self, data):

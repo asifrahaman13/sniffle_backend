@@ -9,4 +9,3 @@ class DatabaseInterface(ABC):
     @abstractmethod
     def insert_one(self, data: str, collection_name: str):
         pass
-    

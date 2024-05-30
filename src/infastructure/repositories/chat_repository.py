@@ -5,14 +5,16 @@ from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain.output_parsers import PydanticOutputParser
 from src.internal.helper.regular_expression import detect_summary
-from src.internal.entities.health_model import HealthData, Recommendations
+from src.internal.entities.health_model import (
+    HealthData,
+    Recommendations,
+    GeneralParameters,
+)
 from config.config import OPEN_AI_API_KEY
 
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 class HealthAssistant:
@@ -75,6 +77,24 @@ class HealthAssistant:
         )
         return prompt.format_prompt(question=user_query)
 
+    def format_user_general_metrics(self, user_query):
+
+        # Create a prompt
+        parser = PydanticOutputParser(pydantic_object=GeneralParameters)
+
+        # Create a prompt
+        prompt = ChatPromptTemplate(
+            messages=[
+                HumanMessagePromptTemplate.from_template(
+                    "Format the user query into the schema provided to you. It will have weight, age, current_medications, previous_mediacal_history, family_health_history, height, surgical_history, reproductive_health. The quantitative values should be without any units. The query is as follows: \n \n{question}"
+                )
+            ],
+            # Define the input variables
+            input_variables=["question"],
+            partial_variables={"format_instructions": parser.get_format_instructions()},
+        )
+        return prompt.format_prompt(question=user_query)
+
     def run_health_assistant(self, user_query):
 
         # Format the input
@@ -98,6 +118,17 @@ class HealthAssistant:
             "The output is",
             output,
         )
+        # Process the output
+        return self.process_output(output)
+
+    def run_user_general_metrics(self, user_query):
+
+        # Format the input
+        input_prompt = self.format_user_general_metrics(user_query)
+
+        # Invoke the model
+        output = self.chat_model.invoke(input_prompt.to_messages())
+
         # Process the output
         return self.process_output(output)
 
@@ -217,6 +248,42 @@ class ChatResponseRepository:
         summary = {"recommendations": recommendations}
 
         return summary
+
+    def llm_user_general_metrics(self, _query, previous_messages=[]):
+        messages = previous_messages
+        messages.append(
+            {"role": "user", "content": _query},
+        )
+        messages.append(
+            {
+                "role": "system",
+                "content": "You are a helpful and friendly assistant as if you are the best friend of the user.  Your task is to extract the details of weight, age, current_medications, previous_mediacal_history, family_health_history, height, surgical_history, reproductive_health etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than one entities at a time. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
+            },
+        )
+
+        # Create a completion
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            max_tokens=self.max_tokens,
+            temperature=self.temperature,
+        )
+
+        # Get the response
+        response = response.choices[0].message.content
+
+        if detect_summary(response):
+            assistant = HealthAssistant()
+            general_metrics = assistant.run_user_general_metrics(response)
+            logging.info(general_metrics)
+
+            return {
+                "summary": True,
+                "response": response,
+                "response_schema": general_metrics,
+            }
+
+        return {"summary": False, "response": response}
 
 
 if __name__ == "__main__":

@@ -38,17 +38,17 @@ async def google_sign_in(
         }
         database_interface.insert_one(user, "users")
 
-    access_token = auth_interface.create_access_token(data={"sub": id_info["email"], "name": id_info["name"]})
+    access_token = auth_interface.create_access_token(
+        data={"sub": id_info["email"], "name": id_info["name"]}
+    )
 
     return {"token": access_token, "user": id_info}
 
 
 @auth_router.post("/decode_token", response_model=dict)
-async def decode_token(
-    token: Token, auth_interface: AuthInterface = Depends(auth_service)
-):
+async def decode_token(token: Token, auth_interface: AuthInterface = Depends(auth_service)):
     try:
-        id_info =auth_interface.decode_access_token(token.token)
+        id_info = auth_interface.decode_access_token(token.token)
         return id_info
     except Exception as e:
         return {"error": "Invalid token"}

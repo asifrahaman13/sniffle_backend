@@ -14,7 +14,7 @@ auth_service = AuthService(auth_repository)
 data_service = DataService()
 
 
-@data_router.get("/general_metrics/{token}")
+@data_router.get("/quantitative_metrics/{token}")
 async def get_general_metrics(
     token: str,
     auth_interface: AuthInterface = Depends(auth_service),
@@ -72,7 +72,6 @@ async def get_recommendations(
     try:
         # Decode the token
         id_info = auth_interface.decode_access_token(token)
-        
 
         # Check if the token is valid
         if id_info is None:
