@@ -213,14 +213,13 @@ class ChatResponseRepository:
 
         return {"summary": False, "response": response}
 
-    def llm_recommendation(self, general_metrics, assessment_metrics):
+    def llm_recommendation(self, *args):
         messages = []
-        messages.append(
-            {"role": "user", "content": str(general_metrics)},
-        )
-        messages.append(
-            {"role": "user", "content": str(assessment_metrics)},
-        )
+
+        for item in args:
+            messages.append(
+                {"role": "user", "content": f"The quantitave data is as follows: {str(item)}"},
+            )
         messages.append(
             {
                 "role": "system",

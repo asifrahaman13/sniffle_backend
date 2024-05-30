@@ -158,3 +158,19 @@ class DatabaseRepository:
         except Exception as e:
             logging.error(f"Failed to update data: {e}")
             return False
+        
+
+    def update_single_document_(self, filter_key: str, filter_value: str, update_data: dict, collection_name: str):
+            try:
+                # Define the collection where the data will be updated
+                collection = self.db[collection_name]
+
+                # Update the document in the collection
+                collection.update_one({filter_key: filter_value}, {"$set": update_data})
+
+                # Return the updated data
+                return update_data
+            except Exception as e:
+                logging.error(f"Failed to update data: {e}")
+                return None
+
