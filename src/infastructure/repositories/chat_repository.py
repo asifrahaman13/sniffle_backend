@@ -1,4 +1,5 @@
 import json
+import time
 from openai import OpenAI
 import logging
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
@@ -283,6 +284,69 @@ class ChatResponseRepository:
             }
 
         return {"summary": False, "response": response}
+    
+    def streaming_llm_response(self, _query, previous_messages=[]):
+
+        messages = previous_messages
+        messages.append(
+            {"role": "user", "content": _query},
+        )
+        messages.append(
+            {
+                "role": "system",
+                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature, step count, calories burnt, distance travelled, sleep duration, water consumed, cofeine_consumed, alcohol consumed etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than two entities at a time. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
+            },
+        )
+        # Record the start time
+        start_time = time.time()
+
+        # Create a completion
+        stream = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            stream=True,
+            max_tokens=self.max_tokens,
+            temperature=self.temperature,
+        )
+
+        # Initialize a buffer to store the sentence
+        sentence_buffer = ""
+
+
+        total_text=""
+        # Iterate over the stream of chunks
+        for chunk in stream:
+
+            # Check if the completion is a message
+            if chunk.choices[0].delta.content is not None:
+
+                # Append the chunk to the buffer
+                sentence_buffer += chunk.choices[0].delta.content
+
+                total_text+=chunk.choices[0].delta.content
+
+                # Check if the sentence is complete
+                if sentence_buffer.endswith((".", "!", "?")):
+                    # Record the end time
+                    end_time = time.time()
+
+                    # Calculate the elapsed time
+                    elapsed_time = end_time - start_time
+
+                    logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
+
+                    # Yield the sentence
+                    yield {"response": sentence_buffer.strip(), "is_last": False}
+                    sentence_buffer = ""
+
+        if detect_summary(str(total_text)):
+            json_parased_quanitative_data =  HealthAssistant()
+            json_parased_quanitative_data = json_parased_quanitative_data.run_health_assistant(str(total_text))
+            print(total_text)
+            yield {"response": str(total_text), "is_last": True, "response_schema": json_parased_quanitative_data}    
+         
+        
+
 
 
 if __name__ == "__main__":

@@ -13,3 +13,7 @@ class ChatInterface(ABC):
     @abstractmethod
     def llm_user_general_metrics(self, user, query, all_messages):
         pass
+
+    @abstractmethod
+    def streaming_llm_response(self, user, query, all_messages):
+        pass

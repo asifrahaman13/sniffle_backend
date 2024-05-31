@@ -14,6 +14,7 @@ from src.infastructure.middleware.logging_middleware import (
 from src.application.web.controllers.socket_controller import websocket_router
 from src.application.web.controllers.auth_controller import auth_router
 from src.application.web.controllers.data_controller import data_router
+from src.application.web.controllers.voice_controller import voice_router
 
 
 data_service = DataService()
@@ -35,6 +36,7 @@ app.add_middleware(
 app.include_router(websocket_router, prefix="/websocket", tags=["websocket connection "])
 app.include_router(auth_router, prefix="/auth", tags=["Auth router"])
 app.include_router(data_router, prefix="/data", tags=["Data router"])
+app.include_router(voice_router, prefix="/voice", tags=["Voice router"])
 
 # Include the middleware.
 app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
