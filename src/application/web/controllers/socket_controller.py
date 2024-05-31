@@ -148,8 +148,6 @@ async def websocket_endpoint(
             received_data = {"role": "user", "content": data["query"]}
             all_messages.append(received_data)
 
-            logging.info(type(data))
-
             # Log the message
             logging.info(f"Client #{client_id} sent: {data}")
 

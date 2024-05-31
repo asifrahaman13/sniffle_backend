@@ -15,7 +15,9 @@ from config.config import OPEN_AI_API_KEY
 
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class HealthAssistant:
@@ -219,7 +221,10 @@ class ChatResponseRepository:
 
         for item in args:
             messages.append(
-                {"role": "user", "content": f"The quantitave data is as follows: {str(item)}"},
+                {
+                    "role": "user",
+                    "content": f"The quantitave data is as follows: {str(item)}",
+                },
             )
         messages.append(
             {
@@ -284,7 +289,7 @@ class ChatResponseRepository:
             }
 
         return {"summary": False, "response": response}
-    
+
     def streaming_llm_response(self, _query, previous_messages=[]):
 
         messages = previous_messages
@@ -312,8 +317,7 @@ class ChatResponseRepository:
         # Initialize a buffer to store the sentence
         sentence_buffer = ""
 
-
-        total_text=""
+        total_text = ""
         # Iterate over the stream of chunks
         for chunk in stream:
 
@@ -323,7 +327,7 @@ class ChatResponseRepository:
                 # Append the chunk to the buffer
                 sentence_buffer += chunk.choices[0].delta.content
 
-                total_text+=chunk.choices[0].delta.content
+                total_text += chunk.choices[0].delta.content
 
                 # Check if the sentence is complete
                 if sentence_buffer.endswith((".", "!", "?")):
@@ -338,18 +342,30 @@ class ChatResponseRepository:
                     # Yield the sentence
 
                     if detect_summary(total_text):
-                        json_parased_quanitative_data =  HealthAssistant()
-                        json_parased_quanitative_data = json_parased_quanitative_data.run_health_assistant(str(total_text))
-                        print("Sending",{"response": total_text, "is_last": True, "response_schema": json_parased_quanitative_data}  )
-                        yield {"response": total_text, "is_last": True, "response_schema": json_parased_quanitative_data}   
+                        json_parased_quanitative_data = HealthAssistant()
+                        json_parased_quanitative_data = (
+                            json_parased_quanitative_data.run_health_assistant(
+                                str(total_text)
+                            )
+                        )
+                        print(
+                            "Sending",
+                            {
+                                "response": total_text,
+                                "is_last": True,
+                                "response_schema": json_parased_quanitative_data,
+                            },
+                        )
+                        yield {
+                            "response": total_text,
+                            "is_last": True,
+                            "response_schema": json_parased_quanitative_data,
+                        }
 
                     else:
-                        print("Sending",{"response": total_text, "is_last": True}  )
+                        print("Sending", {"response": total_text, "is_last": True})
                         yield {"response": sentence_buffer.strip(), "is_last": False}
                     sentence_buffer = ""
-         
-        
-
 
 
 if __name__ == "__main__":

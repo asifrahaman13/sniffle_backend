@@ -14,7 +14,7 @@ class DataService:
         self.database_repository = DatabaseRepository()
         self.chat_response_repository = ChatResponseRepository()
 
-    def get_general_metrics(self, user):
+    def get_quantitative_metrics(self, user):
         try:
             # Get the general metrics for the user
             general_metrics = self.database_repository.find_single_document(
@@ -43,7 +43,9 @@ class DataService:
 
             with ThreadPoolExecutor() as executor:
                 # Submit tasks for each user
-                futures = [executor.submit(self.process_user, user) for user in all_users]
+                futures = [
+                    executor.submit(self.process_user, user) for user in all_users
+                ]
 
                 # Wait for all tasks to complete
                 for future in futures:
@@ -55,18 +57,26 @@ class DataService:
     def process_user(self, user):
         try:
             user_email = user["email"]
-            quantitative_metrics = self.database_repository.find_single_document("email", user_email, "quantitative_metrics")
-            assessment_metrics = self.database_repository.find_single_document("email", user_email, "assessment_metrics")
-            general_metrics = self.database_repository.find_single_document("email", user_email, "general_metrics")
+            quantitative_metrics = self.database_repository.find_single_document(
+                "email", user_email, "quantitative_metrics"
+            )
+            assessment_metrics = self.database_repository.find_single_document(
+                "email", user_email, "assessment_metrics"
+            )
+            general_metrics = self.database_repository.find_single_document(
+                "email", user_email, "general_metrics"
+            )
             recommendations = self.chat_response_repository.llm_recommendation(
                 quantitative_metrics, assessment_metrics, general_metrics
             )
 
-            if_data_exists = self.database_repository.find_single_document("email", user_email, "recommendations")
+            if_data_exists = self.database_repository.find_single_document(
+                "email", user_email, "recommendations"
+            )
 
             if if_data_exists is not None:
                 self.database_repository.update_single_document_(
-                    "email", user_email, {"data":recommendations}, "recommendations"
+                    "email", user_email, {"data": recommendations}, "recommendations"
                 )
             else:
                 self.database_repository.insert_single_document(
@@ -76,9 +86,10 @@ class DataService:
             logging.info(f"Processed recommendations for user: {user_email}")
 
         except Exception as e:
-            logging.error(f"Failed to process recommendations for user {user_email}: {e}")
+            logging.error(
+                f"Failed to process recommendations for user {user_email}: {e}"
+            )
 
-            
     def get_recommendations(self, user):
         try:
             # Get the recommendations for the user
@@ -90,4 +101,16 @@ class DataService:
             return recommendations["data"]
         except Exception as e:
             logging.error(f"Failed to get recommendations: {e}")
+            return None
+    
+    def get_general_metrics(self, user):
+        try:
+            # Get the general metrics for the user
+            general_metrics = self.database_repository.find_single_document(
+                "email", user, "general_metrics"
+            )
+            # Return the general metrics
+            return general_metrics
+        except Exception as e:
+            logging.error(f"Failed to get general metrics: {e}")
             return None

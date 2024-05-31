@@ -195,6 +195,3 @@ class ChatService:
                     logging.error(f"Failed to save chat response: {e}")
             else:
                 return responses
-
-    # def streaming_llm_response(self, user, query, all_messages):
-    #     return self.chat_repository.streaming_llm_response(query, all_messages)

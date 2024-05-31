@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class DataInterface(ABC):
 
     @abstractmethod
-    def get_general_metrics(self, user: str):
+    def get_quantitative_metrics(self, user: str):
         pass
 
     @abstractmethod
@@ -17,4 +17,8 @@ class DataInterface(ABC):
 
     @abstractmethod
     def get_recommendations(self, user: str):
+        pass
+
+    @abstractmethod
+    def get_general_metrics(self, user: str):
         pass
