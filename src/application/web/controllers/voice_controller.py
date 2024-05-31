@@ -25,8 +25,9 @@ voice_router = APIRouter()
 @voice_router.websocket("/voice/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str,  chat_interface: ChatInterface = Depends(chat_service),
     auth_interface: AuthInterface = Depends(auth_service), voice_interface: VoiceInterface = Depends(voice_service)):
+    user_info = auth_interface.decode_access_token(client_id)
+    print(user_info)
     await websocket.accept()
-
     messages_received=[]
 
     try:
@@ -40,7 +41,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str,  chat_interfa
             The streaming response from the chat interface is passed to the voice interface to generate a voice response.
             """
             print("messages received", messages_received)
-            llm_streaming_response=chat_interface.streaming_llm_response(client_id, message["query"], messages_received)
+            llm_streaming_response=chat_interface.streaming_llm_response(user_info["sub"], message["query"], messages_received)
 
 
             gen=llm_streaming_response
