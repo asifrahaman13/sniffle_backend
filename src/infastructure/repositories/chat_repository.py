@@ -367,6 +367,76 @@ class ChatResponseRepository:
                         yield {"response": sentence_buffer.strip(), "is_last": False}
                     sentence_buffer = ""
 
+    def streaming_voice_assessment_response(self, _query, previous_messages=[]):
+
+        messages = previous_messages
+        messages.append(
+            {"role": "user", "content": _query},
+        )
+        messages.append(
+            {
+                "role": "system",
+                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to ask follow up questions to the users to get meaninful insights on mental health,, stress level, mood, anxiety level, sleep quality. If some data needs more clarification ask followup questions. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than one entities at a time. If the user does not wish to question anymore or the user have provided enough information ie total number of follow up questions exceeds 10 (ten) then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
+            },
+        )
+        # Record the start time
+        start_time = time.time()
+
+        # Create a completion
+        stream = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            stream=True,
+            max_tokens=self.max_tokens,
+            temperature=self.temperature,
+        )
+
+        # Initialize a buffer to store the sentence
+        sentence_buffer = ""
+
+        total_text = ""
+        # Iterate over the stream of chunks
+        for chunk in stream:
+
+            # Check if the completion is a message
+            if chunk.choices[0].delta.content is not None:
+
+                # Append the chunk to the buffer
+                sentence_buffer += chunk.choices[0].delta.content
+
+                total_text += chunk.choices[0].delta.content
+
+                # Check if the sentence is complete
+                if sentence_buffer.endswith((".", "!", "?")):
+                    # Record the end time
+                    end_time = time.time()
+
+                    # Calculate the elapsed time
+                    elapsed_time = end_time - start_time
+
+                    logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
+
+                    if detect_summary(total_text):
+                        json_parased_quanitative_data = {"summary": total_text}
+                        print(
+                            "Sending",
+                            {
+                                "response": total_text,
+                                "is_last": True,
+                                "response_schema": json_parased_quanitative_data,
+                            },
+                        )
+                        yield {
+                            "response": total_text,
+                            "is_last": True,
+                            "response_schema": json_parased_quanitative_data,
+                        }
+
+                    else:
+                        print("Sending", {"response": total_text, "is_last": True})
+                        yield {"response": sentence_buffer.strip(), "is_last": False}
+                    sentence_buffer = ""
+
 
 if __name__ == "__main__":
     chat_response = ChatResponseRepository()

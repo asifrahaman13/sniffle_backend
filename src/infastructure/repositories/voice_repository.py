@@ -1,3 +1,4 @@
+from deepgram import DeepgramClient, SpeakOptions
 import base64
 from pydub.playback import play
 import re
@@ -46,33 +47,61 @@ class VoiceRepository:
         return chunks
 
     def voice_response(self, text):
-            from deepgram import DeepgramClient, SpeakOptions
 
-            # Create a Deepgram client using the API key
-            deepgram = DeepgramClient(api_key=deepgram_api_key)
+        # Create a Deepgram client using the API key
+        deepgram = DeepgramClient(api_key=deepgram_api_key)
 
-            # Choose a model to use for synthesis
-            options = SpeakOptions(
-                model="aura-luna-en",  # Specify the desired voice
-                # encoding="aac"  # Specify the desired audio format
-            )
+        # Choose a model to use for synthesis
+        options = SpeakOptions(
+            model="aura-luna-en",  # Specify the desired voice
+            # encoding="aac"  # Specify the desired audio format
+        )
 
-            speak_options = {"text": text}
+        speak_options = {"text": text}
 
-            # Synthesize audio and stream the response
-            response = deepgram.speak.v("1").stream(speak_options, options)
+        # Synthesize audio and stream the response
+        response = deepgram.speak.v("1").stream(speak_options, options)
 
-            # Get the audio stream from the response
-            audio_buffer = response.stream
+        # Get the audio stream from the response
+        audio_buffer = response.stream
 
-            # Read the audio data from the buffer and encode it as base64
-            audio_base64 = base64.b64encode(audio_buffer.read()).decode('utf-8')
-            print(type(audio_base64))
+        # Read the audio data from the buffer and encode it as base64
+        audio_base64 = base64.b64encode(audio_buffer.read()).decode("utf-8")
+        print(type(audio_base64))
 
-            # Reset the audio buffer for reading
-            audio_buffer.seek(0)
+        # Reset the audio buffer for reading
+        audio_buffer.seek(0)
 
-            return audio_base64
+        return audio_base64
+
+    # def voice_assessment_response(self, text):
+
+    #     # Create a Deepgram client using the API key
+    #     deepgram = DeepgramClient(api_key=deepgram_api_key)
+
+    #     # Choose a model to use for synthesis
+    #     options = SpeakOptions(
+    #         model="aura-luna-en",  # Specify the desired voice
+    #         # encoding="aac"  # Specify the desired audio format
+    #     )
+
+    #     speak_options = {"text": text}
+
+    #     # Synthesize audio and stream the response
+    #     response = deepgram.speak.v("1").stream(speak_options, options)
+
+    #     # Get the audio stream from the response
+    #     audio_buffer = response.stream
+
+    #     # Read the audio data from the buffer and encode it as base64
+    #     audio_base64 = base64.b64encode(audio_buffer.read()).decode("utf-8")
+    #     print(type(audio_base64))
+
+    #     # Reset the audio buffer for reading
+    #     audio_buffer.seek(0)
+
+    #     return audio_base64
+
 
 def main():
 

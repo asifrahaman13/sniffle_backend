@@ -18,3 +18,7 @@ class VoiceService:
     def voice_response(self, query):
         response = self.voice_repository.voice_response(query)
         return response
+    
+    def voice_assessment_response(self, query):
+        response = self.voice_repository.voice_response(query)
+        return response
