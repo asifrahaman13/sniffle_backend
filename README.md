@@ -17,7 +17,7 @@ Backend repository for the mobile application server which aims at making the he
 
 - Give the proper configuration by giving the API keys. For example set the open ai key, mapbox api key etc.
 
-- Next you need to run the application using the following script: `python3  src/index.py`
+- Next you need to run the application using the following script: `uvicorn src.main:app --reload`
 
 ## PORT
 

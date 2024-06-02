@@ -140,7 +140,7 @@ class ChatResponseRepository:
 
     def __init__(self) -> None:
         self.temperature = 0.7
-        self.max_tokens = 500
+        self.max_tokens = 1000
         self.model = "gpt-4o"
         self.client = OpenAI(api_key=OPEN_AI_API_KEY)
 

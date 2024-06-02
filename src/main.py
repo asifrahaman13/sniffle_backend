@@ -50,7 +50,7 @@ def job():
 
 # Schedule the jobs
 # schedule.every(30).seconds.do(job)
-schedule.every().day.at("10:30").do(job)
+# schedule.every().day.at("10:30").do(job)
 
 def scheduler_thread():
     async def run_scheduler():
