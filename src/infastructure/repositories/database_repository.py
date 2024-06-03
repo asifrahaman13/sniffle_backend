@@ -9,7 +9,7 @@ class DatabaseRepository:
 
         # Connect to the database
         self.client = MongoClient(MONGO_DB_URI)
-        self.db = self.client["dophin"]
+        self.db = self.client["dolphin"]
 
     def insert_single_document(self, data: str, collection_name: str):
 
