@@ -29,3 +29,7 @@ logging.info("Access token expire minutes is set")
 OPEN_AI_API_KEY = os.getenv("OPENAI_API_KEY")
 assert OPEN_AI_API_KEY, "OpenAI client is not set"
 logging.info("OpenAI client is set")
+
+MONGO_DB_URI = os.getenv("MONGO_DB_URI")
+assert MONGO_DB_URI, "Mongo URI is not set"
+logging.info("Mongo URI is set")

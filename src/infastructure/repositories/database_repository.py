@@ -1,13 +1,14 @@
 from pymongo import MongoClient
 from typing import Any, Dict
 import logging
+from config.config import MONGO_DB_URI
 
 
 class DatabaseRepository:
     def __init__(self):
 
         # Connect to the database
-        self.client = MongoClient("localhost", 27017)
+        self.client = MongoClient(MONGO_DB_URI)
         self.db = self.client["dophin"]
 
     def insert_single_document(self, data: str, collection_name: str):
