@@ -159,7 +159,6 @@ class DatabaseRepository:
         except Exception as e:
             logging.error(f"Failed to update data: {e}")
             return False
-        
 
     def update_single_document_(self, filter_key: str, filter_value: str, update_data: dict, collection_name: str):
             try:
@@ -175,3 +174,22 @@ class DatabaseRepository:
                 logging.error(f"Failed to update data: {e}")
                 return None
 
+    def find_all_documents_from_field(self, field: str, field_value: str, collection_name: str):
+        # Create an empty list to store the data that will be found
+        all_pdfs_of_user = []
+        try:
+
+            # Define the collection where the data will be stored
+            collection = self.db_knowledgebase[collection_name]
+
+            # Find all the data that matches the username
+            pdf_data = collection.find({field: field_value})
+
+            for item in pdf_data:
+                item["_id"] = str(item["_id"])
+                all_pdfs_of_user.append(item)
+
+            # Return the data that was found
+            return all_pdfs_of_user
+        except Exception as e:
+            return None

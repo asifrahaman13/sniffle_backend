@@ -248,3 +248,6 @@ class ChatService:
                     logging.error(f"Failed to save chat response: {e}")
             else:
                 return responses
+            
+    def get_fhir_data(self, encoded_image):
+        return self.chat_repository.get_fhir_data(encoded_image)

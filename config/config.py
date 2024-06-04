@@ -33,3 +33,16 @@ logging.info("OpenAI client is set")
 MONGO_DB_URI = os.getenv("MONGO_DB_URI")
 assert MONGO_DB_URI, "Mongo URI is not set"
 logging.info("Mongo URI is set")
+
+
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
+assert AWS_ACCESS_KEY, "AWS access key is not set"
+logging.info("AWS access key is set")
+
+AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY")
+assert AWS_SECRET_KEY, "AWS secret key is not set"
+logging.info("AWS secret key is set")
+
+AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+assert AWS_BUCKET_NAME, "AWS bucket name is not set"
+logging.info("AWS bucket name is set")

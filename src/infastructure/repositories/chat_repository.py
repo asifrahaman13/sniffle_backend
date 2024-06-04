@@ -429,12 +429,27 @@ class ChatResponseRepository:
                 "response_schema": json_parased_quanitative_data,
             }
 
+    def get_fhir_data(self, encoded_image):
+        response = self.client.chat.completions.create(
+        model=self.model,
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Generate FHIR file format from the image. The output should be in the standard FHIR in json format. Ensure that the output is correctly formatted json. Only give the json result with full accuracy which can be converted into json object.",
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/jpeg;base64,{encoded_image}"},
+                    },
+                ],
+            }
+        ],
+        max_tokens=self.max_tokens,
+      )
 
-if __name__ == "__main__":
-    chat_response = ChatResponseRepository()
-    gen = chat_response.llm_recommendation(
-        "blood pressure 180/78, respiration 90",
-        "Here's a summary of the details you've shared:- **Current Feeling**: Fine but experiencing stress - **Stress Cause**: Heavy worklo- **Mood Changes**: Significant changes noticed.- **Sleep Quality**: Reduced from 8 hours to 6 hours.- **Daytime Feeling**: Quite tired and frustrated.- **Anxiety**: Present, espcially during peak workload in the afternoon.- **Strategies Used**: None currently, but interested in trying exercise, meditation, time management, healthy diet, sleep hygiene, talking to someone, and hobbies.I'm glad you're willing to try some new strategies to manage your stress and anxiety. If you need any further assistance or support, feel free to reach out. Take care!",
-    )
+        result = response.choices[0].message.content
+        return result
 
-    print(f"\n\n\n\n\n\nThe final result is", gen)

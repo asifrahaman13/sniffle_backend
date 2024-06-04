@@ -21,3 +21,7 @@ class ChatInterface(ABC):
     @abstractmethod
     def streaming_voice_assessment_response(self, user, query, all_messages):
         pass
+
+    @abstractmethod
+    def get_fhir_data(self, encoded_image):
+        pass

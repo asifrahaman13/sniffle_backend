@@ -17,6 +17,7 @@ from src.application.web.controllers.auth_controller import auth_router
 from src.application.web.controllers.data_controller import data_router
 from src.application.web.controllers.voice_controller import voice_router
 from src.application.web.controllers.wearable_controller import wearable_router
+from src.application.web.controllers.fhir_controller import fhir_router
 
 
 data_service = DataService()
@@ -40,6 +41,7 @@ app.include_router(auth_router, prefix="/auth", tags=["Auth router"])
 app.include_router(data_router, prefix="/data", tags=["Data router"])
 app.include_router(voice_router, prefix="/voice", tags=["Voice router"])
 app.include_router(wearable_router, prefix="/wearable", tags=["Wearable router"])
+app.include_router(fhir_router, prefix="/fhir", tags=["FHIR router"])
 
 # Include the middleware.
 app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
