@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import base64
+import requests
 from fastapi import File, Form, UploadFile, HTTPException
 from src.internal.interfaces.chat_interface import ChatInterface
 from src.internal.interfaces.aws_interface import AWSInterface
@@ -90,8 +91,7 @@ async def get_all_json(
     # Get all the JSON files uploaded by the specified user
     all_json_files = database_interface.find_all_documents_from_field(
         "username", username, "json_files"
-    )
-    print("#########################33", all_json_files)
+    ) 
     if all_json_files:
         return all_json_files
     else:
@@ -107,6 +107,14 @@ async def get_presigned_url(
     logging.info(file_name)
     # Get the presigned URL for the specified file name
     presigned_url = aws_interface.get_presigned_json_url(file_name=file_name + ".json")
+
+    # response= requests.get(presigned_url)
+
+    # response=response.content
+
+    # return response
+
+    # print(response)
     if presigned_url:
         return {"presigned_url": presigned_url}
     else:

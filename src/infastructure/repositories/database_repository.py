@@ -193,3 +193,5 @@ class DatabaseRepository:
             return all_pdfs_of_user
         except Exception as e:
             return None
+        
+        
