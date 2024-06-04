@@ -180,7 +180,7 @@ class DatabaseRepository:
         try:
 
             # Define the collection where the data will be stored
-            collection = self.db_knowledgebase[collection_name]
+            collection = self.db[collection_name]
 
             # Find all the data that matches the username
             pdf_data = collection.find({field: field_value})

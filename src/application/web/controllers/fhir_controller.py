@@ -91,6 +91,7 @@ async def get_all_json(
     all_json_files = database_interface.find_all_documents_from_field(
         "username", username, "json_files"
     )
+    print("#########################33", all_json_files)
     if all_json_files:
         return all_json_files
     else:
