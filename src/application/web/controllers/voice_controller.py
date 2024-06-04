@@ -46,7 +46,8 @@ async def websocket_endpoint(
             """
             The streaming response from the chat interface is passed to the voice interface to generate a voice response.
             """
-            logging.info("messages received", messages_received)
+            logging.info("messages received")
+            logging.info(messages_received)
             llm_streaming_response = chat_interface.streaming_llm_response(
                 user_info["sub"], message["query"], messages_received
             )

@@ -24,7 +24,7 @@ class HealthAssistant:
     def __init__(self):
         self.model = "gpt-4o"
         self.openai_api_key = OPEN_AI_API_KEY
-        self.max_tokens = 2500
+        self.max_tokens = 3000
         self.chat_model = ChatOpenAI(
             model=self.model,
             openai_api_key=self.openai_api_key,
@@ -140,7 +140,7 @@ class ChatResponseRepository:
 
     def __init__(self) -> None:
         self.temperature = 0.7
-        self.max_tokens = 1000
+        self.max_tokens = 3000
         self.model = "gpt-4o"
         self.client = OpenAI(api_key=OPEN_AI_API_KEY)
 
@@ -153,7 +153,7 @@ class ChatResponseRepository:
         messages.append(
             {
                 "role": "system",
-                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature, step count, calories burnt, distance travelled, sleep duration, water consumed, cofeine_consumed, alcohol consumed etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than two entities at a time. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
+                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature, step count, calories burnt, distance travelled, sleep duration, water consumed, cofeine_consumed, alcohol consumed etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than one entity at a time. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
             },
         )
 
@@ -299,7 +299,7 @@ class ChatResponseRepository:
         messages.append(
             {
                 "role": "system",
-                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature, step count, calories burnt, distance travelled, sleep duration, water consumed, cofeine_consumed, alcohol consumed etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than two entities at a time. If the details are already provided then you can first say 'Summary ready !' and after that give the summary of the details with the standard units and end the conversation.",
+                "content": "You are a helpful and friendly assistant as if you are the best friend of the user. Your task is to extract the details of heart rate, bood pressure, respiratory rate, blood temperature, step count, calories burnt, distance travelled, sleep duration, water consumed, cofeine_consumed, alcohol consumed etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than one entity at a time. If the details are already provided then you can first say 'Summary ready !' and after that give the summary of the details with the standard units and end the conversation.",
             },
         )
         # Record the start time
@@ -341,31 +341,25 @@ class ChatResponseRepository:
 
                     # Yield the sentence
 
-                    if detect_summary(total_text):
-                        json_parased_quanitative_data = HealthAssistant()
-                        json_parased_quanitative_data = (
-                            json_parased_quanitative_data.run_health_assistant(
-                                str(total_text)
-                            )
-                        )
-                        print(
-                            "Sending",
-                            {
-                                "response": total_text,
-                                "is_last": True,
-                                "response_schema": json_parased_quanitative_data,
-                            },
-                        )
-                        yield {
-                            "response": total_text,
-                            "is_last": True,
-                            "response_schema": json_parased_quanitative_data,
-                        }
-
-                    else:
-                        print("Sending", {"response": total_text, "is_last": True})
-                        yield {"response": sentence_buffer.strip(), "is_last": False}
+                    print("Sending", {"response": total_text, "is_last": True})
+                    yield {"response": sentence_buffer.strip(), "is_last": False}
                     sentence_buffer = ""
+
+        if detect_summary(total_text):
+            json_parased_quanitative_data = {"summary": total_text}
+            print(
+                "Sending",
+                {
+                    "response": total_text,
+                    "is_last": True,
+                    "response_schema": json_parased_quanitative_data,
+                },
+            )
+            yield {
+                "response": total_text,
+                "is_last": True,
+                "response_schema": json_parased_quanitative_data,
+            }
 
     def streaming_voice_assessment_response(self, _query, previous_messages=[]):
 
@@ -415,27 +409,25 @@ class ChatResponseRepository:
                     elapsed_time = end_time - start_time
 
                     logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
-
-                    if detect_summary(total_text):
-                        json_parased_quanitative_data = {"summary": total_text}
-                        print(
-                            "Sending",
-                            {
-                                "response": total_text,
-                                "is_last": True,
-                                "response_schema": json_parased_quanitative_data,
-                            },
-                        )
-                        yield {
-                            "response": total_text,
-                            "is_last": True,
-                            "response_schema": json_parased_quanitative_data,
-                        }
-
-                    else:
-                        print("Sending", {"response": total_text, "is_last": True})
-                        yield {"response": sentence_buffer.strip(), "is_last": False}
+                    print("Sending", {"response": total_text, "is_last": True})
+                    yield {"response": sentence_buffer.strip(), "is_last": False}
                     sentence_buffer = ""
+
+        if detect_summary(total_text):
+            json_parased_quanitative_data = {"summary": total_text}
+            print(
+                "Sending",
+                {
+                    "response": total_text,
+                    "is_last": True,
+                    "response_schema": json_parased_quanitative_data,
+                },
+            )
+            yield {
+                "response": total_text,
+                "is_last": True,
+                "response_schema": json_parased_quanitative_data,
+            }
 
 
 if __name__ == "__main__":
