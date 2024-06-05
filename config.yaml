@@ -1,0 +1,23 @@
+# config.yaml
+
+# Application settings
+app:
+  title: "My FastAPI Application"
+  version: "1.0.0"
+  description: "This is a sample FastAPI application."
+
+# Server settings
+server:
+  host: "0.0.0.0"
+  port: 8000
+
+# Database settings
+database:
+  # url: "postgresql://user:password@localhost/dbname"
+  pool_size: 10
+
+# Security settings
+security:
+  algorithm: "HS256"
+  access_token_expire_minutes: 30000
+

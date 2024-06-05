@@ -2,21 +2,29 @@
 FROM python:3.12-slim
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy the requirements file into the container
 COPY requirements.txt ./
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && \
+    apt-get install -y redis-server && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application into the container
 COPY . .
 
+# Copy the Redis configuration file
+COPY redis.conf /usr/local/etc/redis/redis.conf
+
 # Expose the port that the application will run on
 EXPOSE 8000
 
-# Command to run the Python script
-# CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", $PORT]
+# Expose the port Redis runs on
+EXPOSE 6379
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--reload"]
+# Start both Redis and the FastAPI app
+CMD redis-server /usr/local/etc/redis/redis.conf --daemonize yes && uvicorn src.main:app --host 0.0.0.0 --reload
