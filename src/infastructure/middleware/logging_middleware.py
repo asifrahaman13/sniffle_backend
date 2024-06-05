@@ -1,5 +1,7 @@
+import logging
+
 async def log_middleware(request, call_next):
-    print(f"Request: {request.method} {request.url}")
+    logging.info(f"Request: {request.method} {request.url}")
     response = await call_next(request)
-    print(f"Response: {response.status_code}")
+    logging.info(f"Response: {response.status_code}")
     return response

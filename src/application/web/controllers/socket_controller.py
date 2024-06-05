@@ -171,3 +171,5 @@ async def websocket_endpoint(
         manager.disconnect(websocket)
         # Broadcast the message to all clients
         await manager.broadcast(f"Client #{client_id} left the chat")
+
+

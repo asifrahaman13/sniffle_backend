@@ -75,6 +75,10 @@ scheduler.start()
 async def health_check():
     return JSONResponse(status_code=200, content={"status": "healthy"})
 
+@app.get("/")
+async def health_check():
+    return JSONResponse(status_code=200, content={"status": "The server is running as expected."})
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT"))
