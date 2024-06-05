@@ -19,9 +19,7 @@ from fastapi import status
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from config.config import REDIS_URL
 from src.application.web.controllers.socket_controller import websocket_router
 from src.application.web.controllers.auth_controller import auth_router
 from src.application.web.controllers.data_controller import data_router
@@ -35,8 +33,6 @@ data_service = DataService()
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
-
-REDIS_URL = os.getenv("REDIS_URL")
 
 
 async def client_identifier(request: Request):

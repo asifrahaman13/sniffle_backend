@@ -8,6 +8,46 @@ load_dotenv()
 # Set up logging configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
+import yaml
+from pydantic import BaseModel
+
+class AppConfig(BaseModel):
+    title: str
+    version: str
+    description: str
+
+class ServerConfig(BaseModel):
+    host: str
+    port: int
+
+class DatabaseConfig(BaseModel):
+    # url: str
+    pool_size: int
+
+class SecurityConfig(BaseModel):
+    algorithm: str
+    access_token_expire_minutes: int
+
+class RedisConfig(BaseModel):
+    url: str
+
+class Config(BaseModel):
+    app: AppConfig
+    server: ServerConfig
+    database: DatabaseConfig
+    security: SecurityConfig
+    redis: RedisConfig
+
+def load_config(file_path: str) -> Config:
+    with open(file_path, 'r') as file:
+        config_dict = yaml.safe_load(file)
+    return Config(**config_dict)
+
+# Load the configuration
+config = load_config("config.yaml")
+
+
 # Retrieve environment variables and ensure they are set
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 assert GOOGLE_CLIENT_ID, "Google client ID is not set"
@@ -17,11 +57,11 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 assert SECRET_KEY, "Secret key is not set"
 logging.info("Secret key is set")
 
-ALGORITHM = os.getenv("ALGORITHM")
+ALGORITHM = config.security.algorithm
 assert ALGORITHM, "Algorithm is not set"
 logging.info("Algorithm is set")
 
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+ACCESS_TOKEN_EXPIRE_MINUTES = config.security.access_token_expire_minutes
 assert ACCESS_TOKEN_EXPIRE_MINUTES, "Access token expire minutes is not set"
 logging.info("Access token expire minutes is set")
 
@@ -46,3 +86,7 @@ logging.info("AWS secret key is set")
 AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
 assert AWS_BUCKET_NAME, "AWS bucket name is not set"
 logging.info("AWS bucket name is set")
+
+REDIS_URL= config.redis.url
+assert REDIS_URL, "Redis URL is not set."
+logging.info("Redis URL is set")
