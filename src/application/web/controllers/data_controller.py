@@ -4,6 +4,7 @@ from src.internal.use_cases.auth_service import AuthService
 from src.internal.interfaces.auth_interface import AuthInterface
 from src.internal.interfaces.data_interface import DataInterface
 from src.internal.use_cases.data_service import DataService
+from src.internal.entities.health_model import GeneralParameters
 
 # Create a new router
 data_router = APIRouter()
@@ -106,6 +107,34 @@ async def get_general_metrics(
 
         # Return the general metrics
         return general_metrics
+
+    except Exception as e:
+        # Log the error
+        raise HTTPException(status_code=500, detail="Failed to get general metrics")
+
+
+@data_router.put("/general_metrics/{token}")
+async def update_general_metrics(
+    token: str,
+    data: GeneralParameters,
+    auth_interface: AuthInterface = Depends(auth_service),
+    data_interface: DataInterface = Depends(data_service),
+):
+    try:
+        # Decode the token
+        id_info = auth_interface.decode_access_token(token)
+
+        # Check if the token is valid
+        if id_info is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+
+        # Get the general metrics for the user
+        general_metrics = data_interface.update_general_metrics(
+            "email", id_info["sub"], data.model_dump(), "general_metrics"
+        )
+
+        # Return the general metrics
+        return {"message": general_metrics}
 
     except Exception as e:
         # Log the error

@@ -89,7 +89,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    "Format the user query into the schema provided to you. It will have weight, age, current_medications, previous_mediacal_history, family_health_history, height, surgical_history, reproductive_health. The quantitative values should be without any units. The query is as follows: \n \n{question}"
+                    "Format the user query into the schema provided to you. It will have weight, age, current_medications, allergies, previous_mediacal_history, family_medical_history, height, surgical_history, lifestyle, social_history, reproductive_health. The quantitative values should be without any units. The query is as follows: \n \n{question}"
                 )
             ],
             # Define the input variables
@@ -262,7 +262,7 @@ class ChatResponseRepository:
         messages.append(
             {
                 "role": "system",
-                "content": "You are a helpful and friendly assistant as if you are the best friend of the user.  Your task is to extract the details of weight, age, current_medications, previous_mediacal_history, family_health_history, height, surgical_history, reproductive_health etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than one entities at a time. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
+                "content": "You are a helpful and friendly assistant as if you are the best friend of the user.  Your task is to extract the details of weight, age, current_medications, allergies, previous_mediacal_history, family_medical_history, lifestyle, height, surgical_history, social_history, reproductive_health etc. You have the previous conversation with the user. Ask follow up questions if the user has not provided enough. Ask no more than one entities at a time. If the details are already provided then you can say 'Summary ready !' and give the summary of the details with the standard units and end the conversation.",
             },
         )
 

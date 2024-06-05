@@ -141,6 +141,7 @@ class DatabaseRepository:
             return False
         
     def update_single_document(self, field: str, field_value: str, data: Dict[str, Any], collection_name: str):
+        print("#############", data)
         try:
             # Define the collection where the data will be stored
             collection = self.db[collection_name]
@@ -151,8 +152,12 @@ class DatabaseRepository:
             # Define the new values for the document
             new_values = {"$set": data}
 
+            print("####################################### new values", new_values)
+
             # Update the document
-            collection.update_one(filter, new_values)
+            result=collection.update_one(filter, new_values)
+
+            print("#########################################", result)
 
             # Return True to indicate success
             return True
@@ -193,5 +198,6 @@ class DatabaseRepository:
             return all_pdfs_of_user
         except Exception as e:
             return None
+    
         
         

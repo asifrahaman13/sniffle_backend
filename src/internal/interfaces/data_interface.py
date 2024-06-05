@@ -22,3 +22,7 @@ class DataInterface(ABC):
     @abstractmethod
     def get_general_metrics(self, user: str):
         pass
+
+    @abstractmethod
+    def update_general_metrics(self, field, field_value, data, collection_name):
+        pass

@@ -19,7 +19,7 @@ class AuthRepository:
         to_encode = data.copy()
 
         # Set the expiration time for the token
-        expire = datetime.now(UTC) + timedelta(minutes=self.expires)
+        expire = datetime.now(UTC) + timedelta(hours=self.expires)
 
         # Add the expiration time to the token
         to_encode.update({"exp": expire})

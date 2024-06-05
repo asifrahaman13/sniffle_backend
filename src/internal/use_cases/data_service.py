@@ -114,3 +114,12 @@ class DataService:
         except Exception as e:
             logging.error(f"Failed to get general metrics: {e}")
             return None
+        
+    def update_general_metrics(self, field, field_value, data, collection_name):
+        try:
+            update_metrics=self.database_repository.update_single_document(field, field_value, data, collection_name)
+
+            return update_metrics
+        
+        except Exception as e:
+            return None
