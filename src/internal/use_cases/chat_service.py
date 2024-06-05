@@ -251,3 +251,9 @@ class ChatService:
             
     def get_fhir_data(self, encoded_image):
         return self.chat_repository.get_fhir_data(encoded_image)
+    
+    def general_chat_query(self, query, previous_messages):
+        return self.chat_repository.general_chat_query(query, previous_messages)
+    
+    def get_streaming_voice_response(self, query, previous_messages):
+        return self.chat_repository.get_streaming_voice_response(query, previous_messages)

@@ -453,3 +453,74 @@ class ChatResponseRepository:
         result = response.choices[0].message.content
         return result
 
+    def general_chat_query(self, query, previous_messages):
+        messages = previous_messages.copy()
+        messages.append(
+            {"role": "user", "content": query},
+        )
+        messages.append(
+            {
+                "role": "system",
+                "content": "You are a helpful and friendly healthcare assistant as if you are the best friend of the user. Your task is answer the query of the user in a very friendly manner. Use emoji whenever required.",
+            },
+        )
+
+        # Create a completion
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            max_tokens=self.max_tokens,
+            temperature=self.temperature,
+        )
+
+        # Get the response
+        response = response.choices[0].message.content
+        return {"response": response}
+
+    def get_streaming_voice_response(self, _query, previous_messages=[]):
+
+        messages = previous_messages
+        messages.append(
+            {"role": "user", "content": _query},
+        )
+        messages.append(
+            {
+                "role": "system",
+                "content": "You are a helpful and friendly healthcare assistant as if you are the best friend of the user. Your task is answer the query of the user in a very friendly manner.",
+            },
+        )
+        # Record the start time
+        start_time = time.time()
+
+        # Create a completion
+        stream = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            stream=True,
+            max_tokens=self.max_tokens,
+            temperature=self.temperature,
+        )
+
+        # Initialize a buffer to store the sentence
+        sentence_buffer = ""
+
+        # Iterate over the stream of chunks
+        for chunk in stream:
+
+            # Check if the completion is a message
+            if chunk.choices[0].delta.content is not None:
+
+                # Append the chunk to the buffer
+                sentence_buffer += chunk.choices[0].delta.content
+
+                # Check if the sentence is complete
+                if sentence_buffer.endswith((".", "!", "?")):
+                    # Record the end time
+                    end_time = time.time()
+
+                    # Calculate the elapsed time
+                    elapsed_time = end_time - start_time
+
+                    logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
+                    yield {"response": sentence_buffer.strip()}
+                    sentence_buffer = ""

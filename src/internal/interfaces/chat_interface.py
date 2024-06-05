@@ -25,3 +25,12 @@ class ChatInterface(ABC):
     @abstractmethod
     def get_fhir_data(self, encoded_image):
         pass
+
+    @abstractmethod
+    def general_chat_query(self, query, previous_messages):
+        pass
+
+    @abstractmethod
+    def get_streaming_voice_response(self, query, previous_messages):
+        pass
+
