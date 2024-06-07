@@ -34,6 +34,11 @@ async def get_quantitative_metrics(
             id_info["sub"]
         )
 
+        if general_metrics is None:
+            raise HTTPException(
+                status_code=404, detail="General metrics not found"
+            )
+
         # Return the general metrics
         return general_metrics
 
@@ -62,6 +67,11 @@ async def get_assessment_metrics(
         assessment_metrics = data_interface.get_assessment_metrics(
             id_info["sub"]
         )
+
+        if assessment_metrics is None:
+            raise HTTPException(
+                status_code=404, detail="Assessment metrics not found"
+            )
 
         # Return the assessment metrics
         return assessment_metrics
@@ -114,6 +124,11 @@ async def get_general_metrics(
 
         # Get the general metrics for the user
         general_metrics = data_interface.get_general_metrics(id_info["sub"])
+
+        if general_metrics is None:
+            raise HTTPException(
+                status_code=404, detail="General metrics not found"
+            )
 
         # Return the general metrics
         return general_metrics

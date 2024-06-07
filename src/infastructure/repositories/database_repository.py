@@ -68,26 +68,6 @@ class DatabaseRepository:
             logging.error(f"Failed to find data: {e}")
             return None
 
-    def check_if_file_belongs_to_user(self, username: str, pdf_name: str):
-        try:
-
-            # Define the collection where the data will be stored
-            collection = self.db["pdfs"]
-
-            # Find the data that matches the username and pdf name
-            pdf_data = collection.find_one(
-                {"username": username, "pdf_name": pdf_name}
-            )
-
-            if pdf_data is not None:
-                return True
-            else:
-                return False
-
-        except Exception as e:
-            logging.error(f"Failed to find data: {e}")
-            return False
-
     def find_single_document(
         self, field: str, field_value: str, collection_name: str
     ):
