@@ -119,7 +119,6 @@ async def websocket_endpoint(
         await websocket.close()
 
 
-
 @voice_router.websocket("/general_voice_response/{client_id}")
 async def websocket_endpoint_query(
     websocket: WebSocket,
@@ -146,7 +145,7 @@ async def websocket_endpoint_query(
             logging.info("messages received")
             logging.info(messages_received)
             llm_streaming_response = chat_interface.get_streaming_voice_response(
-                 message["query"], messages_received
+                message["query"], messages_received
             )
 
             gen = llm_streaming_response

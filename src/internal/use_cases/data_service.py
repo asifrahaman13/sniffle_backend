@@ -43,9 +43,7 @@ class DataService:
 
             with ThreadPoolExecutor() as executor:
                 # Submit tasks for each user
-                futures = [
-                    executor.submit(self.process_user, user) for user in all_users
-                ]
+                futures = [executor.submit(self.process_user, user) for user in all_users]
 
                 # Wait for all tasks to complete
                 for future in futures:
@@ -86,9 +84,7 @@ class DataService:
             logging.info(f"Processed recommendations for user: {user_email}")
 
         except Exception as e:
-            logging.error(
-                f"Failed to process recommendations for user {user_email}: {e}"
-            )
+            logging.error(f"Failed to process recommendations for user {user_email}: {e}")
 
     def get_recommendations(self, user):
         try:
@@ -102,7 +98,7 @@ class DataService:
         except Exception as e:
             logging.error(f"Failed to get recommendations: {e}")
             return None
-    
+
     def get_general_metrics(self, user):
         try:
             # Get the general metrics for the user
@@ -114,12 +110,14 @@ class DataService:
         except Exception as e:
             logging.error(f"Failed to get general metrics: {e}")
             return None
-        
+
     def update_general_metrics(self, field, field_value, data, collection_name):
         try:
-            update_metrics=self.database_repository.update_single_document(field, field_value, data, collection_name)
+            update_metrics = self.database_repository.update_single_document(
+                field, field_value, data, collection_name
+            )
 
             return update_metrics
-        
+
         except Exception as e:
             return None

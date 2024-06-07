@@ -20,9 +20,7 @@ class AWSRepository:
     def upload_json(self, file_name, file_content):
         try:
             # Upload the file to the S3 bucket
-            self.s3_client.put_object(
-                Bucket=self.aws_bucket_name, Key=file_name, Body=file_content
-            )
+            self.s3_client.put_object(Bucket=self.aws_bucket_name, Key=file_name, Body=file_content)
             return True
         except Exception as e:
             print(e)

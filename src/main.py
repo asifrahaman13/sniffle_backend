@@ -30,9 +30,7 @@ from src.application.web.controllers.fhir_controller import fhir_router
 data_service = DataService()
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 async def client_identifier(request: Request):
@@ -87,17 +85,13 @@ app.include_router(
     auth_router,
     prefix="/auth",
     tags=["Auth router"],
-    dependencies=[
-        Depends(RateLimiter(times=10, seconds=10, identifier=client_identifier))
-    ],
+    dependencies=[Depends(RateLimiter(times=10, seconds=10, identifier=client_identifier))],
 )
 app.include_router(
     data_router,
     prefix="/data",
     tags=["Data router"],
-    dependencies=[
-        Depends(RateLimiter(times=10, seconds=10, identifier=client_identifier))
-    ],
+    dependencies=[Depends(RateLimiter(times=10, seconds=10, identifier=client_identifier))],
 )
 app.include_router(voice_router, prefix="/voice", tags=["Voice router"])
 app.include_router(wearable_router, prefix="/wearable", tags=["Wearable router"])
@@ -105,9 +99,7 @@ app.include_router(
     fhir_router,
     prefix="/fhir",
     tags=["FHIR router"],
-    dependencies=[
-        Depends(RateLimiter(times=10, seconds=10, identifier=client_identifier))
-    ],
+    dependencies=[Depends(RateLimiter(times=10, seconds=10, identifier=client_identifier))],
 )
 
 # Include the middleware
@@ -144,9 +136,7 @@ scheduler.start()
 # Health check endpoint
 @app.get(
     "/health",
-    dependencies=[
-        Depends(RateLimiter(times=3, seconds=10, identifier=client_identifier))
-    ],
+    dependencies=[Depends(RateLimiter(times=3, seconds=10, identifier=client_identifier))],
 )
 async def health_check(request: Request):
     ip = request.client.host
@@ -156,9 +146,7 @@ async def health_check(request: Request):
 
 @app.get("/")
 async def health_check():
-    return JSONResponse(
-        status_code=200, content={"status": "The server is running as expected."}
-    )
+    return JSONResponse(status_code=200, content={"status": "The server is running as expected."})
 
 
 if __name__ == "__main__":

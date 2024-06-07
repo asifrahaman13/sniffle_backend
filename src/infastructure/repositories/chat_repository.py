@@ -15,9 +15,7 @@ from config.config import OPEN_AI_API_KEY
 
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 class HealthAssistant:
@@ -431,24 +429,24 @@ class ChatResponseRepository:
 
     def get_fhir_data(self, encoded_image):
         response = self.client.chat.completions.create(
-        model=self.model,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "Generate FHIR file format from the image. The output should be in the standard FHIR in json format. Ensure that the output is correctly formatted json. Only give the json result with full accuracy which can be converted into json object.",
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": f"data:image/jpeg;base64,{encoded_image}"},
-                    },
-                ],
-            }
-        ],
-        max_tokens=self.max_tokens,
-      )
+            model=self.model,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Generate FHIR file format from the image. The output should be in the standard FHIR in json format. Ensure that the output is correctly formatted json. Only give the json result with full accuracy which can be converted into json object.",
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": f"data:image/jpeg;base64,{encoded_image}"},
+                        },
+                    ],
+                }
+            ],
+            max_tokens=self.max_tokens,
+        )
 
         result = response.choices[0].message.content
         return result

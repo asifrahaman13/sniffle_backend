@@ -43,7 +43,6 @@ async def get_image_description(
 
     gpt4_description = chat_interface.get_fhir_data(encoded_image)
     logging.info(gpt4_description)
-    
 
     """
     Extract out the json data from the chat response of the LLM. We need to parse the data later into json format. We also need to upload the files into the AWS S3, and 
@@ -74,11 +73,9 @@ async def get_image_description(
                 )
                 if "_id" in saved_json:
                     saved_json["_id"] = str(saved_json["_id"])
-                return  saved_json
+                return saved_json
             else:
-                raise HTTPException(
-                    status_code=500, detail="Failed to upload JSON to AWS S3"
-                )
+                raise HTTPException(status_code=500, detail="Failed to upload JSON to AWS S3")
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid JSON format: {e}")
 
@@ -87,23 +84,19 @@ async def get_image_description(
 async def get_all_json(
     username: str,
     database_interface: DatabaseInterface = Depends(database_service),
-):  
+):
     # Get all the JSON files uploaded by the specified user
     all_json_files = database_interface.find_all_documents_from_field(
         "username", username, "json_files"
-    ) 
+    )
     if all_json_files:
         return all_json_files
     else:
-        raise HTTPException(
-            status_code=404, detail="No JSON files found for the specified user"
-        )
+        raise HTTPException(status_code=404, detail="No JSON files found for the specified user")
 
 
 @fhir_router.get("/presigned-url/{file_name}")
-async def get_presigned_url(
-    file_name: str, aws_interface: AWSInterface = Depends(aws_service)
-):
+async def get_presigned_url(file_name: str, aws_interface: AWSInterface = Depends(aws_service)):
     logging.info(file_name)
     # Get the presigned URL for the specified file name
     presigned_url = aws_interface.get_presigned_json_url(file_name=file_name + ".json")

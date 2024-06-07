@@ -17,7 +17,7 @@ assert deepgram_api_key, "Deepgram API key is not set"
 class VoiceRepository:
 
     def __init__(self) -> None:
-        self.__model="aura-luna-en"
+        self.__model = "aura-luna-en"
 
     def chunk_text_by_sentence(self, text):
 

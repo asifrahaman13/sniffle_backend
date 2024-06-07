@@ -139,8 +139,10 @@ class DatabaseRepository:
         except Exception as e:
             logging.error(f"Failed to append data: {e}")
             return False
-        
-    def update_single_document(self, field: str, field_value: str, data: Dict[str, Any], collection_name: str):
+
+    def update_single_document(
+        self, field: str, field_value: str, data: Dict[str, Any], collection_name: str
+    ):
         try:
             # Define the collection where the data will be stored
             collection = self.db[collection_name]
@@ -152,11 +154,11 @@ class DatabaseRepository:
             new_values = {"$set": data}
 
             # Update the document
-            result=collection.update_one(filter, new_values)
-            
+            result = collection.update_one(filter, new_values)
+
             # Check if the document was updated
             if result.modified_count == 0:
-                return False        
+                return False
 
             # Return True to indicate success
             return True
@@ -164,19 +166,21 @@ class DatabaseRepository:
             logging.error(f"Failed to update data: {e}")
             return False
 
-    def update_single_document_(self, filter_key: str, filter_value: str, update_data: dict, collection_name: str):
-            try:
-                # Define the collection where the data will be updated
-                collection = self.db[collection_name]
+    def update_single_document_(
+        self, filter_key: str, filter_value: str, update_data: dict, collection_name: str
+    ):
+        try:
+            # Define the collection where the data will be updated
+            collection = self.db[collection_name]
 
-                # Update the document in the collection
-                collection.update_one({filter_key: filter_value}, {"$set": update_data})
+            # Update the document in the collection
+            collection.update_one({filter_key: filter_value}, {"$set": update_data})
 
-                # Return the updated data
-                return update_data
-            except Exception as e:
-                logging.error(f"Failed to update data: {e}")
-                return None
+            # Return the updated data
+            return update_data
+        except Exception as e:
+            logging.error(f"Failed to update data: {e}")
+            return None
 
     def find_all_documents_from_field(self, field: str, field_value: str, collection_name: str):
         # Create an empty list to store the data that will be found
@@ -197,6 +201,3 @@ class DatabaseRepository:
             return all_pdfs_of_user
         except Exception as e:
             return None
-    
-        
-        

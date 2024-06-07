@@ -106,9 +106,7 @@ class ChatService:
         try:
 
             # Get the general metrics for the user
-            response = self.chat_repository.llm_user_general_metrics(
-                query, all_messages
-            )
+            response = self.chat_repository.llm_user_general_metrics(query, all_messages)
 
             if response["summary"] == True:
                 # Check if the user exists in the database
@@ -195,7 +193,7 @@ class ChatService:
                     logging.error(f"Failed to save chat response: {e}")
             else:
                 return responses
-            
+
     def streaming_voice_assessment_response(self, user, query, all_messages):
 
         # Get the chat response
@@ -248,12 +246,12 @@ class ChatService:
                     logging.error(f"Failed to save chat response: {e}")
             else:
                 return responses
-            
+
     def get_fhir_data(self, encoded_image):
         return self.chat_repository.get_fhir_data(encoded_image)
-    
+
     def general_chat_query(self, query, previous_messages):
         return self.chat_repository.general_chat_query(query, previous_messages)
-    
+
     def get_streaming_voice_response(self, query, previous_messages):
         return self.chat_repository.get_streaming_voice_response(query, previous_messages)

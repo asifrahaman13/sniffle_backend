@@ -6,6 +6,7 @@ from fastapi import APIRouter
 
 wearable_router = APIRouter()
 
+
 def glucose_monitor(value: float):
     if value > 100:
         return True
@@ -42,7 +43,9 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
                 if int(time.time()) - last_time > 60:
                     print("Glucose level alert")
                     print("Push notification sent")
-                    await websocket.send_text(f"Hey your current glucose level: {data["glucoseLevel"]} is unusual. Please take care.")
+                    await websocket.send_text(
+                        f"Hey your current glucose level: {data["glucoseLevel"]} is unusual. Please take care."
+                    )
                     await asyncio.sleep(1)
                     last_time = int(time.time())
 
@@ -54,7 +57,9 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
                 if int(time.time()) - last_time > 60:
                     print("Heart rate alert")
                     print("Push notification sent")
-                    await websocket.send_text(f"Hey your current heart rate level: {data["heartRate"]} is unusual. Please take care.")
+                    await websocket.send_text(
+                        f"Hey your current heart rate level: {data["heartRate"]} is unusual. Please take care."
+                    )
                     await asyncio.sleep(1)
                     last_time = int(time.time())
 
@@ -66,7 +71,9 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
                 if int(time.time()) - last_time > 60:
                     print("Blood pressure alert")
                     print("Push notification sent")
-                    await websocket.send_text(f"Hey your current blood pressure level: {data["bloodPressure"]} is unusual. Please take care.")
+                    await websocket.send_text(
+                        f"Hey your current blood pressure level: {data["bloodPressure"]} is unusual. Please take care."
+                    )
                     await asyncio.sleep(1)
                     last_time = int(time.time())
 
@@ -78,7 +85,8 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
                 if int(time.time()) - last_time > 60:
                     print("Temperature alert")
                     print("Push notification sent")
-                    await websocket.send_text(f"Hey your current temperature level: {data["temperature"]} is unusual. Please take care.")
+                    await websocket.send_text(
+                        f"Hey your current temperature level: {data["temperature"]} is unusual. Please take care."
+                    )
                     await asyncio.sleep(1)
                     last_time = int(time.time())
-
