@@ -1,5 +1,9 @@
-from src.infastructure.repositories.chat_repository import ChatResponseRepository
-from src.infastructure.repositories.database_repository import DatabaseRepository
+from src.infastructure.repositories.chat_repository import (
+    ChatResponseRepository,
+)
+from src.infastructure.repositories.database_repository import (
+    DatabaseRepository,
+)
 import logging
 import time
 
@@ -106,7 +110,9 @@ class ChatService:
         try:
 
             # Get the general metrics for the user
-            response = self.chat_repository.llm_user_general_metrics(query, all_messages)
+            response = self.chat_repository.llm_user_general_metrics(
+                query, all_messages
+            )
 
             if response["summary"] == True:
                 # Check if the user exists in the database
@@ -130,7 +136,10 @@ class ChatService:
 
                     # Save the chat response
                     self.database_repository.update_single_document(
-                        "email", user, response["response_schema"], "general_metrics"
+                        "email",
+                        user,
+                        response["response_schema"],
+                        "general_metrics",
                     )
 
                 # Return the response
@@ -144,7 +153,9 @@ class ChatService:
     def streaming_llm_response(self, user, query, all_messages):
 
         # Get the chat response
-        responses = self.chat_repository.streaming_llm_response(query, all_messages)
+        responses = self.chat_repository.streaming_llm_response(
+            query, all_messages
+        )
 
         while True:
 
@@ -160,8 +171,10 @@ class ChatService:
                 try:
 
                     # Check if the user exists in the database
-                    if_data_exists = self.database_repository.find_single_document(
-                        "email", user, "quantitative_metrics"
+                    if_data_exists = (
+                        self.database_repository.find_single_document(
+                            "email", user, "quantitative_metrics"
+                        )
                     )
 
                     logging.info(f"response: {if_data_exists}")
@@ -182,7 +195,10 @@ class ChatService:
                     # If the user does not exist in the database, create a new document
                     else:
                         self.database_repository.insert_single_document(
-                            {"email": user, "data": [response["response_schema"]]},
+                            {
+                                "email": user,
+                                "data": [response["response_schema"]],
+                            },
                             "quantitative_metrics",
                         )
 
@@ -197,7 +213,9 @@ class ChatService:
     def streaming_voice_assessment_response(self, user, query, all_messages):
 
         # Get the chat response
-        responses = self.chat_repository.streaming_voice_assessment_response(query, all_messages)
+        responses = self.chat_repository.streaming_voice_assessment_response(
+            query, all_messages
+        )
 
         while True:
 
@@ -213,8 +231,10 @@ class ChatService:
                 try:
 
                     # Check if the user exists in the database
-                    if_data_exists = self.database_repository.find_single_document(
-                        "email", user, "assessment_metrics"
+                    if_data_exists = (
+                        self.database_repository.find_single_document(
+                            "email", user, "assessment_metrics"
+                        )
                     )
 
                     logging.info(f"response: {if_data_exists}")
@@ -235,7 +255,10 @@ class ChatService:
                     # If the user does not exist in the database, create a new document
                     else:
                         self.database_repository.insert_single_document(
-                            {"email": user, "data": [response["response_schema"]]},
+                            {
+                                "email": user,
+                                "data": [response["response_schema"]],
+                            },
                             "assessment_metrics",
                         )
 
@@ -254,4 +277,6 @@ class ChatService:
         return self.chat_repository.general_chat_query(query, previous_messages)
 
     def get_streaming_voice_response(self, query, previous_messages):
-        return self.chat_repository.get_streaming_voice_response(query, previous_messages)
+        return self.chat_repository.get_streaming_voice_response(
+            query, previous_messages
+        )

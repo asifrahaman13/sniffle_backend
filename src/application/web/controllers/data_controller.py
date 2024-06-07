@@ -30,14 +30,18 @@ async def get_quantitative_metrics(
             raise HTTPException(status_code=401, detail="Invalid token")
 
         # Get the general metrics for the user
-        general_metrics = data_interface.get_quantitative_metrics(id_info["sub"])
+        general_metrics = data_interface.get_quantitative_metrics(
+            id_info["sub"]
+        )
 
         # Return the general metrics
         return general_metrics
 
     except Exception as e:
         # Log the error
-        raise HTTPException(status_code=500, detail="Failed to get general metrics")
+        raise HTTPException(
+            status_code=500, detail="Failed to get general metrics"
+        )
 
 
 @data_router.get("/assessment_metrics/{token}")
@@ -55,13 +59,17 @@ async def get_assessment_metrics(
             raise HTTPException(status_code=401, detail="Invalid token")
 
         # Get the assessment metrics for the user
-        assessment_metrics = data_interface.get_assessment_metrics(id_info["sub"])
+        assessment_metrics = data_interface.get_assessment_metrics(
+            id_info["sub"]
+        )
 
         # Return the assessment metrics
         return assessment_metrics
     except Exception as e:
         # Log the error
-        raise HTTPException(status_code=500, detail="Failed to get assessment metrics")
+        raise HTTPException(
+            status_code=500, detail="Failed to get assessment metrics"
+        )
 
 
 @data_router.get("/recommendations/{token}")
@@ -85,7 +93,9 @@ async def get_recommendations(
         return recommendations
     except Exception as e:
         # Log the error
-        raise HTTPException(status_code=500, detail="Failed to get recommendations")
+        raise HTTPException(
+            status_code=500, detail="Failed to get recommendations"
+        )
 
 
 @data_router.get("/general_metrics/{token}")
@@ -110,7 +120,9 @@ async def get_general_metrics(
 
     except Exception as e:
         # Log the error
-        raise HTTPException(status_code=500, detail="Failed to get general metrics")
+        raise HTTPException(
+            status_code=500, detail="Failed to get general metrics"
+        )
 
 
 @data_router.put("/general_metrics/{token}")
@@ -138,4 +150,6 @@ async def update_general_metrics(
 
     except Exception as e:
         # Log the error
-        raise HTTPException(status_code=500, detail="Failed to get general metrics")
+        raise HTTPException(
+            status_code=500, detail="Failed to get general metrics"
+        )

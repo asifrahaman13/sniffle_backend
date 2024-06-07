@@ -75,7 +75,9 @@ class DatabaseRepository:
             collection = self.db["pdfs"]
 
             # Find the data that matches the username and pdf name
-            pdf_data = collection.find_one({"username": username, "pdf_name": pdf_name})
+            pdf_data = collection.find_one(
+                {"username": username, "pdf_name": pdf_name}
+            )
 
             if pdf_data is not None:
                 return True
@@ -86,7 +88,9 @@ class DatabaseRepository:
             logging.error(f"Failed to find data: {e}")
             return False
 
-    def find_single_document(self, field: str, field_value: str, collection_name: str):
+    def find_single_document(
+        self, field: str, field_value: str, collection_name: str
+    ):
         try:
 
             # Define the collection where the data will be stored
@@ -132,7 +136,9 @@ class DatabaseRepository:
             collection = self.db[collection_name]
 
             # Append the data to the array
-            collection.update_one({field: field_value}, {"$push": {array_field: data}})
+            collection.update_one(
+                {field: field_value}, {"$push": {array_field: data}}
+            )
 
             # Return the data that was stored
             return True
@@ -141,7 +147,11 @@ class DatabaseRepository:
             return False
 
     def update_single_document(
-        self, field: str, field_value: str, data: Dict[str, Any], collection_name: str
+        self,
+        field: str,
+        field_value: str,
+        data: Dict[str, Any],
+        collection_name: str,
     ):
         try:
             # Define the collection where the data will be stored
@@ -167,14 +177,20 @@ class DatabaseRepository:
             return False
 
     def update_single_document_(
-        self, filter_key: str, filter_value: str, update_data: dict, collection_name: str
+        self,
+        filter_key: str,
+        filter_value: str,
+        update_data: dict,
+        collection_name: str,
     ):
         try:
             # Define the collection where the data will be updated
             collection = self.db[collection_name]
 
             # Update the document in the collection
-            collection.update_one({filter_key: filter_value}, {"$set": update_data})
+            collection.update_one(
+                {filter_key: filter_value}, {"$set": update_data}
+            )
 
             # Return the updated data
             return update_data
@@ -182,7 +198,9 @@ class DatabaseRepository:
             logging.error(f"Failed to update data: {e}")
             return None
 
-    def find_all_documents_from_field(self, field: str, field_value: str, collection_name: str):
+    def find_all_documents_from_field(
+        self, field: str, field_value: str, collection_name: str
+    ):
         # Create an empty list to store the data that will be found
         all_pdfs_of_user = []
         try:

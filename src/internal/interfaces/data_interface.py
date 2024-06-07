@@ -31,7 +31,11 @@ class DataInterface(ABC):
 
     @abstractmethod
     def update_general_metrics(
-        self, field: str, field_value: Any, data: Dict[str, Any], collection_name: str
+        self,
+        field: str,
+        field_value: Any,
+        data: Dict[str, Any],
+        collection_name: str,
     ) -> None:
         """Update general metrics in the specified collection."""
         pass

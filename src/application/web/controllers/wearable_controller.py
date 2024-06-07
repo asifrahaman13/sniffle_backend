@@ -38,7 +38,9 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
         # Glucose Level Monitoring
         if "glucoseLevel" in data:
             glucose_level = float(data["glucoseLevel"])
-            print(f"Received glucose level data from user {user_id}: {glucose_level}")
+            print(
+                f"Received glucose level data from user {user_id}: {glucose_level}"
+            )
             if glucose_monitor(glucose_level):
                 if int(time.time()) - last_time > 60:
                     print("Glucose level alert")
@@ -66,7 +68,9 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
         # Blood Pressure Monitoring
         if "bloodPressure" in data:
             blood_pressure = int(data["bloodPressure"])
-            print(f"Received blood pressure data from user {user_id}: {blood_pressure}")
+            print(
+                f"Received blood pressure data from user {user_id}: {blood_pressure}"
+            )
             if blood_pressure_monitor(blood_pressure):
                 if int(time.time()) - last_time > 60:
                     print("Blood pressure alert")
@@ -80,7 +84,9 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
         # Temperature Monitoring
         if "temperature" in data:
             temperature = float(data["temperature"])
-            print(f"Received temperature data from user {user_id}: {temperature}")
+            print(
+                f"Received temperature data from user {user_id}: {temperature}"
+            )
             if temperature_monitor(temperature):
                 if int(time.time()) - last_time > 60:
                     print("Temperature alert")

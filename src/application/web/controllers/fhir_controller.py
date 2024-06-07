@@ -9,10 +9,14 @@ from fastapi import File, Form, UploadFile, HTTPException
 from src.internal.interfaces.chat_interface import ChatInterface
 from src.internal.interfaces.aws_interface import AWSInterface
 from src.internal.use_cases.chat_service import ChatService
-from src.infastructure.repositories.chat_repository import ChatResponseRepository
+from src.infastructure.repositories.chat_repository import (
+    ChatResponseRepository,
+)
 from src.infastructure.repositories.aws_repository import AWSRepository
 from src.internal.use_cases.aws_service import AwsService
-from src.infastructure.repositories.database_repository import DatabaseRepository
+from src.infastructure.repositories.database_repository import (
+    DatabaseRepository,
+)
 from src.internal.use_cases.database_service import DatabaseService
 from src.internal.interfaces.database_interface import DatabaseInterface
 
@@ -55,7 +59,9 @@ async def get_image_description(
     try:
         json_content = json.loads(gpt4_description)
         # Create a temporary JSON file
-        with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temp_file:
+        with tempfile.NamedTemporaryFile(
+            suffix=".json", delete=False
+        ) as temp_file:
             temp_file.write(json.dumps(json_content).encode("utf-8"))
             temp_file_path = temp_file.name
 
@@ -75,7 +81,9 @@ async def get_image_description(
                     saved_json["_id"] = str(saved_json["_id"])
                 return saved_json
             else:
-                raise HTTPException(status_code=500, detail="Failed to upload JSON to AWS S3")
+                raise HTTPException(
+                    status_code=500, detail="Failed to upload JSON to AWS S3"
+                )
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid JSON format: {e}")
 
@@ -92,14 +100,20 @@ async def get_all_json(
     if all_json_files:
         return all_json_files
     else:
-        raise HTTPException(status_code=404, detail="No JSON files found for the specified user")
+        raise HTTPException(
+            status_code=404, detail="No JSON files found for the specified user"
+        )
 
 
 @fhir_router.get("/presigned-url/{file_name}")
-async def get_presigned_url(file_name: str, aws_interface: AWSInterface = Depends(aws_service)):
+async def get_presigned_url(
+    file_name: str, aws_interface: AWSInterface = Depends(aws_service)
+):
     logging.info(file_name)
     # Get the presigned URL for the specified file name
-    presigned_url = aws_interface.get_presigned_json_url(file_name=file_name + ".json")
+    presigned_url = aws_interface.get_presigned_json_url(
+        file_name=file_name + ".json"
+    )
 
     # response= requests.get(presigned_url)
 
@@ -112,5 +126,6 @@ async def get_presigned_url(file_name: str, aws_interface: AWSInterface = Depend
         return {"presigned_url": presigned_url}
     else:
         raise HTTPException(
-            status_code=404, detail="File not found or presigned URL generation failed"
+            status_code=404,
+            detail="File not found or presigned URL generation failed",
         )

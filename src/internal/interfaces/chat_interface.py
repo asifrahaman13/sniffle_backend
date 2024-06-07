@@ -5,12 +5,16 @@ from typing import Dict, List
 class ChatInterface(ABC):
 
     @abstractmethod
-    def chat_response(self, user: str, query: str, all_messages: List[Dict[str, str]]) -> None:
+    def chat_response(
+        self, user: str, query: str, all_messages: List[Dict[str, str]]
+    ) -> None:
         """Generate a chat response based on the user, query, and previous messages."""
         pass
 
     @abstractmethod
-    def llm_assessment(self, user: str, query: str, all_messages: List[Dict[str, str]]) -> None:
+    def llm_assessment(
+        self, user: str, query: str, all_messages: List[Dict[str, str]]
+    ) -> None:
         """Perform an LLM assessment based on the user, query, and previous messages."""
         pass
 
@@ -41,7 +45,9 @@ class ChatInterface(ABC):
         pass
 
     @abstractmethod
-    def general_chat_query(self, query: str, previous_messages: List[Dict[str, str]]) -> None:
+    def general_chat_query(
+        self, query: str, previous_messages: List[Dict[str, str]]
+    ) -> None:
         """Perform a general chat query based on the query and previous messages."""
         pass
 

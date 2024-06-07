@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from src.internal.entities.auth import Token
-from src.infastructure.repositories.database_repository import DatabaseRepository
+from src.infastructure.repositories.database_repository import (
+    DatabaseRepository,
+)
 from src.infastructure.repositories.auth_repository import AuthRepository
 from src.internal.use_cases.auth_service import AuthService
 from src.internal.use_cases.database_service import DatabaseService
@@ -46,7 +48,9 @@ async def google_sign_in(
 
 
 @auth_router.post("/decode_token", response_model=dict)
-async def decode_token(token: Token, auth_interface: AuthInterface = Depends(auth_service)):
+async def decode_token(
+    token: Token, auth_interface: AuthInterface = Depends(auth_service)
+):
     try:
         id_info = auth_interface.decode_access_token(token.token)
         return id_info

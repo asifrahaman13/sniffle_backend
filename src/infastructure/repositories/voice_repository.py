@@ -25,7 +25,9 @@ class VoiceRepository:
         sentence_boundaries = re.finditer(r"(?<=[.!?])\s+", text)
 
         # Get the indices of the sentence boundaries
-        boundaries_indices = [boundary.start() for boundary in sentence_boundaries]
+        boundaries_indices = [
+            boundary.start() for boundary in sentence_boundaries
+        ]
 
         chunks = []
         start = 0

@@ -15,7 +15,9 @@ from config.config import OPEN_AI_API_KEY
 
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class HealthAssistant:
@@ -53,7 +55,9 @@ class HealthAssistant:
             ],
             # Define the input variables
             input_variables=["question"],
-            partial_variables={"format_instructions": parser.get_format_instructions()},
+            partial_variables={
+                "format_instructions": parser.get_format_instructions()
+            },
         )
         return prompt.format_prompt(question=user_query)
 
@@ -74,7 +78,9 @@ class HealthAssistant:
             ],
             # Define the input variables
             input_variables=["question"],
-            partial_variables={"format_instructions": parser.get_format_instructions()},
+            partial_variables={
+                "format_instructions": parser.get_format_instructions()
+            },
         )
         return prompt.format_prompt(question=user_query)
 
@@ -92,7 +98,9 @@ class HealthAssistant:
             ],
             # Define the input variables
             input_variables=["question"],
-            partial_variables={"format_instructions": parser.get_format_instructions()},
+            partial_variables={
+                "format_instructions": parser.get_format_instructions()
+            },
         )
         return prompt.format_prompt(question=user_query)
 
@@ -210,7 +218,11 @@ class ChatResponseRepository:
             summary = {"summary": response}
 
             # Extract the JSON content and return the data.
-            return {"summary": True, "response": response, "response_schema": summary}
+            return {
+                "summary": True,
+                "response": response,
+                "response_schema": summary,
+            }
 
         return {"summary": False, "response": response}
 
@@ -335,12 +347,17 @@ class ChatResponseRepository:
                     # Calculate the elapsed time
                     elapsed_time = end_time - start_time
 
-                    logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
+                    logging.info(
+                        f"Elapsed time for open ai: {elapsed_time} seconds"
+                    )
 
                     # Yield the sentence
 
                     print("Sending", {"response": total_text, "is_last": True})
-                    yield {"response": sentence_buffer.strip(), "is_last": False}
+                    yield {
+                        "response": sentence_buffer.strip(),
+                        "is_last": False,
+                    }
                     sentence_buffer = ""
 
         if detect_summary(total_text):
@@ -406,9 +423,14 @@ class ChatResponseRepository:
                     # Calculate the elapsed time
                     elapsed_time = end_time - start_time
 
-                    logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
+                    logging.info(
+                        f"Elapsed time for open ai: {elapsed_time} seconds"
+                    )
                     print("Sending", {"response": total_text, "is_last": True})
-                    yield {"response": sentence_buffer.strip(), "is_last": False}
+                    yield {
+                        "response": sentence_buffer.strip(),
+                        "is_last": False,
+                    }
                     sentence_buffer = ""
 
         if detect_summary(total_text):
@@ -440,7 +462,9 @@ class ChatResponseRepository:
                         },
                         {
                             "type": "image_url",
-                            "image_url": {"url": f"data:image/jpeg;base64,{encoded_image}"},
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{encoded_image}"
+                            },
                         },
                     ],
                 }
@@ -519,6 +543,8 @@ class ChatResponseRepository:
                     # Calculate the elapsed time
                     elapsed_time = end_time - start_time
 
-                    logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
+                    logging.info(
+                        f"Elapsed time for open ai: {elapsed_time} seconds"
+                    )
                     yield {"response": sentence_buffer.strip()}
                     sentence_buffer = ""

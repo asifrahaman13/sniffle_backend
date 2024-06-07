@@ -7,7 +7,9 @@ class AuthService:
     def __call__(self) -> "AuthService":
         return self
 
-    def __init__(self, auth_repository: AuthRepository = AuthRepository) -> None:
+    def __init__(
+        self, auth_repository: AuthRepository = AuthRepository
+    ) -> None:
         self.auth_repository = auth_repository
 
     def create_access_token(self, data: Dict[str, Any]) -> str:

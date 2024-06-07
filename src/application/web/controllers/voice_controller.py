@@ -1,6 +1,8 @@
 import logging
 from fastapi import APIRouter, Depends, WebSocket
-from src.infastructure.repositories.chat_repository import ChatResponseRepository
+from src.infastructure.repositories.chat_repository import (
+    ChatResponseRepository,
+)
 from src.internal.use_cases.chat_service import ChatService
 from src.infastructure.repositories.auth_repository import AuthRepository
 from src.internal.use_cases.auth_service import AuthService
@@ -41,7 +43,9 @@ async def websocket_endpoint(
             message = await websocket.receive_json()
             logging.info(f"Client #{client_id} sent: {message}")
 
-            messages_received.append({"role": "user", "content": message["query"]})
+            messages_received.append(
+                {"role": "user", "content": message["query"]}
+            )
 
             """
             The streaming response from the chat interface is passed to the voice interface to generate a voice response.
@@ -60,7 +64,9 @@ async def websocket_endpoint(
                     sentences = sentences["response"]
                     logging.info("llm_streaming_response")
                     logging.info(sentences)
-                    text_to_audio_base64 = voice_interface.voice_response(sentences)
+                    text_to_audio_base64 = voice_interface.voice_response(
+                        sentences
+                    )
                     await websocket.send_text(text_to_audio_base64)
                     # messages_received=[]
                 except StopIteration:
@@ -89,15 +95,19 @@ async def websocket_endpoint(
             message = await websocket.receive_json()
             logging.info(f"Client #{client_id} sent: {message}")
 
-            messages_received.append({"role": "user", "content": message["query"]})
+            messages_received.append(
+                {"role": "user", "content": message["query"]}
+            )
 
             """
             The streaming response from the chat interface is passed to the voice interface to generate a voice response.
             """
             logging.info("messages received")
             logging.info(messages_received)
-            llm_streaming_response = chat_interface.streaming_voice_assessment_response(
-                user_info["sub"], message["query"], messages_received
+            llm_streaming_response = (
+                chat_interface.streaming_voice_assessment_response(
+                    user_info["sub"], message["query"], messages_received
+                )
             )
 
             gen = llm_streaming_response
@@ -108,7 +118,9 @@ async def websocket_endpoint(
                     sentences = sentences["response"]
                     logging.info("llm_streaming_response")
                     logging.info(sentences)
-                    text_to_audio_base64 = voice_interface.voice_response(sentences)
+                    text_to_audio_base64 = voice_interface.voice_response(
+                        sentences
+                    )
                     await websocket.send_text(text_to_audio_base64)
                     # messages_received=[]
                 except StopIteration:
@@ -137,15 +149,19 @@ async def websocket_endpoint_query(
             message = await websocket.receive_json()
             logging.info(f"Client #{client_id} sent: {message}")
 
-            messages_received.append({"role": "user", "content": message["query"]})
+            messages_received.append(
+                {"role": "user", "content": message["query"]}
+            )
 
             """
             The streaming response from the chat interface is passed to the voice interface to generate a voice response.
             """
             logging.info("messages received")
             logging.info(messages_received)
-            llm_streaming_response = chat_interface.get_streaming_voice_response(
-                message["query"], messages_received
+            llm_streaming_response = (
+                chat_interface.get_streaming_voice_response(
+                    message["query"], messages_received
+                )
             )
 
             gen = llm_streaming_response
@@ -156,7 +172,9 @@ async def websocket_endpoint_query(
                     sentences = sentences["response"]
                     logging.info("llm_streaming_response")
                     logging.info(sentences)
-                    text_to_audio_base64 = voice_interface.voice_response(sentences)
+                    text_to_audio_base64 = voice_interface.voice_response(
+                        sentences
+                    )
                     await websocket.send_text(text_to_audio_base64)
                     # messages_received=[]
                 except StopIteration:

@@ -3,7 +3,12 @@ from datetime import UTC
 from jose import jwt
 from google.oauth2 import id_token
 from google.auth.transport import requests
-from config.config import GOOGLE_CLIENT_ID, SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from config.config import (
+    GOOGLE_CLIENT_ID,
+    SECRET_KEY,
+    ALGORITHM,
+    ACCESS_TOKEN_EXPIRE_MINUTES,
+)
 
 
 class AuthRepository:
@@ -23,13 +28,17 @@ class AuthRepository:
 
         # Add the expiration time to the token
         to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
+        encoded_jwt = jwt.encode(
+            to_encode, self.secret_key, algorithm=self.algorithm
+        )
         return encoded_jwt
 
     def verify_google_access_token(self, token):
         try:
             # Verify the access token
-            id_info = id_token.verify_oauth2_token(token, requests.Request(), self.google_client_id)
+            id_info = id_token.verify_oauth2_token(
+                token, requests.Request(), self.google_client_id
+            )
 
             # Return the user information
             return id_info
@@ -41,7 +50,9 @@ class AuthRepository:
         print("The token received is: ", token)
         try:
             # Decode the access token
-            payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])
+            payload = jwt.decode(
+                token, self.secret_key, algorithms=[self.algorithm]
+            )
 
             # Return the payload
             return payload

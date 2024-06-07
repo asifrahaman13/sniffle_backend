@@ -2,7 +2,9 @@ import logging
 from fastapi import WebSocket, APIRouter, Depends
 from src.ConnectionManager.ConnectionManager import ConnectionManager
 from fastapi import WebSocket, WebSocketDisconnect
-from src.infastructure.repositories.chat_repository import ChatResponseRepository
+from src.infastructure.repositories.chat_repository import (
+    ChatResponseRepository,
+)
 from src.internal.use_cases.chat_service import ChatService
 from src.infastructure.repositories.auth_repository import AuthRepository
 from src.internal.use_cases.auth_service import AuthService
@@ -201,10 +203,15 @@ async def websocket_general_chat(
             logging.info(f"Client #{client_id} sent: {data}")
 
             # Create a chat response
-            chat_response = chat_interface.general_chat_query(data["query"], all_messages)
+            chat_response = chat_interface.general_chat_query(
+                data["query"], all_messages
+            )
 
             # Log the response
-            llm_response = {"role": "system", "content": chat_response["response"]}
+            llm_response = {
+                "role": "system",
+                "content": chat_response["response"],
+            }
 
             # Append the response to the all_messages list
             all_messages.append(llm_response)
