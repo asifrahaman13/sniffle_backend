@@ -12,7 +12,7 @@ class AuthRepository:
         self.secret_key = SECRET_KEY
         self.google_client_id = GOOGLE_CLIENT_ID
         self.algorithm = ALGORITHM
-        self.expires = 3600
+        self.expires = ACCESS_TOKEN_EXPIRE_MINUTES
 
     def create_access_token(self, data: dict):
         # Create a new access token
@@ -38,6 +38,7 @@ class AuthRepository:
             return None
 
     def decode_access_token(self, token):
+        print("The token received is: ", token)
         try:
             # Decode the access token
             payload = jwt.decode(token, self.secret_key, algorithms=[self.algorithm])

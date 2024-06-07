@@ -1,3 +1,5 @@
+import yaml
+from pydantic import BaseModel
 import os
 import logging
 from dotenv import load_dotenv
@@ -6,31 +8,35 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Set up logging configuration
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
-
-import yaml
-from pydantic import BaseModel
 
 class AppConfig(BaseModel):
     title: str
     version: str
     description: str
 
+
 class ServerConfig(BaseModel):
     host: str
     port: int
+
 
 class DatabaseConfig(BaseModel):
     # url: str
     pool_size: int
 
+
 class SecurityConfig(BaseModel):
     algorithm: str
     access_token_expire_minutes: int
 
+
 class RedisConfig(BaseModel):
     url: str
+
 
 class Config(BaseModel):
     app: AppConfig
@@ -39,10 +45,12 @@ class Config(BaseModel):
     security: SecurityConfig
     redis: RedisConfig
 
+
 def load_config(file_path: str) -> Config:
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         config_dict = yaml.safe_load(file)
     return Config(**config_dict)
+
 
 # Load the configuration
 config = load_config("config.yaml")
@@ -87,6 +95,6 @@ AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
 assert AWS_BUCKET_NAME, "AWS bucket name is not set"
 logging.info("AWS bucket name is set")
 
-REDIS_URL= config.redis.url
+REDIS_URL = config.redis.url
 assert REDIS_URL, "Redis URL is not set."
 logging.info("Redis URL is set")

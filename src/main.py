@@ -2,14 +2,13 @@ import logging
 import os
 import threading
 from fastapi import FastAPI
-from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 import asyncio
 import schedule
 from src.internal.interfaces.data_interface import DataInterface
 from src.internal.use_cases.data_service import DataService
-from src.infastructure.middleware.logging_middleware import log_middleware
+from src.infastructure.middleware.logging_middleware import  PrefixMiddleware
 from math import ceil
 import redis.asyncio as redis
 import uvicorn
@@ -102,8 +101,9 @@ app.include_router(
     dependencies=[Depends(RateLimiter(times=10, seconds=10, identifier=client_identifier))],
 )
 
+
 # Include the middleware
-app.add_middleware(BaseHTTPMiddleware, dispatch=log_middleware)
+app.add_middleware(PrefixMiddleware)
 
 
 # Define the jobs
