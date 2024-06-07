@@ -3,10 +3,10 @@
 Backend repository for the mobile application server which aims at making the health of the users better leveraging the use of AI.
 
 # Tech stacks used:
-- ***FastAPI***: A high perfomant python based framework for creating backend server. 📈
-- ***Mongo db database***: A NoSQL database. Preferred this over the SQL database due to performance and highly unstructured data required. 📊
-- ***openai, langchain, Deepgram SDKs and other libraries***: They are libraries to deal with LLMs, Voice and other AI based works. 🤖
-- ***AWS***: Use the S3 service of AWS to store FHIR files. ☁️
+- **FastAPI**: A high perfomant python based framework for creating backend server. 📈
+- **Mongo db database**: A NoSQL database. Preferred this over the SQL database due to performance and highly unstructured data required. 📊
+- **openai, langchain, Deepgram SDKs and other libraries**: They are libraries to deal with LLMs, Voice and other AI based works. 🤖
+- **AWS**: Use the S3 service of AWS to store FHIR files. ☁️
 
 ## Deploy:
 
