@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta, timezone
 from jose import jwt
-from datetime import UTC
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from config.config import (
@@ -24,7 +23,7 @@ class AuthRepository:
         to_encode = data.copy()
 
         # Set the expiration time for the token
-        expire = datetime.now(UTC) + timedelta(hours=self.__expires)
+        expire = datetime.now(timezone.utc) + timedelta(hours=self.__expires)
 
         # Add the expiration time to the token
         to_encode.update({"exp": expire})
