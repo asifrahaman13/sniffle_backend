@@ -38,6 +38,10 @@ async def websocket_endpoint(
 
     user_info = auth_interface.decode_access_token(client_id)
 
+    if user_info is None or "error" in user_info:
+        await websocket.send_json("Invalid token")
+        return
+
     all_messages = []
 
     try:
@@ -88,6 +92,10 @@ async def websocket_endpoint(
     logging.info(f"Client #{client_id} connected for assessment")
 
     user_info = auth_interface.decode_access_token(client_id)
+
+    if user_info is None or "error" in user_info:
+        await websocket.send_json("Invalid token")
+        return
 
     all_messages = []
 
@@ -140,6 +148,10 @@ async def websocket_endpoint(
 
     user_info = auth_interface.decode_access_token(client_id)
 
+    if user_info is None or "error" in user_info:
+        await websocket.send_json("Invalid token")
+        return
+
     all_messages = []
 
     try:
@@ -188,6 +200,10 @@ async def websocket_general_chat(
     logging.info(f"Client #{client_id} connected for health metrics")
 
     user_info = auth_interface.decode_access_token(client_id)
+
+    if user_info is None or "error" in user_info:
+        await websocket.send_json("Invalid token")
+        return
 
     all_messages = []
 
