@@ -13,9 +13,9 @@ Backend repository for the mobile application server which aims at making the he
 
 ## Deploy:
 
-The service is deployed on render.com. https://sniffle-backend.onrender.com/
-
 Find the front end repository corresponding to this repo here: https://github.com/asifrahaman13/sniffle_mobile.git
+
+To run the front end application plese run this backend application.
 
 ## How to run the code
 
