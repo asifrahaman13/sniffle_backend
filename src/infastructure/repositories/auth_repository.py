@@ -1,6 +1,6 @@
-from datetime import datetime, timedelta
-from datetime import UTC
+from datetime import datetime, timedelta, timezone
 from jose import jwt
+from datetime import UTC
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from config.config import (

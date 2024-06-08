@@ -46,7 +46,7 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
                     logging.info("Glucose level alert")
                     logging.info("Push notification sent")
                     await websocket.send_text(
-                        f"Hey your current glucose level: {data["glucoseLevel"]} is unusual. Please take care."
+                        "Hey your current glucose level: {} is unusual. Please take care.".format(data['glucoseLevel'])
                     )
                     await asyncio.sleep(1)
                     last_time = int(time.time())
@@ -60,7 +60,7 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
                     logging.info("Heart rate alert")
                     logging.info("Push notification sent")
                     await websocket.send_text(
-                        f"Hey your current heart rate level: {data["heartRate"]} is unusual. Please take care."
+                        "Hey your current heart rate level: {} is unusual. Please take care.".format(data["heartRate"])
                     )
                     await asyncio.sleep(1)
                     last_time = int(time.time())
@@ -76,7 +76,7 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
                     logging.info("Blood pressure alert")
                     logging.info("Push notification sent")
                     await websocket.send_text(
-                        f"Hey your current blood pressure level: {data["bloodPressure"]} is unusual. Please take care."
+                        "Hey your current blood pressure level: {} is unusual. Please take care.".format(data["bloodPressure"])
                     )
                     await asyncio.sleep(1)
                     last_time = int(time.time())
@@ -92,7 +92,7 @@ async def websocket_endpoint(id: str, websocket: WebSocket):
                     logging.info("Temperature alert")
                     logging.info("Push notification sent")
                     await websocket.send_text(
-                        f"Hey your current temperature level: {data["temperature"]} is unusual. Please take care."
+                        "Hey your current temperature level: {} is unusual. Please take care.".format(data["temperature"])
                     )
                     await asyncio.sleep(1)
                     last_time = int(time.time())
