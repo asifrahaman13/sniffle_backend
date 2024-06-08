@@ -22,13 +22,13 @@ logging.basicConfig(
 
 class HealthAssistant:
     def __init__(self):
-        self.model = "gpt-4o"
-        self.openai_api_key = OPEN_AI_API_KEY
-        self.max_tokens = 3000
+        self.__model = "gpt-4o"
+        self.__openai_api_key = OPEN_AI_API_KEY
+        self.__max_tokens = 3000
         self.chat_model = ChatOpenAI(
-            model=self.model,
-            openai_api_key=self.openai_api_key,
-            max_tokens=self.max_tokens,
+            model=self.__model,
+            openai_api_key=self.__openai_api_key,
+            max_tokens=self.__max_tokens,
         )
 
     def process_output(self, output):
@@ -145,10 +145,10 @@ class HealthAssistant:
 class ChatResponseRepository:
 
     def __init__(self) -> None:
-        self.temperature = 0.7
-        self.max_tokens = 3000
-        self.model = "gpt-4o"
-        self.client = OpenAI(api_key=OPEN_AI_API_KEY)
+        self.__temperature = 0.7
+        self.__max_tokens = 3000
+        self.__model = "gpt-4o"
+        self.__client = OpenAI(api_key=OPEN_AI_API_KEY)
 
     def chat_response(self, _query, previous_messages=[]):
 
@@ -164,11 +164,11 @@ class ChatResponseRepository:
         )
 
         # Create a completion
-        response = self.client.chat.completions.create(
-            model=self.model,
+        response = self.__client.chat.completions.create(
+            model=self.__model,
             messages=messages,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
+            max_tokens=self.__max_tokens,
+            temperature=self.__temperature,
         )
 
         # Get the response
@@ -202,11 +202,11 @@ class ChatResponseRepository:
         )
 
         # Create a completion
-        response = self.client.chat.completions.create(
-            model=self.model,
+        response = self.__client.chat.completions.create(
+            model=self.__model,
             messages=messages,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
+            max_tokens=self.__max_tokens,
+            temperature=self.__temperature,
         )
 
         # Get the response
@@ -244,11 +244,11 @@ class ChatResponseRepository:
         )
 
         # Create a completion
-        response = self.client.chat.completions.create(
-            model=self.model,
+        response = self.__client.chat.completions.create(
+            model=self.__model,
             messages=messages,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
+            max_tokens=self.__max_tokens,
+            temperature=self.__temperature,
         )
 
         # Get the response
@@ -277,11 +277,11 @@ class ChatResponseRepository:
         )
 
         # Create a completion
-        response = self.client.chat.completions.create(
-            model=self.model,
+        response = self.__client.chat.completions.create(
+            model=self.__model,
             messages=messages,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
+            max_tokens=self.__max_tokens,
+            temperature=self.__temperature,
         )
 
         # Get the response
@@ -302,7 +302,7 @@ class ChatResponseRepository:
 
     def streaming_llm_response(self, _query, previous_messages=[]):
 
-        messages = previous_messages
+        messages = previous_messages.copy()
         messages.append(
             {"role": "user", "content": _query},
         )
@@ -316,12 +316,12 @@ class ChatResponseRepository:
         start_time = time.time()
 
         # Create a completion
-        stream = self.client.chat.completions.create(
-            model=self.model,
+        stream = self.__client.chat.completions.create(
+            model=self.__model,
             messages=messages,
             stream=True,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
+            max_tokens=self.__max_tokens,
+            temperature=self.__temperature,
         )
 
         # Initialize a buffer to store the sentence
@@ -360,6 +360,8 @@ class ChatResponseRepository:
                     }
                     sentence_buffer = ""
 
+        previous_messages.append({"role": "system", "content": total_text}) 
+
         if detect_summary(total_text):
             json_parased_quanitative_data = {"summary": total_text}
             print(
@@ -378,7 +380,7 @@ class ChatResponseRepository:
 
     def streaming_voice_assessment_response(self, _query, previous_messages=[]):
 
-        messages = previous_messages
+        messages = previous_messages.copy()
         messages.append(
             {"role": "user", "content": _query},
         )
@@ -392,12 +394,12 @@ class ChatResponseRepository:
         start_time = time.time()
 
         # Create a completion
-        stream = self.client.chat.completions.create(
-            model=self.model,
+        stream = self.__client.chat.completions.create(
+            model=self.__model,
             messages=messages,
             stream=True,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
+            max_tokens=self.__max_tokens,
+            temperature=self.__temperature,
         )
 
         # Initialize a buffer to store the sentence
@@ -432,7 +434,8 @@ class ChatResponseRepository:
                         "is_last": False,
                     }
                     sentence_buffer = ""
-
+        
+        previous_messages.append({"role": "system", "content": total_text})
         if detect_summary(total_text):
             json_parased_quanitative_data = {"summary": total_text}
             print(
@@ -450,8 +453,8 @@ class ChatResponseRepository:
             }
 
     def get_fhir_data(self, encoded_image):
-        response = self.client.chat.completions.create(
-            model=self.model,
+        response = self.__client.chat.completions.create(
+            model=self.__model,
             messages=[
                 {
                     "role": "user",
@@ -469,7 +472,7 @@ class ChatResponseRepository:
                     ],
                 }
             ],
-            max_tokens=self.max_tokens,
+            max_tokens=self.__max_tokens,
         )
 
         result = response.choices[0].message.content
@@ -488,11 +491,11 @@ class ChatResponseRepository:
         )
 
         # Create a completion
-        response = self.client.chat.completions.create(
-            model=self.model,
+        response = self.__client.chat.completions.create(
+            model=self.__model,
             messages=messages,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
+            max_tokens=self.__max_tokens,
+            temperature=self.__temperature,
         )
 
         # Get the response
@@ -501,7 +504,7 @@ class ChatResponseRepository:
 
     def get_streaming_voice_response(self, _query, previous_messages=[]):
 
-        messages = previous_messages
+        messages = previous_messages.copy()
         messages.append(
             {"role": "user", "content": _query},
         )
@@ -515,16 +518,17 @@ class ChatResponseRepository:
         start_time = time.time()
 
         # Create a completion
-        stream = self.client.chat.completions.create(
-            model=self.model,
+        stream = self.__client.chat.completions.create(
+            model=self.__model,
             messages=messages,
             stream=True,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
+            max_tokens=self.__max_tokens,
+            temperature=self.__temperature,
         )
 
         # Initialize a buffer to store the sentence
         sentence_buffer = ""
+        total_text = ""
 
         # Iterate over the stream of chunks
         for chunk in stream:
@@ -534,6 +538,8 @@ class ChatResponseRepository:
 
                 # Append the chunk to the buffer
                 sentence_buffer += chunk.choices[0].delta.content
+                
+                total_text += chunk.choices[0].delta.content
 
                 # Check if the sentence is complete
                 if sentence_buffer.endswith((".", "!", "?")):
@@ -548,3 +554,5 @@ class ChatResponseRepository:
                     )
                     yield {"response": sentence_buffer.strip()}
                     sentence_buffer = ""
+
+        previous_messages.append({"role": "system", "content": total_text})

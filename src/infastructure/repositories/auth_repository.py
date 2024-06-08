@@ -14,30 +14,30 @@ from config.config import (
 class AuthRepository:
 
     def __init__(self) -> None:
-        self.secret_key = SECRET_KEY
-        self.google_client_id = GOOGLE_CLIENT_ID
-        self.algorithm = ALGORITHM
-        self.expires = ACCESS_TOKEN_EXPIRE_MINUTES
+        self.__secret_key = SECRET_KEY
+        self.__google_client_id = GOOGLE_CLIENT_ID
+        self.__algorithm = ALGORITHM
+        self.__expires = ACCESS_TOKEN_EXPIRE_MINUTES
 
     def create_access_token(self, data: dict):
         # Create a new access token
         to_encode = data.copy()
 
         # Set the expiration time for the token
-        expire = datetime.now(UTC) + timedelta(hours=self.expires)
+        expire = datetime.now(UTC) + timedelta(hours=self.__expires)
 
         # Add the expiration time to the token
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(
-            to_encode, self.secret_key, algorithm=self.algorithm
+            to_encode, self.__secret_key, algorithm=self.__algorithm
         )
         return encoded_jwt
 
-    def verify_google_access_token(self, token):
+    def verify_google_access_token(self, token:str):
         try:
             # Verify the access token
             id_info = id_token.verify_oauth2_token(
-                token, requests.Request(), self.google_client_id
+                token, requests.Request(), self.__google_client_id
             )
 
             # Return the user information
@@ -46,12 +46,12 @@ class AuthRepository:
             # Invalid token
             return None
 
-    def decode_access_token(self, token):
+    def decode_access_token(self, token:str):
         print("The token received is: ", token)
         try:
             # Decode the access token
             payload = jwt.decode(
-                token, self.secret_key, algorithms=[self.algorithm]
+                token, self.__secret_key, algorithms=[self.__algorithm]
             )
 
             # Return the payload

@@ -98,3 +98,8 @@ logging.info("AWS bucket name is set")
 REDIS_URL = config.redis.url
 assert REDIS_URL, "Redis URL is not set."
 logging.info("Redis URL is set")
+
+
+DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
+assert DEEPGRAM_API_KEY, "Deepgram API key is not set"
+logging.info("Deepgram API key is set")

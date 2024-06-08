@@ -8,14 +8,14 @@ class DatabaseRepository:
     def __init__(self):
 
         # Connect to the database
-        self.client = MongoClient(MONGO_DB_URI)
-        self.db = self.client["dolphin"]
+        self.__client = MongoClient(MONGO_DB_URI)
+        self.__db = self.__client["dolphin"]
 
     def insert_single_document(self, data: str, collection_name: str):
 
         try:
             # Define the collection where the data will be stored
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Insert the data into the collection
             collection.insert_one(data)
@@ -33,7 +33,7 @@ class DatabaseRepository:
         try:
 
             # Define the collection where the data will be stored
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Find all the data that matches the username
             data = collection.find({field: field_value})
@@ -53,7 +53,7 @@ class DatabaseRepository:
         all_documents = []
         try:
             # Define the collection where the data will be stored
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Find all the data that matches the username
             data = collection.find()
@@ -74,7 +74,7 @@ class DatabaseRepository:
         try:
 
             # Define the collection where the data will be stored
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Find the data that matches the username
             result = collection.find_one({field: field_value})
@@ -92,7 +92,7 @@ class DatabaseRepository:
     def delete_one(self, field: str, field_value: str, collection_name: str):
         try:
             # Define the collection where the data will be stored
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Delete the data that matches the username
             collection.delete_one({field: field_value})
@@ -113,7 +113,7 @@ class DatabaseRepository:
     ):
         try:
             # Define the collection where the data will be stored
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Append the data to the array
             collection.update_one(
@@ -135,7 +135,7 @@ class DatabaseRepository:
     ):
         try:
             # Define the collection where the data will be stored
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Define the filter to find the document to update
             filter = {field: field_value}
@@ -165,7 +165,7 @@ class DatabaseRepository:
     ):
         try:
             # Define the collection where the data will be updated
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Update the document in the collection
             collection.update_one(
@@ -186,7 +186,7 @@ class DatabaseRepository:
         try:
 
             # Define the collection where the data will be stored
-            collection = self.db[collection_name]
+            collection = self.__db[collection_name]
 
             # Find all the data that matches the username
             pdf_data = collection.find({field: field_value})

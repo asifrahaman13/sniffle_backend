@@ -5,13 +5,7 @@ from deepgram import (
     DeepgramClient,
     SpeakOptions,
 )
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
-deepgram_api_key = os.getenv("DEEPGRAM_API_KEY")
-assert deepgram_api_key, "Deepgram API key is not set"
+from config.config import DEEPGRAM_API_KEY
 
 
 class VoiceRepository:
@@ -25,9 +19,7 @@ class VoiceRepository:
         sentence_boundaries = re.finditer(r"(?<=[.!?])\s+", text)
 
         # Get the indices of the sentence boundaries
-        boundaries_indices = [
-            boundary.start() for boundary in sentence_boundaries
-        ]
+        boundaries_indices = [boundary.start() for boundary in sentence_boundaries]
 
         chunks = []
         start = 0
@@ -48,7 +40,7 @@ class VoiceRepository:
     def voice_response(self, text):
 
         # Create a Deepgram client using the API key
-        deepgram = DeepgramClient(api_key=deepgram_api_key)
+        deepgram = DeepgramClient(api_key=DEEPGRAM_API_KEY)
 
         # Choose a model to use for synthesis
         options = SpeakOptions(
