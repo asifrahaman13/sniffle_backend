@@ -20,13 +20,11 @@ Find the front end repository corresponding to this repo here: https://github.co
 
 - Go to the root directory. `cd sniffle_backend`
 
-- create a virtual environment. `virtualenv .venv`
+- create a virtual environment. `virtualenv .venv`. You need to actiavate the virtual environment too. `source .venv/bin/activate`
 
 - Now install the dependencies. `pip install -r requirements.txt`
 
-- Now rename the .env.example. `mv .env.example .env`. 
-
-- Give the proper configuration by giving the API keys. For example set the open ai key, mapbox api key etc. Also set the configuration data in the config.yaml file. If you are using redis server instead of local redis environment please change the redis.conf file.
+- Now rename the .env.example. `mv .env.example .env`.  Give the proper configuration by giving the API keys. For example set the open ai key, deepgram api key etc. Also set the configuration data in the config.yaml file. If you are using redis server instead of local redis environment please change the redis.conf file.
 
 - Next you need to run the application using the following script: `uvicorn src.main:app --reload`
 
