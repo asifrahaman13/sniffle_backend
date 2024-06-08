@@ -75,8 +75,6 @@ async def websocket_endpoint(
 
         # Disconnect the websocket
         manager.disconnect(websocket)
-        # Broadcast the message to all clients
-        await manager.broadcast(f"Client #{client_id} left the chat")
 
 
 @websocket_router.websocket("/assessment/{client_id}")
@@ -130,8 +128,6 @@ async def websocket_endpoint(
 
         # Disconnect the websocket
         manager.disconnect(websocket)
-        # Broadcast the message to all clients
-        await manager.broadcast(f"Client #{client_id} left the chat")
 
 
 @websocket_router.websocket("/general_metrics/{client_id}")
@@ -183,8 +179,6 @@ async def websocket_endpoint(
 
         # Disconnect the websocket
         manager.disconnect(websocket)
-        # Broadcast the message to all clients
-        await manager.broadcast(f"Client #{client_id} left the chat")
 
 
 @websocket_router.websocket("/general_chat_reponse/{client_id}")
@@ -240,5 +234,3 @@ async def websocket_general_chat(
 
         # Disconnect the websocket
         manager.disconnect(websocket)
-        # Broadcast the message to all clients
-        # await manager.broadcast(f"Client #{client_id} left the chat")
