@@ -7,6 +7,9 @@ Backend repository for the mobile application server which aims at making the he
 - **Mongo db database**: A NoSQL database. Preferred this over the SQL database due to performance and highly unstructured data required. 📊
 - **openai, langchain, Deepgram SDKs and other libraries**: They are libraries to deal with LLMs, Voice and other AI based works. 🤖
 - **AWS**: Use the S3 service of AWS to store FHIR files. ☁️
+- **Redis**: Open source key value pair in memory database. Used it to avoid DDOS attack through rate limiting strategy.📝
+- **Websockts**: Websocket is used over rest api for the agents to have better connection management.
+
 
 ## Deploy:
 
@@ -20,13 +23,11 @@ Find the front end repository corresponding to this repo here: https://github.co
 
 - Go to the root directory. `cd sniffle_backend`
 
-- create a virtual environment. `virtualenv .venv`
+- create a virtual environment. `virtualenv .venv`. You need to actiavate the virtual environment too. `source .venv/bin/activate`
 
 - Now install the dependencies. `pip install -r requirements.txt`
 
-- Now rename the .env.example. `mv .env.example .env`. 
-
-- Give the proper configuration by giving the API keys. For example set the open ai key, mapbox api key etc. Also set the configuration data in the config.yaml file. If you are using redis server instead of local redis environment please change the redis.conf file.
+- Now rename the .env.example. `mv .env.example .env`.  Give the proper configuration by giving the API keys. For example set the open ai key, deepgram api key etc. Also set the configuration data in the config.yaml file. If you are using redis server instead of local redis environment please change the redis.conf file.
 
 - Next you need to run the application using the following script: `uvicorn src.main:app --reload`
 
