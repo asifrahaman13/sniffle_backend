@@ -37,6 +37,8 @@ class SecurityConfig(BaseModel):
 class RedisConfig(BaseModel):
     url: str
 
+class VectorizerConfig(BaseModel):
+    embedding_model: str
 
 class Config(BaseModel):
     app: AppConfig
@@ -44,6 +46,7 @@ class Config(BaseModel):
     database: DatabaseConfig
     security: SecurityConfig
     redis: RedisConfig
+    vector_db: VectorizerConfig
 
 
 def load_config(file_path: str) -> Config:
@@ -105,7 +108,7 @@ assert DEEPGRAM_API_KEY, "Deepgram API key is not set"
 logging.info("Deepgram API key is set")
 
 
-EMBEDDING_MODEL= os.getenv("EMBEDDING_MODEL")
+EMBEDDING_MODEL= config.vector_db.embedding_model
 assert EMBEDDING_MODEL, "Embedding model is not set"
 logging.info("Embedding model is set")
 

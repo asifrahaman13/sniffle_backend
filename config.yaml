@@ -24,3 +24,6 @@ security:
 redis:
   url: "redis://127.0.0.1:6379"
 
+vector_db:
+  embedding_model: "text-embedding-3-small"
+
