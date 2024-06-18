@@ -1,3 +1,5 @@
+from src.internal.entities.search import QueryResponse
+from src.internal.entities.export import ExportData
 from fastapi import APIRouter, Depends, HTTPException, Header
 from src.internal.use_cases.export_service import ExportService
 from src.infastructure.repositories.export_repository import ExportRepository
@@ -163,12 +165,6 @@ async def update_general_metrics(
         raise HTTPException(status_code=500, detail="Failed to get general metrics")
 
 
-from pydantic import BaseModel
-
-
-class QueryResponse(BaseModel):
-    query: str
-
 
 @data_router.post("/search")
 async def search_result(
@@ -186,11 +182,6 @@ async def search_result(
         raise HTTPException(status_code=500, detail="Failed to get search results")
 
 
-from pydantic import BaseModel
-
-class ExportData(BaseModel):
-    export_type: str
-
 @data_router.post("/export-data")
 async def export_data(
     export_data: ExportData,
@@ -205,8 +196,7 @@ async def export_data(
         # Check if the token is valid
         if id_info is None:
             raise HTTPException(status_code=401, detail="Invalid token")
-        
-        print(id_info)
+    
 
         # Get the general metrics for the user
         export_data = export_interface.export_data(id_info["sub"], export_data.export_type)
@@ -215,7 +205,7 @@ async def export_data(
             raise HTTPException(status_code=404, detail="Export data not found")
 
         # Return the general metrics
-        return export_data
+        return {"message": export_data}
 
     except Exception as e:
         # Log the error
