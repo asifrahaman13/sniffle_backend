@@ -36,7 +36,7 @@ To run the front end application plese run this backend application.
 
 In case you face any issue with the installtion and set up, you can run using docker.
 
-`docker build -t dolphin:lastest `
+`docker build -t dolphin:lastest .`
 
 Next you can run the application:
 

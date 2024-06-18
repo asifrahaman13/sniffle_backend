@@ -4,7 +4,6 @@ import json
 import logging
 import os
 import base64
-import requests
 from fastapi import File, Form, UploadFile, HTTPException
 from src.internal.interfaces.chat_interface import ChatInterface
 from src.internal.interfaces.aws_interface import AWSInterface

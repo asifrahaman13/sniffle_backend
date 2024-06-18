@@ -31,17 +31,18 @@ async def websocket_endpoint(
     chat_interface: ChatInterface = Depends(chat_service),
     auth_interface: AuthInterface = Depends(auth_service),
 ):
+
     # Connect the websocket
-    await manager.connect(websocket)
-
-    logging.info(f"Client #{client_id} connected for health metrics")
-
+    await manager.connect(websocket, client_id, "data")
     user_info = auth_interface.decode_access_token(client_id)
 
     if user_info is None or "error" in user_info:
-        await websocket.send_json("Invalid token")
+        await manager.send_personal_message("Invalid token", websocket)
+        await manager.disconnect(websocket)
         return
 
+
+    logging.info(f"Client #{client_id} connected for health metrics")
     all_messages = []
 
     try:
@@ -74,7 +75,7 @@ async def websocket_endpoint(
     except WebSocketDisconnect:
 
         # Disconnect the websocket
-        manager.disconnect(websocket)
+        await manager.disconnect(websocket)
 
 
 @websocket_router.websocket("/assessment/{client_id}")
@@ -85,14 +86,14 @@ async def websocket_endpoint(
     auth_interface: AuthInterface = Depends(auth_service),
 ):
     # Connect the websocket
-    await manager.connect(websocket)
+    await manager.connect(websocket, client_id, "data")
 
     logging.info(f"Client #{client_id} connected for assessment")
 
     user_info = auth_interface.decode_access_token(client_id)
 
     if user_info is None or "error" in user_info:
-        await websocket.send_json("Invalid token")
+        await manager.send_personal_message("Invalid token", websocket)
         return
 
     all_messages = []
@@ -127,7 +128,7 @@ async def websocket_endpoint(
     except WebSocketDisconnect:
 
         # Disconnect the websocket
-        manager.disconnect(websocket)
+        await manager.disconnect(websocket)
 
 
 @websocket_router.websocket("/general_metrics/{client_id}")
@@ -138,14 +139,14 @@ async def websocket_endpoint(
     auth_interface: AuthInterface = Depends(auth_service),
 ):
     # Connect the websocket
-    await manager.connect(websocket)
+    await manager.connect(websocket, client_id, "data")
 
     logging.info(f"Client #{client_id} connected for health metrics")
 
     user_info = auth_interface.decode_access_token(client_id)
 
     if user_info is None or "error" in user_info:
-        await websocket.send_json("Invalid token")
+        await manager.send_personal_message("Invalid token", websocket)
         return
 
     all_messages = []
@@ -178,7 +179,7 @@ async def websocket_endpoint(
     except WebSocketDisconnect:
 
         # Disconnect the websocket
-        manager.disconnect(websocket)
+        await manager.disconnect(websocket)
 
 
 @websocket_router.websocket("/general_chat_reponse/{client_id}")
@@ -189,14 +190,14 @@ async def websocket_general_chat(
     auth_interface: AuthInterface = Depends(auth_service),
 ):
     # Connect the websocket
-    await manager.connect(websocket)
+    await manager.connect(websocket, client_id, "data")
 
     logging.info(f"Client #{client_id} connected for health metrics")
 
     user_info = auth_interface.decode_access_token(client_id)
 
     if user_info is None or "error" in user_info:
-        await websocket.send_json("Invalid token")
+        await manager.send_personal_message("Invalid token", websocket)
         return
 
     all_messages = []
@@ -227,10 +228,10 @@ async def websocket_general_chat(
             all_messages.append(llm_response)
 
             # Send the response to the client
-            await websocket.send_json(chat_response["response"])
+            await manager.send_personal_message(chat_response["response"], websocket)
 
     except WebSocketDisconnect:
         logging.info(f"Client {client_id} disconnected")
 
         # Disconnect the websocket
-        manager.disconnect(websocket)
+        await manager.disconnect(websocket)

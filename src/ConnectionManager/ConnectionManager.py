@@ -1,33 +1,48 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-
+from fastapi import  WebSocket, WebSocketDisconnect
+import redis
 
 class ConnectionManager:
     def __init__(self):
-        # List of active connections
-        self.active_connections: list[WebSocket] = []
+        self.redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
+        self.active_connections = {}
 
-    async def connect(self, websocket: WebSocket):
+    async def connect(self, websocket: WebSocket, connection_id: str, connection_type: str="active_connections"):
+        # Generate a unique connection ID
+
+        # Store the connection ID in Redis
+        self.redis_client.sadd(connection_type, connection_id)
+
+        # Store the WebSocket object in a dictionary with the connection ID as key
+        self.active_connections[connection_id] = websocket
 
         # Accept the connection
         await websocket.accept()
 
-        # Append the connection to the list of active connections
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-
-        # Remove the connection from the list of active connections
-        self.active_connections.remove(websocket)
+    async def disconnect(self, websocket: WebSocket, connection_type: str="active_connections"):
+        # Find the connection ID for the given WebSocket object
+        connection_id = self.find_connection_id(websocket)
+        if connection_id:
+            # Remove the connection ID from the active_connections set
+            self.redis_client.srem(connection_type, connection_id)
+            # Remove the connection from the active connections dictionary
+            del self.active_connections[connection_id]
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
-
-        # Send the message to the websocket
         await websocket.send_json(message)
 
-    async def broadcast(self, message: str):
+    # async def broadcast(self, message: str):
+    #     # Get all active connection IDs
+    #     active_connections = self.redis_client.smembers('active_connections')
+    #     for connection_id in active_connections:
+    #         # Retrieve the WebSocket object for each connection ID
+    #         stored_websocket = self.active_connections.get(connection_id)
+    #         if stored_websocket:
+    #             # Send the message to the WebSocket object
+    #             await stored_websocket.send_text(message)
 
-        # Send the message to all active connections
-        for connection in self.active_connections:
-
-            # Send the message
-            await connection.send_text(message)
+    def find_connection_id(self, websocket: WebSocket) -> str:
+        # Find the connection ID for the given WebSocket object
+        for connection_id, stored_websocket in self.active_connections.items():
+            if stored_websocket == websocket:
+                return connection_id
+        return None

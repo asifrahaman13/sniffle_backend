@@ -12,6 +12,7 @@ from src.internal.interfaces.chat_interface import ChatInterface
 from src.infastructure.repositories.voice_repository import VoiceRepository
 from src.internal.use_cases.voice_service import VoiceService
 from src.internal.interfaces.voice_interface import VoiceInterface
+from src.ConnectionManager.ConnectionManager import ConnectionManager
 
 chat_repository = ChatResponseRepository()
 chat_service = ChatService(chat_repository)
@@ -23,7 +24,8 @@ voice_repository = VoiceRepository()
 voice_service = VoiceService(voice_repository)
 
 voice_router = APIRouter()
-
+# Create a connection manager
+manager = ConnectionManager()
 
 @voice_router.websocket("/voice_health_metrics/{client_id}")
 async def websocket_endpoint(
@@ -35,8 +37,11 @@ async def websocket_endpoint(
 ):
     user_info = auth_interface.decode_access_token(client_id)
     logging.info(user_info)
-    await websocket.accept()
+     # Connect the websocket
+    await manager.connect(websocket, client_id, "voice")
+    
     messages_received = []
+    
 
     try:
         while True:
@@ -67,14 +72,14 @@ async def websocket_endpoint(
                     text_to_audio_base64 = voice_interface.voice_response(
                         sentences
                     )
-                    await websocket.send_text(text_to_audio_base64)
+                    await manager.send_personal_message(text_to_audio_base64, websocket)
                     # messages_received=[]
                 except StopIteration:
                     break
 
     except Exception as e:
         logging.error(f"An error occurred: {e}")
-        await websocket.close()
+        await manager.disconnect(websocket)
 
 
 @voice_router.websocket("/voice_assessment/{client_id}")
@@ -87,7 +92,7 @@ async def websocket_endpoint(
 ):
     user_info = auth_interface.decode_access_token(client_id)
     logging.info(user_info)
-    await websocket.accept()
+    await manager.connect(websocket, client_id, "voice")
     messages_received = []
 
     try:
@@ -121,14 +126,14 @@ async def websocket_endpoint(
                     text_to_audio_base64 = voice_interface.voice_response(
                         sentences
                     )
-                    await websocket.send_text(text_to_audio_base64)
+                    await manager.send_personal_message(text_to_audio_base64, websocket)
                     # messages_received=[]
                 except StopIteration:
                     break
 
     except Exception as e:
         logging.error(f"An error occurred: {e}")
-        await websocket.close()
+        await manager.disconnect(websocket)
 
 
 @voice_router.websocket("/general_voice_response/{client_id}")
@@ -141,7 +146,7 @@ async def websocket_endpoint_query(
 ):
     user_info = auth_interface.decode_access_token(client_id)
     logging.info(user_info)
-    await websocket.accept()
+    await manager.connect(websocket, client_id, "voice")
     messages_received = []
 
     try:
@@ -175,11 +180,11 @@ async def websocket_endpoint_query(
                     text_to_audio_base64 = voice_interface.voice_response(
                         sentences
                     )
-                    await websocket.send_text(text_to_audio_base64)
+                    await manager.send_personal_message(text_to_audio_base64)
                     # messages_received=[]
                 except StopIteration:
                     break
 
     except Exception as e:
         logging.error(f"An error occurred: {e}")
-        await websocket.close()
+        await manager.disconnect(websocket)
