@@ -103,3 +103,9 @@ logging.info("Redis URL is set")
 DEEPGRAM_API_KEY = os.getenv("DEEPGRAM_API_KEY")
 assert DEEPGRAM_API_KEY, "Deepgram API key is not set"
 logging.info("Deepgram API key is set")
+
+
+EMBEDDING_MODEL= os.getenv("EMBEDDING_MODEL")
+assert EMBEDDING_MODEL, "Embedding model is not set"
+logging.info("Embedding model is set")
+

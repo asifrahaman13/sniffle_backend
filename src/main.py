@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 import asyncio
 import schedule
+from src.infastructure.repositories.search_repository import EmbeddingService, QdrantService, SearchRepository
 from src.internal.interfaces.data_interface import DataInterface
 from src.internal.use_cases.data_service import DataService
 from src.infastructure.middleware.logging_middleware import PrefixMiddleware
@@ -17,7 +18,7 @@ from fastapi import status
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
 import os
-from config.config import REDIS_URL
+from config.config import EMBEDDING_MODEL, OPEN_AI_API_KEY, REDIS_URL
 from src.application.web.controllers.socket_controller import websocket_router
 from src.application.web.controllers.auth_controller import auth_router
 from src.application.web.controllers.data_controller import data_router
@@ -52,9 +53,12 @@ async def custom_callback(request: Request, response: Response, pexpire: int):
         headers={"Retry-After": str(expire)},
     )
 
-
+from src.infastructure.repositories.search_repository import search_repository
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+
+    # Initialize Qdrant
+    search_repository.initialize_qdrant()
     redis_connection = redis.from_url(REDIS_URL, encoding="utf8")
     await FastAPILimiter.init(
         redis=redis_connection,

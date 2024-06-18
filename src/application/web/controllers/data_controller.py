@@ -1,16 +1,25 @@
 from fastapi import APIRouter, Depends, HTTPException
+from src.internal.use_cases.search_service import SearchService
+from src.infastructure.repositories.search_repository import EmbeddingService, QdrantService, SearchRepository
 from src.infastructure.repositories.auth_repository import AuthRepository
 from src.internal.use_cases.auth_service import AuthService
 from src.internal.interfaces.auth_interface import AuthInterface
 from src.internal.interfaces.data_interface import DataInterface
 from src.internal.use_cases.data_service import DataService
 from src.internal.entities.health_model import GeneralParameters
+from src.internal.interfaces.search_interface import SearchInterface
+from config.config import OPEN_AI_API_KEY, EMBEDDING_MODEL
+from src.infastructure.repositories.search_repository import search_repository
 
 # Create a new router
 data_router = APIRouter()
 
 auth_repository = AuthRepository()
 auth_service = AuthService(auth_repository)
+
+
+
+search_service = SearchService(search_repository)
 
 data_service = DataService()
 
@@ -168,3 +177,24 @@ async def update_general_metrics(
         raise HTTPException(
             status_code=500, detail="Failed to get general metrics"
         )
+
+from pydantic import BaseModel
+class QueryResponse(BaseModel):
+    query: str
+@data_router.post("/search")
+async def search_result(
+    query_text: QueryResponse,
+    search_interface: SearchInterface = Depends(search_service)
+
+):
+    try:
+        # Get the search results
+        response = search_interface.search(query_text.query)
+
+        # Return the search results
+        return response
+
+    except Exception as e:
+        # Log the error
+        raise HTTPException(
+            status_code=500, detail="Failed to get search results")
