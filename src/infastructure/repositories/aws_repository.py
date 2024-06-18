@@ -3,10 +3,10 @@ from config.config import AWS_BUCKET_NAME, AWS_ACCESS_KEY, AWS_SECRET_KEY
 
 
 class AWSRepository:
-
     """
     Initialize the AWSRepository class with the required configuration.
     """
+
     def __init__(self):
 
         self.__aws_bucket_name = AWS_BUCKET_NAME

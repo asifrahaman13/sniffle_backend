@@ -16,9 +16,7 @@ from src.constants.prompts.prompts import Prompts
 
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
 class HealthAssistant:
@@ -87,9 +85,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    "{} \n \n{question}".format(
-                        Prompts.FORMAT_USER_GENERAL_METRICS_PROMPT.value
-                    )
+                    "{} \n \n{question}".format(Prompts.FORMAT_USER_GENERAL_METRICS_PROMPT.value)
                 )
             ],
             # Define the input variables
@@ -455,9 +451,7 @@ class ChatResponseRepository:
                         },
                         {
                             "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpeg;base64,{encoded_image}"
-                            },
+                            "image_url": {"url": f"data:image/jpeg;base64,{encoded_image}"},
                         },
                     ],
                 }

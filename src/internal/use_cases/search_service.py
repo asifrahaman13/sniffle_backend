@@ -1,4 +1,3 @@
-
 from typing import Dict, List
 
 from src.infastructure.repositories.search_repository import SearchRepository
@@ -9,10 +8,8 @@ class SearchService:
 
     def __call__(self) -> SearchInterface:
         return self
-    
-    def __init__(
-        self, search_repository: SearchRepository = SearchRepository
-    ) -> None:
+
+    def __init__(self, search_repository: SearchRepository = SearchRepository) -> None:
         self.search_repository = search_repository
 
     def search(self, query_text: str) -> List[Dict]:

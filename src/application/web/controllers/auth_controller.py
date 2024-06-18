@@ -48,9 +48,7 @@ async def google_sign_in(
 
 
 @auth_router.post("/decode_token", response_model=dict)
-async def decode_token(
-    token: Token, auth_interface: AuthInterface = Depends(auth_service)
-):
+async def decode_token(token: Token, auth_interface: AuthInterface = Depends(auth_service)):
     try:
         id_info = auth_interface.decode_access_token(token.token)
         return id_info

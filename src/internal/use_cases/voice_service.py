@@ -12,9 +12,7 @@ class VoiceService:
     def __call__(self) -> VoiceInterface:
         return self
 
-    def __init__(
-        self, database_repository: DatabaseRepository = DatabaseRepository
-    ) -> None:
+    def __init__(self, database_repository: DatabaseRepository = DatabaseRepository) -> None:
         self.voice_repository = VoiceRepository()
         self.database_repository = database_repository
         self.chat_repository = ChatResponseRepository()

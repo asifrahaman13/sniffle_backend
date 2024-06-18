@@ -41,7 +41,6 @@ async def websocket_endpoint(
         await manager.disconnect(websocket)
         return
 
-
     logging.info(f"Client #{client_id} connected for health metrics")
     all_messages = []
 
@@ -214,9 +213,7 @@ async def websocket_general_chat(
             logging.info(f"Client #{client_id} sent: {data}")
 
             # Create a chat response
-            chat_response = chat_interface.general_chat_query(
-                data["query"], all_messages
-            )
+            chat_response = chat_interface.general_chat_query(data["query"], all_messages)
 
             # Log the response
             llm_response = {

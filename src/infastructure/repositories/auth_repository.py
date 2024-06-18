@@ -27,12 +27,10 @@ class AuthRepository:
 
         # Add the expiration time to the token
         to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(
-            to_encode, self.__secret_key, algorithm=self.__algorithm
-        )
+        encoded_jwt = jwt.encode(to_encode, self.__secret_key, algorithm=self.__algorithm)
         return encoded_jwt
 
-    def verify_google_access_token(self, token:str):
+    def verify_google_access_token(self, token: str):
         try:
             # Verify the access token
             id_info = id_token.verify_oauth2_token(
@@ -45,13 +43,11 @@ class AuthRepository:
             # Invalid token
             return None
 
-    def decode_access_token(self, token:str):
+    def decode_access_token(self, token: str):
         print("The token received is: ", token)
         try:
             # Decode the access token
-            payload = jwt.decode(
-                token, self.__secret_key, algorithms=[self.__algorithm]
-            )
+            payload = jwt.decode(token, self.__secret_key, algorithms=[self.__algorithm])
 
             # Return the payload
             return payload

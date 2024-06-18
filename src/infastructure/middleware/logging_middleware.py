@@ -14,7 +14,7 @@ class PrefixMiddleware(BaseHTTPMiddleware):
     """
     Middleware to check the prefix of the request being made and authenticate the user baded on that.
     If token is not provided for protected routes then unauthorized message is sent.
-    However if token is provided then decoding is attempted. If the decoding shows that the user is actually an 
+    However if token is provided then decoding is attempted. If the decoding shows that the user is actually an
     authenticated user and the token is not expired yet then the user is allowed to make the request.
     """
 
@@ -27,9 +27,9 @@ class PrefixMiddleware(BaseHTTPMiddleware):
     async def authenticate(self, request):
         auth_interface: AuthInterface = auth_service
         logging.info("############################# authenticating")
-        try: 
+        try:
             """
-            For the post requsts the token is made in the form of authorization headers and hence we 
+            For the post requsts the token is made in the form of authorization headers and hence we
             need to extract the data from the authorization header.
             """
             if request.method == "POST":
@@ -71,9 +71,7 @@ class PrefixMiddleware(BaseHTTPMiddleware):
                 response = await call_next(request)
                 return response
             except HTTPException as e:
-                return JSONResponse(
-                    status_code=e.status_code, content={"message": str(e)}
-                )
+                return JSONResponse(status_code=e.status_code, content={"message": str(e)})
         else:
             response = await call_next(request)
             return response

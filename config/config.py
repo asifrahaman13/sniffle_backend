@@ -40,6 +40,11 @@ class RedisConfig(BaseModel):
 class VectorizerConfig(BaseModel):
     embedding_model: str
 
+class EmailConfig(BaseModel):
+    host: str
+    port: int
+    username: str
+
 class Config(BaseModel):
     app: AppConfig
     server: ServerConfig
@@ -47,6 +52,7 @@ class Config(BaseModel):
     security: SecurityConfig
     redis: RedisConfig
     vector_db: VectorizerConfig
+    email_service: EmailConfig
 
 
 def load_config(file_path: str) -> Config:
@@ -112,3 +118,18 @@ EMBEDDING_MODEL= config.vector_db.embedding_model
 assert EMBEDDING_MODEL, "Embedding model is not set"
 logging.info("Embedding model is set")
 
+EMAIL_HOST = config.email_service.host
+assert EMAIL_HOST, "Email host is not set"
+logging.info("Email host is set")
+
+EMAIL_PORT = config.email_service.port
+assert EMAIL_PORT, "Email port is not set"
+logging.info("Email port is set")
+
+EMAIL_USERNAME = config.email_service.username
+assert EMAIL_USERNAME, "Email username is not set"
+logging.info("Email username is set")
+
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+assert EMAIL_PASSWORD, "Email password is not set"
+logging.info("Email password is set")

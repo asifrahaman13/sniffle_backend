@@ -1,12 +1,15 @@
-from fastapi import  WebSocket, WebSocketDisconnect
+from fastapi import WebSocket, WebSocketDisconnect
 import redis
+
 
 class ConnectionManager:
     def __init__(self):
-        self.redis_client = redis.Redis(host='localhost', port=6379, decode_responses=True)
+        self.redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
         self.active_connections = {}
 
-    async def connect(self, websocket: WebSocket, connection_id: str, connection_type: str="active_connections"):
+    async def connect(
+        self, websocket: WebSocket, connection_id: str, connection_type: str = "active_connections"
+    ):
         # Generate a unique connection ID
 
         # Store the connection ID in Redis
@@ -18,7 +21,7 @@ class ConnectionManager:
         # Accept the connection
         await websocket.accept()
 
-    async def disconnect(self, websocket: WebSocket, connection_type: str="active_connections"):
+    async def disconnect(self, websocket: WebSocket, connection_type: str = "active_connections"):
         # Find the connection ID for the given WebSocket object
         connection_id = self.find_connection_id(websocket)
         if connection_id:

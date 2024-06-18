@@ -27,3 +27,8 @@ redis:
 vector_db:
   embedding_model: "text-embedding-3-small"
 
+email_service:
+  host: "smtp.gmail.com"
+  port: 587
+  username: "asifr@iitbhilai.ac.in"
+

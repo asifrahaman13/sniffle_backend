@@ -68,9 +68,7 @@ class DatabaseRepository:
             logging.error(f"Failed to find data: {e}")
             return None
 
-    def find_single_document(
-        self, field: str, field_value: str, collection_name: str
-    ):
+    def find_single_document(self, field: str, field_value: str, collection_name: str):
         try:
 
             # Define the collection where the data will be stored
@@ -116,9 +114,7 @@ class DatabaseRepository:
             collection = self.__db[collection_name]
 
             # Append the data to the array
-            collection.update_one(
-                {field: field_value}, {"$push": {array_field: data}}
-            )
+            collection.update_one({field: field_value}, {"$push": {array_field: data}})
 
             # Return the data that was stored
             return True
@@ -168,9 +164,7 @@ class DatabaseRepository:
             collection = self.__db[collection_name]
 
             # Update the document in the collection
-            collection.update_one(
-                {filter_key: filter_value}, {"$set": update_data}
-            )
+            collection.update_one({filter_key: filter_value}, {"$set": update_data})
 
             # Return the updated data
             return update_data
@@ -178,9 +172,7 @@ class DatabaseRepository:
             logging.error(f"Failed to update data: {e}")
             return None
 
-    def find_all_documents_from_field(
-        self, field: str, field_value: str, collection_name: str
-    ):
+    def find_all_documents_from_field(self, field: str, field_value: str, collection_name: str):
         # Create an empty list to store the data that will be found
         all_pdfs_of_user = []
         try:
