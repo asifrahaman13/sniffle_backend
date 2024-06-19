@@ -38,7 +38,6 @@ class DataService:
 
             assessment_metrics["data"]=assessment_metrics["data"][::-1]
 
-            print("##############################", assessment_metrics)
             # Return the assessment metrics
             return assessment_metrics
         except Exception as e:

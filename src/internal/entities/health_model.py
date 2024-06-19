@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class HealthData(BaseModel):
+    sugar_level: int = Field(description="The sugar level in mg/dL")
     heart_rate: int = Field(description="The heart rate in beats per minute")
     systol_blood_pressure: str = Field(
         description="The systol blood pressure as systolic/diastolic in mmHg"

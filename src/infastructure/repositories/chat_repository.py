@@ -16,7 +16,9 @@ from src.constants.prompts.prompts import Prompts
 
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class HealthAssistant:
@@ -49,7 +51,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    "\n \n{question}".format(Prompts.HEALTH_ASSISTANT_FORMAT_PROMPT.value)
+                    """Format the user query into the schema provided to you. It will have sugar_level, systol_blood_pressure and diastol_blood_pressure  pressure (give them separate), heart_rate, respiratory_rate, bod_temperature, step_count, body_temperature, calories_burned, distance_travelled, sleep_duration, water_consumed, caffeine_consumed, alcohol_consumed. Only numerical values to consider no unit. If some data is not provided then use the default value as 0. Note that only give the JSON data as the output. The query is as follows:" \n \n{question} """
                 )
             ],
             # Define the input variables
@@ -67,7 +69,9 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    "{} \n \n{question}".format(Prompts.FORMAT_RECOMMENDATIONS.value)
+                    """"Format the user query into the json schema provided to you. It will have medications_recommended, diet_recommended, exercise_recommended, lifestyle_changes_recommended, stress_management_techniques_recommended, sleep_hygiene_techniques_recommended, mental_health_techniques_recommended,  relaxation_techniques_recommended, social_support_techniques_recommended, other_recommendations. Each of the entity should have only two subheader ie 'title' and 'details' only. Note that only give the JSON data as the output. 
+                    The user query is as follows:
+                    \n \n{question}"""
                 )
             ],
             # Define the input variables
@@ -85,7 +89,9 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    "{} \n \n{question}".format(Prompts.FORMAT_USER_GENERAL_METRICS_PROMPT.value)
+                    """Format the user query into the schema provided to you. It will have weight, age, current_medications, allergies, previous_mediacal_history, family_medical_history, height, surgical_history, lifestyle, social_history, reproductive_health. The quantitative values should be without any units. Note that only give the JSON data as the output. The query is as follows:
+                     
+                     \n \n{question}"""
                 )
             ],
             # Define the input variables
@@ -451,7 +457,9 @@ class ChatResponseRepository:
                         },
                         {
                             "type": "image_url",
-                            "image_url": {"url": f"data:image/jpeg;base64,{encoded_image}"},
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{encoded_image}"
+                            },
                         },
                     ],
                 }
