@@ -15,11 +15,11 @@ class ExportService:
         database_repository: DatabaseRepository = DatabaseRepository,
         export_repository: ExportRepository = ExportRepository,
     ) -> None:
-        self.database_repository = database_repository
-        self.export_repository = export_repository
-        self.subject = "Health Data Report" 
-        self.from_email = EMAIL_USERNAME
-        self.from_password = EMAIL_PASSWORD
+        self.__database_repository = database_repository
+        self.__export_repository = export_repository
+        self.__subject  = "Health Data Report" 
+        self.__from_email = EMAIL_USERNAME
+        self.__from_password = EMAIL_PASSWORD
 
     def format_quantitative_data_as_html(self, data):
         email = data["email"]
@@ -61,29 +61,29 @@ class ExportService:
     def export_data(self, user: str, collection_name: str):
         try:
             # Find the data from the database.
-            data = self.database_repository.find_single_document(
+            data = self.__database_repository.find_single_document(
                 "email", user, collection_name
             )
 
             if collection_name=="quantitative_metrics":
                 # If data is present then we need to parse it and send it as an email.
                 html_body = self.format_quantitative_data_as_html(data)
-                response = self.export_repository.send_email(
-                    self.subject,
+                response = self.__export_repository.send_email(
+                    self.__subject ,
                     html_body,
                     user,
-                    self.from_email,
-                    self.from_password,
+                    self.__from_email,
+                    self.__from_password,
                 )
             elif collection_name=="assessment_metrics":
                 # If data is present then we need to parse it and send it as an email.
                 html_body = self.format_assessment_data_as_html(data)
-                response = self.export_repository.send_email(
-                    self.subject,
+                response = self.__export_repository.send_email(
+                    self.__subject ,
                     html_body,
                     user,
-                    self.from_email,
-                    self.from_password,
+                    self.__from_email,
+                    self.__from_password,
                 )
 
             return response

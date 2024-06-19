@@ -33,15 +33,15 @@ class ConnectionManager:
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_json(message)
 
-    # async def broadcast(self, message: str):
-    #     # Get all active connection IDs
-    #     active_connections = self.redis_client.smembers('active_connections')
-    #     for connection_id in active_connections:
-    #         # Retrieve the WebSocket object for each connection ID
-    #         stored_websocket = self.active_connections.get(connection_id)
-    #         if stored_websocket:
-    #             # Send the message to the WebSocket object
-    #             await stored_websocket.send_text(message)
+    async def broadcast(self, message: str):
+        # Get all active connection IDs
+        active_connections = self.redis_client.smembers('active_connections')
+        for connection_id in active_connections:
+            # Retrieve the WebSocket object for each connection ID
+            stored_websocket = self.active_connections.get(connection_id)
+            if stored_websocket:
+                # Send the message to the WebSocket object
+                await stored_websocket.send_text(message)
 
     def find_connection_id(self, websocket: WebSocket) -> str:
         # Find the connection ID for the given WebSocket object
