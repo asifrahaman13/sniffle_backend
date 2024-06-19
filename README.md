@@ -16,7 +16,7 @@ Backend repository for the mobile application server which aims at making the he
 
 Find the front end repository corresponding to this repo here: https://github.com/asifrahaman13/sniffle_mobile.git
 
-To run the front end application plese run this backend application.
+To run the front end application please run this backend application.
 
 ## How to run the code
 

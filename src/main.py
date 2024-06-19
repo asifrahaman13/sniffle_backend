@@ -24,7 +24,7 @@ from src.application.web.controllers.data_controller import data_router
 from src.application.web.controllers.voice_controller import voice_router
 from src.application.web.controllers.wearable_controller import wearable_router
 from src.application.web.controllers.fhir_controller import fhir_router
-from src.infastructure.repositories.search_repository import search_repository
+from exports.exports import search_repository
 
 data_service = DataService()
 
@@ -56,7 +56,7 @@ async def custom_callback(request: Request, response: Response, pexpire: int):
 async def lifespan(_: FastAPI):
 
     # Initialize Qdrant
-    # search_repository.initialize_qdrant()
+    search_repository.initialize_qdrant()
     redis_connection = redis.from_url(REDIS_URL, encoding="utf8")
     await FastAPILimiter.init(
         redis=redis_connection,

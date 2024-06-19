@@ -12,7 +12,6 @@ from exports.exports import chat_service, aws_service, database_service
 
 fhir_router = APIRouter()
 
-
 @fhir_router.post("/image-description")
 async def get_image_description(
     file: UploadFile = File(...),
@@ -85,14 +84,8 @@ async def get_presigned_url(file_name: str, aws_interface: AWSInterface = Depend
     logging.info(file_name)
     # Get the presigned URL for the specified file name
     presigned_url = aws_interface.get_presigned_json_url(file_name=file_name + ".json")
-
-    # response= requests.get(presigned_url)
-
-    # response=response.content
-
-    # return response
-
-    # print(response)
+    
+    # Return the presigned URL
     if presigned_url:
         return {"presigned_url": presigned_url}
     else:
