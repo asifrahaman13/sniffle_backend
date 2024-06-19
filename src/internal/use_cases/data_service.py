@@ -35,6 +35,10 @@ class DataService:
             assessment_metrics = self.database_repository.find_single_document(
                 "email", user, "assessment_metrics"
             )
+
+            assessment_metrics["data"]=assessment_metrics["data"][::-1]
+
+            print("##############################", assessment_metrics)
             # Return the assessment metrics
             return assessment_metrics
         except Exception as e:
