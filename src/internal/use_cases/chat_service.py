@@ -19,7 +19,7 @@ class ChatService:
         database_repository=DatabaseRepository,
     ) -> None:
         self.chat_repository = chat_repository
-        self.database_repository = DatabaseRepository()
+        self.database_repository = database_repository 
 
     def chat_response(self, user, query, all_messages):
 

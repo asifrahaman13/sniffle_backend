@@ -14,9 +14,9 @@ class DataService:
     def __call__(self) -> DataInterface:
         return self
 
-    def __init__(self):
-        self.database_repository = DatabaseRepository()
-        self.chat_response_repository = ChatResponseRepository()
+    def __init__(self, database_repository=DatabaseRepository, chat_response_repository=ChatResponseRepository):
+        self.database_repository = database_repository
+        self.chat_response_repository = chat_response_repository
 
     def get_quantitative_metrics(self, user):
         try:

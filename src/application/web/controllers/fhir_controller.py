@@ -7,28 +7,10 @@ import base64
 from fastapi import File, Form, UploadFile, HTTPException
 from src.internal.interfaces.chat_interface import ChatInterface
 from src.internal.interfaces.aws_interface import AWSInterface
-from src.internal.use_cases.chat_service import ChatService
-from src.infastructure.repositories.chat_repository import (
-    ChatResponseRepository,
-)
-from src.infastructure.repositories.aws_repository import AWSRepository
-from src.internal.use_cases.aws_service import AwsService
-from src.infastructure.repositories.database_repository import (
-    DatabaseRepository,
-)
-from src.internal.use_cases.database_service import DatabaseService
 from src.internal.interfaces.database_interface import DatabaseInterface
-
-database_repository = DatabaseRepository()
-database_service = DatabaseService(database_repository)
+from exports.exports import chat_service, aws_service, database_service
 
 fhir_router = APIRouter()
-
-chat_repository = ChatResponseRepository()
-chat_service = ChatService(chat_repository)
-
-aws_repository = AWSRepository()
-aws_service = AwsService(aws_repository)
 
 
 @fhir_router.post("/image-description")

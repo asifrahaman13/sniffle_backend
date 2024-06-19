@@ -1,28 +1,12 @@
 import logging
 from fastapi import WebSocket, APIRouter, Depends
-from src.ConnectionManager.ConnectionManager import ConnectionManager
 from fastapi import WebSocket, WebSocketDisconnect
-from src.infastructure.repositories.chat_repository import (
-    ChatResponseRepository,
-)
-from src.internal.use_cases.chat_service import ChatService
-from src.infastructure.repositories.auth_repository import AuthRepository
-from src.internal.use_cases.auth_service import AuthService
 from src.internal.interfaces.auth_interface import AuthInterface
 from src.internal.interfaces.chat_interface import ChatInterface
-
-chat_repository = ChatResponseRepository()
-chat_service = ChatService(chat_repository)
+from exports.exports import auth_service, chat_service, manager
 
 # Create a router for the websocket
 websocket_router = APIRouter()
-
-# Create a connection manager
-manager = ConnectionManager()
-
-auth_repository = AuthRepository()
-auth_service = AuthService(auth_repository)
-
 
 @websocket_router.websocket("/health_metrics/{client_id}")
 async def websocket_endpoint(

@@ -1,33 +1,15 @@
 from src.internal.entities.search import QueryResponse
 from src.internal.entities.export import ExportData
 from fastapi import APIRouter, Depends, HTTPException, Header
-from src.internal.use_cases.export_service import ExportService
-from src.infastructure.repositories.export_repository import ExportRepository
-from src.infastructure.repositories.database_repository import DatabaseRepository
 from src.internal.interfaces.export_interface import ExportInterface
-from src.internal.use_cases.search_service import SearchService
-from src.infastructure.repositories.auth_repository import AuthRepository
-from src.internal.use_cases.auth_service import AuthService
 from src.internal.interfaces.auth_interface import AuthInterface
 from src.internal.interfaces.data_interface import DataInterface
-from src.internal.use_cases.data_service import DataService
 from src.internal.entities.health_model import GeneralParameters
 from src.internal.interfaces.search_interface import SearchInterface
-from src.infastructure.repositories.search_repository import search_repository
+from exports.exports import auth_service, data_service, search_service, export_service
 
 # Create a new router
 data_router = APIRouter()
-
-auth_repository = AuthRepository()
-auth_service = AuthService(auth_repository)
-
-
-search_service = SearchService(search_repository)
-data_service = DataService()
-
-export_repository = ExportRepository()
-database_repository=DatabaseRepository()
-export_service = ExportService(database_repository, export_repository)
 
 
 @data_router.get("/quantitative_metrics/{token}")
@@ -165,10 +147,10 @@ async def update_general_metrics(
         raise HTTPException(status_code=500, detail="Failed to get general metrics")
 
 
-
 @data_router.post("/search")
 async def search_result(
-    query_text: QueryResponse, search_interface: SearchInterface = Depends(search_service)
+    query_text: QueryResponse,
+    search_interface: SearchInterface = Depends(search_service),
 ):
     try:
         # Get the search results
@@ -186,7 +168,7 @@ async def search_result(
 async def export_data(
     export_data: ExportData,
     auth_interface: AuthInterface = Depends(auth_service),
-    export_interface: ExportInterface= Depends(export_service),
+    export_interface: ExportInterface = Depends(export_service),
     token: str = Header(..., alias="Authorization"),
 ):
     try:
@@ -196,10 +178,11 @@ async def export_data(
         # Check if the token is valid
         if id_info is None:
             raise HTTPException(status_code=401, detail="Invalid token")
-    
 
         # Get the general metrics for the user
-        export_data = export_interface.export_data(id_info["sub"], export_data.export_type)
+        export_data = export_interface.export_data(
+            id_info["sub"], export_data.export_type
+        )
 
         if export_data is None:
             raise HTTPException(status_code=404, detail="Export data not found")

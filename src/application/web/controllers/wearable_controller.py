@@ -3,10 +3,7 @@ import time
 from fastapi import WebSocket
 import asyncio
 from fastapi import APIRouter
-from src.ConnectionManager.ConnectionManager import ConnectionManager
-
-# Create a connection manager
-manager = ConnectionManager()
+from exports.exports import manager
 
 wearable_router = APIRouter()
 

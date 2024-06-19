@@ -1,32 +1,11 @@
 import logging
 from fastapi import APIRouter, Depends, WebSocket
-from src.infastructure.repositories.chat_repository import (
-    ChatResponseRepository,
-)
-from src.internal.use_cases.chat_service import ChatService
-from src.infastructure.repositories.auth_repository import AuthRepository
-from src.internal.use_cases.auth_service import AuthService
 from src.internal.interfaces.auth_interface import AuthInterface
 from src.internal.interfaces.chat_interface import ChatInterface
-
-from src.infastructure.repositories.voice_repository import VoiceRepository
-from src.internal.use_cases.voice_service import VoiceService
 from src.internal.interfaces.voice_interface import VoiceInterface
-from src.ConnectionManager.ConnectionManager import ConnectionManager
-
-chat_repository = ChatResponseRepository()
-chat_service = ChatService(chat_repository)
-
-auth_repository = AuthRepository()
-auth_service = AuthService(auth_repository)
-
-voice_repository = VoiceRepository()
-voice_service = VoiceService(voice_repository)
+from exports.exports import chat_service, auth_service, voice_service, manager
 
 voice_router = APIRouter()
-# Create a connection manager
-manager = ConnectionManager()
-
 
 @voice_router.websocket("/voice_health_metrics/{client_id}")
 async def websocket_endpoint(
@@ -164,7 +143,7 @@ async def websocket_endpoint_query(
                     logging.info("llm_streaming_response")
                     logging.info(sentences)
                     text_to_audio_base64 = voice_interface.voice_response(sentences)
-                    await manager.send_personal_message(text_to_audio_base64)
+                    await manager.send_personal_message(text_to_audio_base64, websocket)
                     # messages_received=[]
                 except StopIteration:
                     break
