@@ -22,11 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # - name: Run tests
-      #   run: |
-      #     pytest  # or your testing command
-
-      # - name: Build and deploy
-      #   run: |
-      #     python3 src/index.py
-      #     # Your deployment commands (e.g., to deploy to a server or a cloud platform)
+      - name: Build and deploy
+        run: |
+          docker compose up -d
+          
