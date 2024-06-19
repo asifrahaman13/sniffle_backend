@@ -37,13 +37,16 @@ class SecurityConfig(BaseModel):
 class RedisConfig(BaseModel):
     url: str
 
+
 class VectorizerConfig(BaseModel):
     embedding_model: str
+
 
 class EmailConfig(BaseModel):
     host: str
     port: int
     username: str
+
 
 class Config(BaseModel):
     app: AppConfig
@@ -114,7 +117,7 @@ assert DEEPGRAM_API_KEY, "Deepgram API key is not set"
 logging.info("Deepgram API key is set")
 
 
-EMBEDDING_MODEL= config.vector_db.embedding_model
+EMBEDDING_MODEL = config.vector_db.embedding_model
 assert EMBEDDING_MODEL, "Embedding model is not set"
 logging.info("Embedding model is set")
 

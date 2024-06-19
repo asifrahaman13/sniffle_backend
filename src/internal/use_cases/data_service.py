@@ -14,7 +14,11 @@ class DataService:
     def __call__(self) -> DataInterface:
         return self
 
-    def __init__(self, database_repository=DatabaseRepository, chat_response_repository=ChatResponseRepository):
+    def __init__(
+        self,
+        database_repository=DatabaseRepository,
+        chat_response_repository=ChatResponseRepository,
+    ):
         self.database_repository = database_repository
         self.chat_response_repository = chat_response_repository
 
@@ -36,7 +40,7 @@ class DataService:
                 "email", user, "assessment_metrics"
             )
 
-            assessment_metrics["data"]=assessment_metrics["data"][::-1]
+            assessment_metrics["data"] = assessment_metrics["data"][::-1]
 
             # Return the assessment metrics
             return assessment_metrics
@@ -50,7 +54,9 @@ class DataService:
 
             with ThreadPoolExecutor() as executor:
                 # Submit tasks for each user
-                futures = [executor.submit(self.process_user, user) for user in all_users]
+                futures = [
+                    executor.submit(self.process_user, user) for user in all_users
+                ]
 
                 # Wait for all tasks to complete
                 for future in futures:
@@ -95,7 +101,9 @@ class DataService:
             logging.info(f"Processed recommendations for user: {user_email}")
 
         except Exception as e:
-            logging.error(f"Failed to process recommendations for user {user_email}: {e}")
+            logging.error(
+                f"Failed to process recommendations for user {user_email}: {e}"
+            )
 
     def get_recommendations(self, user):
         try:

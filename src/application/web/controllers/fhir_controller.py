@@ -12,6 +12,7 @@ from exports.exports import chat_service, aws_service, database_service
 
 fhir_router = APIRouter()
 
+
 @fhir_router.post("/image-description")
 async def get_image_description(
     file: UploadFile = File(...),
@@ -29,7 +30,8 @@ async def get_image_description(
     logging.info(gpt4_description)
 
     """
-    Extract out the json data from the chat response of the LLM. We need to parse the data later into json format. We also need to upload the files into the AWS S3, and 
+    Extract out the json data from the chat response of the LLM. We need to parse the data later into json format.
+    We also need to upload the files into the AWS S3, and 
     save the name of the file in mongodb database. 
     """
     gpt4_description = gpt4_description.strip("```json\n").strip("```")
@@ -59,7 +61,9 @@ async def get_image_description(
                     saved_json["_id"] = str(saved_json["_id"])
                 return saved_json
             else:
-                raise HTTPException(status_code=500, detail="Failed to upload JSON to AWS S3")
+                raise HTTPException(
+                    status_code=500, detail="Failed to upload JSON to AWS S3"
+                )
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid JSON format: {e}")
 
@@ -76,15 +80,19 @@ async def get_all_json(
     if all_json_files:
         return all_json_files
     else:
-        raise HTTPException(status_code=404, detail="No JSON files found for the specified user")
+        raise HTTPException(
+            status_code=404, detail="No JSON files found for the specified user"
+        )
 
 
 @fhir_router.get("/presigned-url/{file_name}")
-async def get_presigned_url(file_name: str, aws_interface: AWSInterface = Depends(aws_service)):
+async def get_presigned_url(
+    file_name: str, aws_interface: AWSInterface = Depends(aws_service)
+):
     logging.info(file_name)
     # Get the presigned URL for the specified file name
     presigned_url = aws_interface.get_presigned_json_url(file_name=file_name + ".json")
-    
+
     # Return the presigned URL
     if presigned_url:
         return {"presigned_url": presigned_url}

@@ -4,11 +4,16 @@ import redis
 
 class ConnectionManager:
     def __init__(self):
-        self.redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
+        self.redis_client = redis.Redis(
+            host="localhost", port=6379, decode_responses=True
+        )
         self.active_connections = {}
 
     async def connect(
-        self, websocket: WebSocket, connection_id: str, connection_type: str = "active_connections"
+        self,
+        websocket: WebSocket,
+        connection_id: str,
+        connection_type: str = "active_connections",
     ):
         # Generate a unique connection ID
 
@@ -21,7 +26,9 @@ class ConnectionManager:
         # Accept the connection
         await websocket.accept()
 
-    async def disconnect(self, websocket: WebSocket, connection_type: str = "active_connections"):
+    async def disconnect(
+        self, websocket: WebSocket, connection_type: str = "active_connections"
+    ):
         # Find the connection ID for the given WebSocket object
         connection_id = self.find_connection_id(websocket)
         if connection_id:
@@ -35,7 +42,7 @@ class ConnectionManager:
 
     async def broadcast(self, message: str):
         # Get all active connection IDs
-        active_connections = self.redis_client.smembers('active_connections')
+        active_connections = self.redis_client.smembers("active_connections")
         for connection_id in active_connections:
             # Retrieve the WebSocket object for each connection ID
             stored_websocket = self.active_connections.get(connection_id)

@@ -7,6 +7,8 @@ from config.config import MONGO_DB_URI
 Database repository is used to interact with the MongoDB database.
 It is separate entity from the rest of the program.
 """
+
+
 class DatabaseRepository:
     def __init__(self):
 
@@ -175,7 +177,9 @@ class DatabaseRepository:
             logging.error(f"Failed to update data: {e}")
             return None
 
-    def find_all_documents_from_field(self, field: str, field_value: str, collection_name: str):
+    def find_all_documents_from_field(
+        self, field: str, field_value: str, collection_name: str
+    ):
         # Create an empty list to store the data that will be found
         all_pdfs_of_user = []
         try:

@@ -7,6 +7,7 @@ from exports.exports import chat_service, auth_service, voice_service, manager
 
 voice_router = APIRouter()
 
+
 @voice_router.websocket("/voice_health_metrics/{client_id}")
 async def websocket_endpoint(
     websocket: WebSocket,

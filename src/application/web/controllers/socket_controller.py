@@ -8,6 +8,7 @@ from exports.exports import auth_service, chat_service, manager
 # Create a router for the websocket
 websocket_router = APIRouter()
 
+
 @websocket_router.websocket("/health_metrics/{client_id}")
 async def websocket_endpoint(
     websocket: WebSocket,
@@ -197,7 +198,9 @@ async def websocket_general_chat(
             logging.info(f"Client #{client_id} sent: {data}")
 
             # Create a chat response
-            chat_response = chat_interface.general_chat_query(data["query"], all_messages)
+            chat_response = chat_interface.general_chat_query(
+                data["query"], all_messages
+            )
 
             # Log the response
             llm_response = {

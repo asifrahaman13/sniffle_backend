@@ -39,10 +39,10 @@ class EmbeddingService:
 
 
 class QdrantService:
-
     """
     Qdrant client is used here to create collection, upsert points and search the points.
     """
+
     def __init__(self):
         self.client = qdrant_client.QdrantClient(":memory:")
         self.collection_name = "example_collection"
@@ -73,21 +73,22 @@ class QdrantService:
 
 
 class SearchRepository:
-
     """
     Search repository is used to initialize the qdrant service and prepare the points.
     It also has the query_text method which is used to search the text.
     """
+
     def __init__(
         self, embedding_service: EmbeddingService, qdrant_service: QdrantService
     ):
         self.__embedding_service = embedding_service
         self.__qdrant_service = qdrant_service
-    
+
     """
     Prepare the points from the text and metadata. Metadat includes the front end configuration 
     data for the screens.
     """
+
     def prepare_points(
         self, texts: List[str], metadata: List[Dict]
     ) -> List[PointStruct]:
@@ -99,11 +100,13 @@ class SearchRepository:
             )
             for idx, (text, meta) in enumerate(zip(texts, metadata))
         ]
+
     """
     This function will be called before the start of the FastAPI application server.
     The function initialized the data points, creates collection and upserts the static data points.
     They will be later used as cached data for the vector search.
     """
+
     def initialize_qdrant(self):
         points = self.prepare_points(texts, metadata)
         self.__qdrant_service.create_collection()

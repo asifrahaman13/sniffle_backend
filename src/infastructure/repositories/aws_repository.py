@@ -20,7 +20,7 @@ class AWSRepository:
             aws_secret_access_key=self.__aws_secret_key,
         )
         self.expiration_time = 60
-        
+
     # Upload the JSON file to the S3 bucket
     def upload_json(self, file_name: str, file_content: str):
         try:
@@ -32,7 +32,7 @@ class AWSRepository:
         except Exception as e:
             logging.error(f"An error occurred: {e}")
             return False
-    
+
     # Generate a presigned URL for the JSON file
     def get_presigned_json_url(self, file_name: str):
         try:

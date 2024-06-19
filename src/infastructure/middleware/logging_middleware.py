@@ -71,7 +71,9 @@ class PrefixMiddleware(BaseHTTPMiddleware):
                 response = await call_next(request)
                 return response
             except HTTPException as e:
-                return JSONResponse(status_code=e.status_code, content={"message": str(e)})
+                return JSONResponse(
+                    status_code=e.status_code, content={"message": str(e)}
+                )
         else:
             response = await call_next(request)
             return response

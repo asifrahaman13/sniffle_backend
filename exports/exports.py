@@ -15,7 +15,11 @@ from src.infastructure.repositories.database_repository import (
 from src.infastructure.repositories.auth_repository import AuthRepository
 from src.internal.use_cases.auth_service import AuthService
 from src.internal.use_cases.database_service import DatabaseService
-from src.infastructure.repositories.search_repository import EmbeddingService, QdrantService, SearchRepository
+from src.infastructure.repositories.search_repository import (
+    EmbeddingService,
+    QdrantService,
+    SearchRepository,
+)
 
 # Create a connection manager
 manager = ConnectionManager()

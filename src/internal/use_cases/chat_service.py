@@ -19,7 +19,7 @@ class ChatService:
         database_repository=DatabaseRepository,
     ) -> None:
         self.chat_repository = chat_repository
-        self.database_repository = database_repository 
+        self.database_repository = database_repository
 
     def chat_response(self, user, query, all_messages):
 
@@ -110,7 +110,9 @@ class ChatService:
         try:
 
             # Get the general metrics for the user
-            response = self.chat_repository.llm_user_general_metrics(query, all_messages)
+            response = self.chat_repository.llm_user_general_metrics(
+                query, all_messages
+            )
 
             if response["summary"] == True:
                 # Check if the user exists in the database
@@ -207,7 +209,9 @@ class ChatService:
     def streaming_voice_assessment_response(self, user, query, all_messages):
 
         # Get the chat response
-        responses = self.chat_repository.streaming_voice_assessment_response(query, all_messages)
+        responses = self.chat_repository.streaming_voice_assessment_response(
+            query, all_messages
+        )
 
         while True:
 
@@ -267,4 +271,6 @@ class ChatService:
         return self.chat_repository.general_chat_query(query, previous_messages)
 
     def get_streaming_voice_response(self, query, previous_messages):
-        return self.chat_repository.get_streaming_voice_response(query, previous_messages)
+        return self.chat_repository.get_streaming_voice_response(
+            query, previous_messages
+        )

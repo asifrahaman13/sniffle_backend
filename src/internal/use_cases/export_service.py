@@ -17,7 +17,7 @@ class ExportService:
     ) -> None:
         self.__database_repository = database_repository
         self.__export_repository = export_repository
-        self.__subject  = "Health Data Report" 
+        self.__subject = "Health Data Report"
         self.__from_email = EMAIL_USERNAME
         self.__from_password = EMAIL_PASSWORD
 
@@ -32,32 +32,36 @@ class ExportService:
         for record in records:
             timestamp = record.get("timestamp", "No timestamp provided")
             # Convert timestamp to readable date and time format
-            readable_time = datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+            readable_time = datetime.fromtimestamp(timestamp).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
             html += f"<tr><td>{record.get('sugar_level')}</td><td>{record.get('systol_blood_pressure')}</td><td>{record.get('diastol_blood_pressure')}</td><td>{record.get('heart_rate')}</td><td>{record.get('respiratory_rate')}</td><td>{record.get('body_temperature')}</td><td>{record.get('step_count')}</td><td>{record.get('calories_burned')}</td><td>{record.get('distance_travelled')}</td><td>{record.get('sleep_duration')}</td><td>{record.get('water_consumed')}</td><td>{record.get('caffeine_consumed')}</td><td>{record.get('alcohol_consumed')}</td><td>{readable_time}</td></tr>"
 
         html += "</table>"
         return html
 
     def format_assessment_data_as_html(self, data):
-        email = data['email']
-        records = data['data']
-        
+        email = data["email"]
+        records = data["data"]
+
         html = f"<h2>Health Summary Data for {email}</h2>"
         html += "<table border='1'>"
         html += "<tr><th>Summary</th><th>Timestamp</th></tr>"
-        
+
         for record in records:
-            summary = record.get('summary', 'No summary provided')
-            timestamp = record.get('timestamp', 'No timestamp provided')
-            
+            summary = record.get("summary", "No summary provided")
+            timestamp = record.get("timestamp", "No timestamp provided")
+
             # Convert timestamp to readable date and time format
-            readable_time = datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-            
+            readable_time = datetime.fromtimestamp(timestamp).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+
             html += f"<tr><td>{summary}</td><td>{readable_time}</td></tr>"
-        
+
         html += "</table>"
         return html
-    
+
     def export_data(self, user: str, collection_name: str):
         try:
             # Find the data from the database.
@@ -65,21 +69,21 @@ class ExportService:
                 "email", user, collection_name
             )
 
-            if collection_name=="quantitative_metrics":
+            if collection_name == "quantitative_metrics":
                 # If data is present then we need to parse it and send it as an email.
                 html_body = self.format_quantitative_data_as_html(data)
                 response = self.__export_repository.send_email(
-                    self.__subject ,
+                    self.__subject,
                     html_body,
                     user,
                     self.__from_email,
                     self.__from_password,
                 )
-            elif collection_name=="assessment_metrics":
+            elif collection_name == "assessment_metrics":
                 # If data is present then we need to parse it and send it as an email.
                 html_body = self.format_assessment_data_as_html(data)
                 response = self.__export_repository.send_email(
-                    self.__subject ,
+                    self.__subject,
                     html_body,
                     user,
                     self.__from_email,

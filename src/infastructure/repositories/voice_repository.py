@@ -11,6 +11,8 @@ from config.config import DEEPGRAM_API_KEY
 """
 VoiceRepository class is used to chunk the text into sentences and then synthesize the audio using Deepgram API.
 """
+
+
 class VoiceRepository:
 
     def __init__(self) -> None:

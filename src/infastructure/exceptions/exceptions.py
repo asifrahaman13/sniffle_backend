@@ -4,7 +4,9 @@ from fastapi import HTTPException, status
 class HttePrequestErrors:
 
     def bad_request():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid input")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid input"
+        )
 
     def unauthorized():
         raise HTTPException(
@@ -13,10 +15,14 @@ class HttePrequestErrors:
         )
 
     def forbidden():
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access forbidden")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Access forbidden"
+        )
 
     def detail_not_found():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, details="Details not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, details="Details not found"
+        )
 
     def internal_server_error():
         raise HTTPException(

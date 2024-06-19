@@ -3,7 +3,7 @@ name: Python CI/CD
 on:
   push:
     branches:
-      - main  # change to your main branch name
+      - main
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.12'  # specify your Python version
+          python-version: '3.12' 
 
       - name: Install dependencies
         run: |
