@@ -9,7 +9,9 @@ from config.config import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
 )
 
-
+"""
+AuthRepository class is used to create and verify access tokens.
+"""
 class AuthRepository:
 
     def __init__(self) -> None:

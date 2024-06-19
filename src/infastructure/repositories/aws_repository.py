@@ -1,3 +1,4 @@
+import logging
 import boto3
 from config.config import AWS_BUCKET_NAME, AWS_ACCESS_KEY, AWS_SECRET_KEY
 
@@ -19,7 +20,8 @@ class AWSRepository:
             aws_secret_access_key=self.__aws_secret_key,
         )
         self.expiration_time = 60
-
+        
+    # Upload the JSON file to the S3 bucket
     def upload_json(self, file_name: str, file_content: str):
         try:
             # Upload the file to the S3 bucket
@@ -28,9 +30,10 @@ class AWSRepository:
             )
             return True
         except Exception as e:
-            print(e)
+            logging.error(f"An error occurred: {e}")
             return False
-
+    
+    # Generate a presigned URL for the JSON file
     def get_presigned_json_url(self, file_name: str):
         try:
             # Generate a presigned URL for the file
@@ -44,8 +47,8 @@ class AWSRepository:
                 },
                 ExpiresIn=self.expiration_time,
             )
-            print(url)
+            logging.info(url)
             return url
         except Exception as e:
-            print(f"An error occurred: {e}")
+            logging.error(f"An error occurred: {e}")
             return None

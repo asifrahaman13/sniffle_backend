@@ -3,7 +3,10 @@ from typing import Any, Dict
 import logging
 from config.config import MONGO_DB_URI
 
-
+"""
+Database repository is used to interact with the MongoDB database.
+It is separate entity from the rest of the program.
+"""
 class DatabaseRepository:
     def __init__(self):
 
