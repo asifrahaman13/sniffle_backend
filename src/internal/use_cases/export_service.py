@@ -5,7 +5,10 @@ from src.infastructure.repositories.export_repository import ExportRepository
 from datetime import datetime
 from config.config import EMAIL_USERNAME, EMAIL_PASSWORD
 
-
+"""
+Export Service class is responsible for exporting the data from the database and sending it through any 
+notification provider. Currently supports exporting the data through registered email.
+"""
 class ExportService:
 
     def __call__(self) -> ExportInterface:

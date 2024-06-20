@@ -1,6 +1,13 @@
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import WebSocket
 import redis
 
+
+"""
+The ConnectionManager class is responsible for managing WebSocket connections. It stores the WebSocket objects 
+in a dictionary with the connection ID as the key. The connection ID is generated when a new connection is established 
+and is used to identify the connection in the system. The ConnectionManager uses the redis in memory service to store 
+the connections.
+"""
 
 class ConnectionManager:
     def __init__(self):
