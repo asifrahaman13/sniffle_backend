@@ -34,6 +34,10 @@ To run the front end application please run this backend application.
 
 ## Run with docker
 
+Best way of utilizing the docker is through the docker compose file.
+
+`docker compose up -d`
+
 In case you face any issue with the installtion and set up, you can run using docker.
 
 `docker build -t dolphin:lastest .`
