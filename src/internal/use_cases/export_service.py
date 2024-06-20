@@ -27,7 +27,7 @@ class ExportService:
 
         html = f"<h2>Health Data for {email}</h2>"
         html += "<table border='1'>"
-        html += "<tr><th>Sugar Level</th><th>Systolic BP</th><th>Diastolic BP</th><th>Heart Rate</th><th>Respiratory Rate</th><th>Body Temperature</th><th>Step Count</th><th>Calories Burned</th><th>Distance Travelled</th><th>Sleep Duration</th><th>Water Consumed</th><th>Caffeine Consumed</th><th>Alcohol Consumed</th><th>Timestamp</th></tr>"
+        html += "<tr><th>Weight</th><th>Sugar Level</th><th>Systolic BP</th><th>Diastolic BP</th><th>Heart Rate</th><th>Respiratory Rate</th><th>Body Temperature</th><th>Step Count</th><th>Calories Burned</th><th>Distance Travelled</th><th>Sleep Duration</th><th>Water Consumed</th><th>Caffeine Consumed</th><th>Alcohol Consumed</th><th>Timestamp</th></tr>"
 
         for record in records:
             timestamp = record.get("timestamp", "No timestamp provided")
@@ -35,7 +35,7 @@ class ExportService:
             readable_time = datetime.fromtimestamp(timestamp).strftime(
                 "%Y-%m-%d %H:%M:%S"
             )
-            html += f"<tr><td>{record.get('sugar_level')}</td><td>{record.get('systol_blood_pressure')}</td><td>{record.get('diastol_blood_pressure')}</td><td>{record.get('heart_rate')}</td><td>{record.get('respiratory_rate')}</td><td>{record.get('body_temperature')}</td><td>{record.get('step_count')}</td><td>{record.get('calories_burned')}</td><td>{record.get('distance_travelled')}</td><td>{record.get('sleep_duration')}</td><td>{record.get('water_consumed')}</td><td>{record.get('caffeine_consumed')}</td><td>{record.get('alcohol_consumed')}</td><td>{readable_time}</td></tr>"
+            html += f"<tr><td>{record.get('weight')}</td><td>{record.get('sugar_level')}</td><td>{record.get('systol_blood_pressure')}</td><td>{record.get('diastol_blood_pressure')}</td><td>{record.get('heart_rate')}</td><td>{record.get('respiratory_rate')}</td><td>{record.get('body_temperature')}</td><td>{record.get('step_count')}</td><td>{record.get('calories_burned')}</td><td>{record.get('distance_travelled')}</td><td>{record.get('sleep_duration')}</td><td>{record.get('water_consumed')}</td><td>{record.get('caffeine_consumed')}</td><td>{record.get('alcohol_consumed')}</td><td>{readable_time}</td></tr>"
 
         html += "</table>"
         return html

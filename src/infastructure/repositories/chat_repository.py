@@ -51,7 +51,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    """Format the user query into the schema provided to you. It will have sugar_level, systol_blood_pressure and diastol_blood_pressure  pressure (give them separate), heart_rate, respiratory_rate, bod_temperature, step_count, body_temperature, calories_burned, distance_travelled, sleep_duration, water_consumed, caffeine_consumed, alcohol_consumed. Only numerical values to consider no unit. If some data is not provided then use the default value as 0. Note that only give the JSON data as the output. The query is as follows:" \n \n{question} """
+                    """Format the user query into the schema provided to you. It will have weight, sugar_level, systol_blood_pressure and diastol_blood_pressure  pressure (give them separate), heart_rate, respiratory_rate, bod_temperature, step_count, body_temperature, calories_burned, distance_travelled, sleep_duration, water_consumed, caffeine_consumed, alcohol_consumed. Only numerical values to consider no unit. If some data is not provided then use the default value as 0. Note that only give the JSON data as the output. The query is as follows:" \n \n{question} """
                 )
             ],
             # Define the input variables
