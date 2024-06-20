@@ -48,7 +48,7 @@ class PrefixMiddleware(BaseHTTPMiddleware):
                 raise HTTPException(status_code=401, detail="Unauthorized")
 
             result = auth_interface.decode_access_token(token)
-            logging.info("The decoded token is: ", result)
+            logging.info(result)
             if "error" in result:
                 raise HTTPException(status_code=401, detail="Unauthorized")
         except Exception as e:

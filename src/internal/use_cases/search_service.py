@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, List
 
 from src.infastructure.repositories.search_repository import SearchRepository
