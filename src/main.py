@@ -59,6 +59,7 @@ async def lifespan(_: FastAPI):
 
     # Initialize Qdrant
     # search_repository.initialize_qdrant()
+    
     redis_connection = redis.from_url(REDIS_URL, encoding="utf8")
     await FastAPILimiter.init(
         redis=redis_connection,
