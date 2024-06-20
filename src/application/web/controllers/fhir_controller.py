@@ -5,6 +5,7 @@ import logging
 import os
 import base64
 from fastapi import File, Form, UploadFile, HTTPException
+from src.internal.entities.export import FileName
 from src.internal.interfaces.auth_interface import AuthInterface
 from src.internal.interfaces.chat_interface import ChatInterface
 from src.internal.interfaces.aws_interface import AWSInterface
@@ -87,13 +88,6 @@ async def get_all_json(
         raise HTTPException(
             status_code=404, detail="No JSON files found for the specified user"
         )
-
-
-from pydantic import BaseModel
-
-class FileName(BaseModel):
-    fileName: str
-
 
 @fhir_router.post("/presigned-url")
 async def get_presigned_url(

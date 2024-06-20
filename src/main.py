@@ -6,7 +6,6 @@ from starlette.middleware.cors import CORSMiddleware
 import asyncio
 import schedule
 from src.internal.interfaces.data_interface import DataInterface
-from src.internal.use_cases.data_service import DataService
 from src.infastructure.middleware.logging_middleware import PrefixMiddleware
 from math import ceil
 import redis.asyncio as redis
@@ -56,7 +55,7 @@ async def custom_callback(request: Request, response: Response, pexpire: int):
 async def lifespan(_: FastAPI):
 
     # Initialize Qdrant
-    search_repository.initialize_qdrant()
+    # search_repository.initialize_qdrant()
     
     redis_connection = redis.from_url(REDIS_URL, encoding="utf8")
     await FastAPILimiter.init(
