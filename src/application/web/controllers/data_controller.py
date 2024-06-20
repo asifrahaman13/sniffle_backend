@@ -11,7 +11,6 @@ from exports.exports import auth_service, data_service, search_service, export_s
 # Create a new router
 data_router = APIRouter()
 
-
 @data_router.get("/quantitative_metrics/{token}")
 async def get_quantitative_metrics(
     token: str,
