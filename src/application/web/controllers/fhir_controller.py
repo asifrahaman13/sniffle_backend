@@ -1,14 +1,15 @@
 import tempfile
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 import json
 import logging
 import os
 import base64
 from fastapi import File, Form, UploadFile, HTTPException
+from src.internal.interfaces.auth_interface import AuthInterface
 from src.internal.interfaces.chat_interface import ChatInterface
 from src.internal.interfaces.aws_interface import AWSInterface
 from src.internal.interfaces.database_interface import DatabaseInterface
-from exports.exports import chat_service, aws_service, database_service
+from exports.exports import chat_service, aws_service, database_service, auth_service
 
 fhir_router = APIRouter()
 
@@ -68,14 +69,17 @@ async def get_image_description(
         raise HTTPException(status_code=400, detail=f"Invalid JSON format: {e}")
 
 
-@fhir_router.get("/get-all-json/{username}")
+@fhir_router.get("/get-all-json/{token}")
 async def get_all_json(
-    username: str,
+    token: str,
+    auth_interface: AuthInterface = Depends(auth_service),
     database_interface: DatabaseInterface = Depends(database_service),
 ):
     # Get all the JSON files uploaded by the specified user
+
+    user=auth_interface.decode_access_token(token)
     all_json_files = database_interface.find_all_documents_from_field(
-        "username", username, "json_files"
+        "username", user["sub"], "json_files"
     )
     if all_json_files:
         return all_json_files
@@ -85,13 +89,19 @@ async def get_all_json(
         )
 
 
-@fhir_router.get("/presigned-url/{file_name}")
+from pydantic import BaseModel
+
+class FileName(BaseModel):
+    fileName: str
+
+
+@fhir_router.post("/presigned-url")
 async def get_presigned_url(
-    file_name: str, aws_interface: AWSInterface = Depends(aws_service)
+    file_name: FileName, aws_interface: AWSInterface = Depends(aws_service),token: str = Header(..., alias="Authorization"),
 ):
     logging.info(file_name)
     # Get the presigned URL for the specified file name
-    presigned_url = aws_interface.get_presigned_json_url(file_name=file_name + ".json")
+    presigned_url = aws_interface.get_presigned_json_url(file_name=file_name.fileName + ".json")
 
     # Return the presigned URL
     if presigned_url:

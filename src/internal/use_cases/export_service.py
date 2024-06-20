@@ -1,3 +1,4 @@
+import logging
 from src.internal.interfaces.export_interface import ExportInterface
 from src.infastructure.repositories.database_repository import DatabaseRepository
 from src.infastructure.repositories.export_repository import ExportRepository
@@ -17,7 +18,6 @@ class ExportService:
     ) -> None:
         self.__database_repository = database_repository
         self.__export_repository = export_repository
-        self.__subject = "Health Data Report"
         self.__from_email = EMAIL_USERNAME
         self.__from_password = EMAIL_PASSWORD
 
@@ -73,7 +73,7 @@ class ExportService:
                 # If data is present then we need to parse it and send it as an email.
                 html_body = self.format_quantitative_data_as_html(data)
                 response = self.__export_repository.send_email(
-                    self.__subject,
+                    "Your Health Data Report",
                     html_body,
                     user,
                     self.__from_email,
@@ -83,7 +83,7 @@ class ExportService:
                 # If data is present then we need to parse it and send it as an email.
                 html_body = self.format_assessment_data_as_html(data)
                 response = self.__export_repository.send_email(
-                    self.__subject,
+                    "Your Health Summary Report",
                     html_body,
                     user,
                     self.__from_email,
@@ -92,5 +92,5 @@ class ExportService:
 
             return response
         except Exception as e:
-            print(f"Failed to send email: {e}")
+            logging.error(f"Failed to send email: {e}")
             return None
