@@ -24,9 +24,7 @@ from src.application.web.controllers.data_controller import data_router
 from src.application.web.controllers.voice_controller import voice_router
 from src.application.web.controllers.wearable_controller import wearable_router
 from src.application.web.controllers.fhir_controller import fhir_router
-from exports.exports import search_repository
-
-data_service = DataService()
+from exports.exports import search_repository, data_service
 
 # Configure logging
 logging.basicConfig(
