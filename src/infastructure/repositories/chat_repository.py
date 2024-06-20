@@ -1,19 +1,16 @@
 import json
-import time
-from openai import OpenAI
 import logging
+import time
+
+from config.config import OPEN_AI_API_KEY
+from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain_openai import ChatOpenAI
-from langchain.output_parsers import PydanticOutputParser
-from src.internal.helper.regular_expression import detect_summary
-from src.internal.entities.health_model import (
-    HealthData,
-    Recommendations,
-    GeneralParameters,
-)
-from config.config import OPEN_AI_API_KEY
+from openai import OpenAI
 from src.constants.prompts.prompts import Prompts
-
+from src.internal.entities.health_model import (GeneralParameters, HealthData,
+                                                Recommendations)
+from src.internal.helper.regular_expression import detect_summary
 
 # Configure logging
 logging.basicConfig(
@@ -39,7 +36,7 @@ class HealthAssistant:
         try:
             return json.loads(json_content)
         except json.JSONDecodeError as e:
-            print(f"Failed to parse JSON: {e}")
+            logging.error(f"Failed to parse JSON: {e}")
             return None
 
     def format_input(self, user_query):
@@ -347,7 +344,7 @@ class ChatResponseRepository:
 
                     # Yield the sentence
 
-                    print("Sending", {"response": total_text, "is_last": True})
+                    logging.info("Sending", {"response": total_text, "is_last": True})
                     yield {
                         "response": sentence_buffer.strip(),
                         "is_last": False,
@@ -358,7 +355,7 @@ class ChatResponseRepository:
 
         if detect_summary(total_text):
             json_parased_quanitative_data = {"summary": total_text}
-            print(
+            logging.info(
                 "Sending",
                 {
                     "response": total_text,
@@ -420,7 +417,7 @@ class ChatResponseRepository:
                     elapsed_time = end_time - start_time
 
                     logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
-                    print("Sending", {"response": total_text, "is_last": True})
+                    logging.info("Sending", {"response": total_text, "is_last": True})
                     yield {
                         "response": sentence_buffer.strip(),
                         "is_last": False,
@@ -430,7 +427,7 @@ class ChatResponseRepository:
         previous_messages.append({"role": "system", "content": total_text})
         if detect_summary(total_text):
             json_parased_quanitative_data = {"summary": total_text}
-            print(
+            logging.info(
                 "Sending",
                 {
                     "response": total_text,

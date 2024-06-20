@@ -21,11 +21,11 @@ class ExportRepository:
         try:
             server.login(from_email, from_password)
             server.send_message(msg)
-            print("Email sent successfully!")
+            logging.info("Email sent successfully!")
 
             return True
         except Exception as e:
-            print(f"Failed to send email: {e}")
+            logging.info(f"Failed to send email: {e}")
             return False
         finally:
             server.quit()

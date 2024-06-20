@@ -9,6 +9,10 @@ from src.infastructure.repositories.chat_repository import (
 import logging
 
 
+"""
+Data Service class is responsible for handling the data related operations.
+When user requests for data, the data service interacts with the database repository.
+"""
 class DataService:
 
     def __call__(self) -> DataInterface:
@@ -46,7 +50,12 @@ class DataService:
             return assessment_metrics
         except Exception as e:
             logging.error(f"Failed to get assessment metrics: {e}")
-
+    
+    """
+    Schedule recommendations for all users. Not binded to any API endpoint. 
+    Currently this function is called every day at 10:30 AM. However we may need
+    to change this to a more dynamic approach.
+    """
     def schedule_recommendations(self):
         try:
             # Get all the users
@@ -65,9 +74,21 @@ class DataService:
         except Exception as e:
             logging.error(f"Failed to schedule recommendations: {e}")
 
+    """
+    Process the recommendations for a given user.
+    Currenlty it retrieves the data three times from database for fetching different information. 
+    1. quantitative_metrics
+    2. assessment_metrics
+    3. general_metrics
+
+    Not a recommended approach as it increases the number of database calls. Need to refactor this code to reduce the number of database calls.
+    """
+
     def process_user(self, user):
         try:
             user_email = user["email"]
+
+            # Get the metrics for the user
             quantitative_metrics = self.database_repository.find_single_document(
                 "email", user_email, "quantitative_metrics"
             )
@@ -77,6 +98,8 @@ class DataService:
             general_metrics = self.database_repository.find_single_document(
                 "email", user_email, "general_metrics"
             )
+
+            # Get the recommendations for the user through LLMs.
             recommendations = self.chat_response_repository.llm_recommendation(
                 quantitative_metrics, assessment_metrics, general_metrics
             )
@@ -111,7 +134,7 @@ class DataService:
             recommendations = self.database_repository.find_single_document(
                 "email", user, "recommendations"
             )
-            print(recommendations)
+            logging.info(recommendations)
             # Return the recommendations
             return recommendations["data"]
         except Exception as e:

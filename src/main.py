@@ -118,10 +118,10 @@ app.add_middleware(PrefixMiddleware)
 
 # Define the jobs
 def job():
-    print("I'm working...")
+    logging.info("Recommendations scheduled")
     data_interface: DataInterface = data_service
     data_interface.schedule_recommendations()
-    print("Recommendations scheduled")
+    logging.info("All scheduling done...")
 
 
 # Schedule the jobs
@@ -168,5 +168,5 @@ if __name__ == "__main__":
     import uvicorn
 
     port = int(os.environ.get("PORT", 8000))
-    print(f"Starting server on port {port}")
+    logging.info(f"Starting server on port {port}")
     uvicorn.run(app, host="0.0.0.0", port=port)

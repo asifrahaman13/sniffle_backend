@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import logging
 from jose import jwt
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -50,7 +51,8 @@ class AuthRepository:
             return None
 
     def decode_access_token(self, token: str):
-        print("The token received is: ", token)
+        logging.info("The token received is: ")
+        logging.info(token)
         try:
             # Decode the access token
             payload = jwt.decode(
