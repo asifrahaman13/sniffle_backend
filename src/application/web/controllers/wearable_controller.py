@@ -4,6 +4,9 @@ from fastapi import WebSocket
 import asyncio
 from fastapi import APIRouter
 from exports.exports import manager
+from src.internal.interfaces.auth_interface import AuthInterface
+from fastapi import Depends
+from exports.exports import auth_service
 
 wearable_router = APIRouter()
 
@@ -29,7 +32,14 @@ def temperature_monitor(value: float):
 
 
 @wearable_router.websocket("/ws/{id}")
-async def websocket_endpoint(id: str, websocket: WebSocket):
+async def websocket_endpoint(id: str, websocket: WebSocket,  auth_interface: AuthInterface = Depends(auth_service), ):
+
+    user_info = auth_interface.decode_access_token(id)
+    logging.info(user_info)
+
+    if "error" in user_info:
+        await manager.disconnect(websocket)
+        return
 
     try:
         logging.info(f"Client #{id} connected for health metrics")

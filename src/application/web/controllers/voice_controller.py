@@ -68,6 +68,9 @@ async def websocket_endpoint(
 ):
     user_info = auth_interface.decode_access_token(client_id)
     logging.info(user_info)
+    if "error" in user_info:
+        await manager.disconnect(websocket)
+        return
     await manager.connect(websocket, client_id, "voice")
     messages_received = []
 
@@ -111,6 +114,10 @@ async def websocket_endpoint_query(
 ):
     user_info = auth_interface.decode_access_token(client_id)
     logging.info(user_info)
+
+    if "error" in user_info:
+        await manager.disconnect(websocket)
+        return
     await manager.connect(websocket, client_id, "voice")
     messages_received = []
 
