@@ -17,7 +17,6 @@ async def websocket_endpoint(
     voice_interface: VoiceInterface = Depends(voice_service),
 ):
     user_info = auth_interface.decode_access_token(client_id)
-    print(user_info)
 
     if "error" in user_info:
         await manager.disconnect(websocket)

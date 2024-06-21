@@ -38,7 +38,7 @@ class ChatInterface(ABC):
     async def streaming_voice_assessment_response(
         self, user: str, query: str, all_messages: List[Dict[str, str]]
     ) -> AsyncGenerator[Dict[str, Any], None]:
-        """Generate a streaming LLM response based on the user, query, and previous messages."""
+        """Generate a streaming voice response based on the user, query, and previous messages."""
         pass
 
 
