@@ -14,7 +14,7 @@ class SearchService:
         self.search_repository = search_repository
 
     def search(self, query_text: str) -> List[Dict]:
-        logging.info("Searching", query_text)
+        logging.info("Searching")
         search_results = self.search_repository.query_text(query_text)
         logging.info(search_results)
         return search_results
