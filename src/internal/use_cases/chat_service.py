@@ -150,29 +150,19 @@ class ChatService:
         except Exception as e:
             logging.error(f"Failed to get general metrics: {e}")
 
-    def streaming_llm_response(self, user, query, all_messages):
-
+    async def streaming_llm_response(self, user, query, all_messages):
         # Get the chat response
-        responses = self.chat_repository.streaming_llm_response(query, all_messages)
-
-        while True:
-
-            response = next(responses)
-
+        async for response in self.chat_repository.streaming_llm_response(query, all_messages):
             logging.info("Receiving the data", response)
 
             # Check if the response is a summary
             if response["is_last"] == True:
-                logging.info(
-                    "Updationg data to database the data",
-                )
+                logging.info("Updating data to database")
                 try:
-
                     # Check if the user exists in the database
                     if_data_exists = self.database_repository.find_single_document(
                         "email", user, "quantitative_metrics"
                     )
-
                     logging.info(f"response: {if_data_exists}")
 
                     # Add the timestamp to the response
@@ -187,8 +177,6 @@ class ChatService:
                             response["response_schema"],
                             "quantitative_metrics",
                         )
-
-                    # If the user does not exist in the database, create a new document
                     else:
                         self.database_repository.insert_single_document(
                             {
@@ -199,24 +187,20 @@ class ChatService:
                         )
 
                     # Return the response
-                    return responses
+                    yield response
 
                 except Exception as e:
                     logging.error(f"Failed to save chat response: {e}")
             else:
-                return responses
+                yield response
 
-    def streaming_voice_assessment_response(self, user, query, all_messages):
+
+    async def streaming_voice_assessment_response(self, user, query, all_messages):
 
         # Get the chat response
-        responses = self.chat_repository.streaming_voice_assessment_response(
+        async for response in self.chat_repository.streaming_voice_assessment_response(
             query, all_messages
-        )
-
-        while True:
-
-            response = next(responses)
-
+        ):
             logging.info("Receiving the data", response)
 
             # Check if the response is a summary
@@ -257,20 +241,21 @@ class ChatService:
                         )
 
                     # Return the response
-                    return responses
+                    yield response
 
                 except Exception as e:
                     logging.error(f"Failed to save chat response: {e}")
             else:
-                return responses
-
+                yield response
+    
     def get_fhir_data(self, encoded_image):
         return self.chat_repository.get_fhir_data(encoded_image)
 
     def general_chat_query(self, query, previous_messages):
         return self.chat_repository.general_chat_query(query, previous_messages)
 
-    def get_streaming_voice_response(self, query, previous_messages):
-        return self.chat_repository.get_streaming_voice_response(
+    async def get_streaming_voice_response(self, query, previous_messages):
+        async for result in  self.chat_repository.get_streaming_voice_response(
             query, previous_messages
-        )
+        ):
+            yield result

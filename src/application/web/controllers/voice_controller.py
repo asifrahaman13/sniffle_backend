@@ -17,7 +17,13 @@ async def websocket_endpoint(
     voice_interface: VoiceInterface = Depends(voice_service),
 ):
     user_info = auth_interface.decode_access_token(client_id)
+    print(user_info)
+
+    if "error" in user_info:
+        await manager.disconnect(websocket)
+        return
     logging.info(user_info)
+    # user_info = {"sub": "1234"}
     # Connect the websocket
     await manager.connect(websocket, client_id, "voice")
 
@@ -35,21 +41,15 @@ async def websocket_endpoint(
             """
             logging.info("messages received")
             logging.info(messages_received)
-            llm_streaming_response = chat_interface.streaming_llm_response(
+            async for sentences in chat_interface.streaming_llm_response(
                 user_info["sub"], message["query"], messages_received
-            )
-
-            gen = llm_streaming_response
-
-            while True:
+            ):
                 try:
-                    sentences = next(gen)
                     sentences = sentences["response"]
-                    logging.info("llm_streaming_response")
+                    logging.info("####################################################### Receiving llm_streaming_response")
                     logging.info(sentences)
                     text_to_audio_base64 = voice_interface.voice_response(sentences)
                     await manager.send_personal_message(text_to_audio_base64, websocket)
-                    # messages_received=[]
                 except StopIteration:
                     break
 
@@ -83,21 +83,16 @@ async def websocket_endpoint(
             """
             logging.info("messages received")
             logging.info(messages_received)
-            llm_streaming_response = chat_interface.streaming_voice_assessment_response(
+    
+            async for sentences in chat_interface.streaming_voice_assessment_response(
                 user_info["sub"], message["query"], messages_received
-            )
-
-            gen = llm_streaming_response
-
-            while True:
+            ):
                 try:
-                    sentences = next(gen)
                     sentences = sentences["response"]
-                    logging.info("llm_streaming_response")
+                    logging.info("####################################################### Receiving llm_streaming_response")
                     logging.info(sentences)
                     text_to_audio_base64 = voice_interface.voice_response(sentences)
                     await manager.send_personal_message(text_to_audio_base64, websocket)
-                    # messages_received=[]
                 except StopIteration:
                     break
 
@@ -131,15 +126,10 @@ async def websocket_endpoint_query(
             """
             logging.info("messages received")
             logging.info(messages_received)
-            llm_streaming_response = chat_interface.get_streaming_voice_response(
+            async for sentences in chat_interface.get_streaming_voice_response(
                 message["query"], messages_received
-            )
-
-            gen = llm_streaming_response
-
-            while True:
+            ):
                 try:
-                    sentences = next(gen)
                     sentences = sentences["response"]
                     logging.info("llm_streaming_response")
                     logging.info(sentences)

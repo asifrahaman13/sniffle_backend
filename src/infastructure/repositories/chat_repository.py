@@ -1,7 +1,7 @@
+import asyncio
 import json
 import logging
 import time
-
 from config.config import OPEN_AI_API_KEY
 from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
@@ -292,22 +292,14 @@ class ChatResponseRepository:
 
         return {"summary": False, "response": response}
 
-    def streaming_llm_response(self, _query, previous_messages=[]):
-
+    async def streaming_llm_response(self, _query, previous_messages=[]):
         messages = previous_messages.copy()
+        messages.append({"role": "user", "content": _query})
         messages.append(
-            {"role": "user", "content": _query},
+            {"role": "system", "content": Prompts.STREAMING_LLM_RESPONSE.value}
         )
-        messages.append(
-            {
-                "role": "system",
-                "content": Prompts.STREAMING_LLM_RESPONSE.value,
-            },
-        )
-        # Record the start time
-        start_time = time.time()
 
-        # Create a completion
+        start_time = time.time()
         stream = self.__client.chat.completions.create(
             model=self.__model,
             messages=messages,
@@ -316,74 +308,49 @@ class ChatResponseRepository:
             temperature=self.__temperature,
         )
 
-        # Initialize a buffer to store the sentence
         sentence_buffer = ""
-
         total_text = ""
-        # Iterate over the stream of chunks
         for chunk in stream:
-
-            # Check if the completion is a message
             if chunk.choices[0].delta.content is not None:
-
-                # Append the chunk to the buffer
                 sentence_buffer += chunk.choices[0].delta.content
-
                 total_text += chunk.choices[0].delta.content
 
-                # Check if the sentence is complete
                 if sentence_buffer.endswith((".", "!", "?")):
-                    # Record the end time
                     end_time = time.time()
-
-                    # Calculate the elapsed time
                     elapsed_time = end_time - start_time
-
                     logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
 
-                    # Yield the sentence
-
-                    logging.info("Sending", {"response": total_text, "is_last": True})
+                    await asyncio.sleep(0)
                     yield {
                         "response": sentence_buffer.strip(),
                         "is_last": False,
                     }
+                    await asyncio.sleep(0)
                     sentence_buffer = ""
 
         previous_messages.append({"role": "system", "content": total_text})
 
         if detect_summary(total_text):
             json_parased_quanitative_data = {"summary": total_text}
-            logging.info(
-                "Sending",
-                {
-                    "response": total_text,
-                    "is_last": True,
-                    "response_schema": json_parased_quanitative_data,
-                },
-            )
+            await asyncio.sleep(0)
             yield {
                 "response": total_text,
                 "is_last": True,
                 "response_schema": json_parased_quanitative_data,
             }
+            await asyncio.sleep(0)
 
-    def streaming_voice_assessment_response(self, _query, previous_messages=[]):
-
+    async def streaming_voice_assessment_response(self, _query, previous_messages=[]):
         messages = previous_messages.copy()
-        messages.append(
-            {"role": "user", "content": _query},
-        )
+        messages.append({"role": "user", "content": _query})
         messages.append(
             {
                 "role": "system",
                 "content": Prompts.STREAMING_VOICE_ASSESSMENT_RESPONSE.value,
-            },
+            }
         )
-        # Record the start time
-        start_time = time.time()
 
-        # Create a completion
+        start_time = time.time()
         stream = self.__client.chat.completions.create(
             model=self.__model,
             messages=messages,
@@ -392,53 +359,37 @@ class ChatResponseRepository:
             temperature=self.__temperature,
         )
 
-        # Initialize a buffer to store the sentence
         sentence_buffer = ""
-
         total_text = ""
-        # Iterate over the stream of chunks
         for chunk in stream:
-
-            # Check if the completion is a message
             if chunk.choices[0].delta.content is not None:
-
-                # Append the chunk to the buffer
                 sentence_buffer += chunk.choices[0].delta.content
-
                 total_text += chunk.choices[0].delta.content
 
-                # Check if the sentence is complete
                 if sentence_buffer.endswith((".", "!", "?")):
-                    # Record the end time
                     end_time = time.time()
-
-                    # Calculate the elapsed time
                     elapsed_time = end_time - start_time
-
                     logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
-                    logging.info("Sending", {"response": total_text, "is_last": True})
+
+                    await asyncio.sleep(0)
                     yield {
                         "response": sentence_buffer.strip(),
                         "is_last": False,
                     }
+                    await asyncio.sleep(0)
                     sentence_buffer = ""
 
         previous_messages.append({"role": "system", "content": total_text})
+
         if detect_summary(total_text):
             json_parased_quanitative_data = {"summary": total_text}
-            logging.info(
-                "Sending",
-                {
-                    "response": total_text,
-                    "is_last": True,
-                    "response_schema": json_parased_quanitative_data,
-                },
-            )
+            await asyncio.sleep(0)
             yield {
                 "response": total_text,
                 "is_last": True,
                 "response_schema": json_parased_quanitative_data,
             }
+            await asyncio.sleep(0)
 
     def get_fhir_data(self, encoded_image):
         response = self.__client.chat.completions.create(
@@ -490,7 +441,7 @@ class ChatResponseRepository:
         response = response.choices[0].message.content
         return {"response": response}
 
-    def get_streaming_voice_response(self, _query, previous_messages=[]):
+    async def get_streaming_voice_response(self, _query, previous_messages=[]):
 
         messages = previous_messages.copy()
         messages.append(
@@ -538,7 +489,9 @@ class ChatResponseRepository:
                     elapsed_time = end_time - start_time
 
                     logging.info(f"Elapsed time for open ai: {elapsed_time} seconds")
+                    await asyncio.sleep(0)
                     yield {"response": sentence_buffer.strip()}
+                    await asyncio.sleep(0)
                     sentence_buffer = ""
 
         previous_messages.append({"role": "system", "content": total_text})

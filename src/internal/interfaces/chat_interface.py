@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, List
+from typing import Any, AsyncGenerator, Dict, List
 
 
 class ChatInterface(ABC):
@@ -25,19 +25,22 @@ class ChatInterface(ABC):
         """Retrieve LLM user general metrics based on the user, query, and previous messages."""
         pass
 
+
     @abstractmethod
-    def streaming_llm_response(
+    async def streaming_llm_response(
         self, user: str, query: str, all_messages: List[Dict[str, str]]
-    ) -> None:
+    ) -> AsyncGenerator[Dict[str, Any], None]:
         """Generate a streaming LLM response based on the user, query, and previous messages."""
         pass
 
+
     @abstractmethod
-    def streaming_voice_assessment_response(
+    async def streaming_voice_assessment_response(
         self, user: str, query: str, all_messages: List[Dict[str, str]]
-    ) -> None:
-        """Perform a streaming voice assessment based on the user, query, and previous messages."""
+    ) -> AsyncGenerator[Dict[str, Any], None]:
+        """Generate a streaming LLM response based on the user, query, and previous messages."""
         pass
+
 
     @abstractmethod
     def get_fhir_data(self, encoded_image: str) -> None:
@@ -52,8 +55,8 @@ class ChatInterface(ABC):
         pass
 
     @abstractmethod
-    def get_streaming_voice_response(
+    async def get_streaming_voice_response(
         self, query: str, previous_messages: List[Dict[str, str]]
-    ) -> None:
+    ) -> AsyncGenerator[Dict[str, Any], None]:
         """Get a streaming voice response based on the query and previous messages."""
         pass
