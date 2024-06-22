@@ -32,7 +32,7 @@ class DataService:
             general_metrics = self.database_repository.find_single_document(
                 "email", user, "quantitative_metrics"
             )
-            general_metrics["data"] = general_metrics["data"][-5:]
+            general_metrics["data"] = general_metrics["data"]
 
             # Return the general metrics
             return general_metrics
