@@ -7,7 +7,7 @@ from langchain.output_parsers import PydanticOutputParser
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain_openai import ChatOpenAI
 from openai import OpenAI
-from src.constants.prompts.prompts import Prompts
+from src.constants.prompts.prompts import Prompts, Format
 from src.internal.entities.health_model import (
     GeneralParameters,
     HealthData,
@@ -51,7 +51,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    Prompts.HEALTH_ASSISTANT_FORMAT_PROMPT.value
+                    Format.HEALTH_ASSISTANT_FORMAT_PROMPT.value
                 )
             ],
             # Define the input variables
@@ -69,7 +69,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    Prompts.FORMAT_RECOMMENDATIONS.value
+                    Format.FORMAT_RECOMMENDATIONS.value
                 )
             ],
             # Define the input variables
@@ -87,7 +87,7 @@ class HealthAssistant:
         prompt = ChatPromptTemplate(
             messages=[
                 HumanMessagePromptTemplate.from_template(
-                    Prompts.FORMAT_USER_GENERAL_METRICS_PROMPT.value
+                    Format.FORMAT_USER_GENERAL_METRICS_PROMPT.value
                 )
             ],
             # Define the input variables

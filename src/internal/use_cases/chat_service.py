@@ -187,7 +187,7 @@ class ChatService:
                         )
 
                     # Return the response
-                    yield response
+                    # yield response
 
                 except Exception as e:
                     logging.error(f"Failed to save chat response: {e}")
@@ -241,7 +241,7 @@ class ChatService:
                         )
 
                     # Return the response
-                    yield response
+                    # yield response
 
                 except Exception as e:
                     logging.error(f"Failed to save chat response: {e}")
