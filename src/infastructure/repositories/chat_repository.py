@@ -333,6 +333,8 @@ class ChatResponseRepository:
         if detect_summary(total_text):
             json_parased_quanitative_data = {"summary": total_text}
             await asyncio.sleep(0)
+            assistant = HealthAssistant()
+            json_parased_quanitative_data = assistant.run_health_assistant(total_text)
             yield {
                 "response": total_text,
                 "is_last": True,

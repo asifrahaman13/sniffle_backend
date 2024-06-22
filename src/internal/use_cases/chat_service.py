@@ -152,7 +152,9 @@ class ChatService:
 
     async def streaming_llm_response(self, user, query, all_messages):
         # Get the chat response
-        async for response in self.chat_repository.streaming_llm_response(query, all_messages):
+        async for response in self.chat_repository.streaming_llm_response(
+            query, all_messages
+        ):
             logging.info("Receiving the data", response)
 
             # Check if the response is a summary
@@ -193,7 +195,6 @@ class ChatService:
                     logging.error(f"Failed to save chat response: {e}")
             else:
                 yield response
-
 
     async def streaming_voice_assessment_response(self, user, query, all_messages):
 
@@ -247,7 +248,7 @@ class ChatService:
                     logging.error(f"Failed to save chat response: {e}")
             else:
                 yield response
-    
+
     def get_fhir_data(self, encoded_image):
         return self.chat_repository.get_fhir_data(encoded_image)
 
@@ -255,7 +256,7 @@ class ChatService:
         return self.chat_repository.general_chat_query(query, previous_messages)
 
     async def get_streaming_voice_response(self, query, previous_messages):
-        async for result in  self.chat_repository.get_streaming_voice_response(
+        async for result in self.chat_repository.get_streaming_voice_response(
             query, previous_messages
         ):
             yield result
