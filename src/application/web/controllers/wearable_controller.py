@@ -32,7 +32,11 @@ def temperature_monitor(value: float):
 
 
 @wearable_router.websocket("/ws/{id}")
-async def websocket_endpoint(id: str, websocket: WebSocket,  auth_interface: AuthInterface = Depends(auth_service), ):
+async def websocket_endpoint(
+    id: str,
+    websocket: WebSocket,
+    auth_interface: AuthInterface = Depends(auth_service),
+):
 
     user_info = auth_interface.decode_access_token(id)
     logging.info(user_info)
@@ -48,6 +52,11 @@ async def websocket_endpoint(id: str, websocket: WebSocket,  auth_interface: Aut
         while True:
             data = await websocket.receive_json()
             user_id = id
+
+            await manager.send_personal_message(
+                "You are connected to the server",
+                websocket,
+            )
             # Glucose Level Monitoring
             if "glucoseLevel" in data:
                 glucose_level = float(data["glucoseLevel"])
@@ -55,7 +64,6 @@ async def websocket_endpoint(id: str, websocket: WebSocket,  auth_interface: Aut
                     f"Received glucose level data from user {user_id}: {glucose_level}"
                 )
                 if glucose_monitor(glucose_level):
-                    if int(time.time()) - last_time > 60:
                         logging.info("Glucose level alert")
                         logging.info("Push notification sent")
                         await manager.send_personal_message(
@@ -74,7 +82,6 @@ async def websocket_endpoint(id: str, websocket: WebSocket,  auth_interface: Aut
                     f"Received heart rate data from user {user_id}: {heart_rate}"
                 )
                 if heart_rate_monitor(heart_rate):
-                    if int(time.time()) - last_time > 60:
                         logging.info("Heart rate alert")
                         logging.info("Push notification sent")
                         await manager.send_personal_message(
@@ -93,7 +100,6 @@ async def websocket_endpoint(id: str, websocket: WebSocket,  auth_interface: Aut
                     f"Received blood pressure data from user {user_id}: {blood_pressure}"
                 )
                 if blood_pressure_monitor(blood_pressure):
-                    if int(time.time()) - last_time > 60:
                         logging.info("Blood pressure alert")
                         logging.info("Push notification sent")
                         await manager.send_personal_message(
@@ -112,7 +118,6 @@ async def websocket_endpoint(id: str, websocket: WebSocket,  auth_interface: Aut
                     f"Received temperature data from user {user_id}: {temperature}"
                 )
                 if temperature_monitor(temperature):
-                    if int(time.time()) - last_time > 60:
                         logging.info("Temperature alert")
                         logging.info("Push notification sent")
                         await manager.send_personal_message(

@@ -17,9 +17,6 @@ async def google_sign_in(
     if not id_info:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    # Find or create the user in your database
-    # user = await users_collection.find_one({'googleId': id_info['sub']})
-
     user = database_interface.find_one("googleId", id_info["sub"], "users")
 
     if not user:
