@@ -64,21 +64,21 @@ metadata = [
         "agent_id": "general_voice_response",
         "agent_type": "voice",
     },
-     {
+    {
         "screen": "About Data Collection",
         "intent": True,
         "chatVariant": "General voice agent",
         "agent_id": "general_voice_response",
         "agent_type": "voice",
     },
-     {
+    {
         "screen": "About our general conversation agent",
         "intent": True,
         "chatVariant": "General voice agent",
         "agent_id": "general_voice_response",
         "agent_type": "voice",
     },
-     {
+    {
         "screen": "About our tools",
         "intent": True,
         "chatVariant": "General voice agent",

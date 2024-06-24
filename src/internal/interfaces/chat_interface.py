@@ -25,7 +25,6 @@ class ChatInterface(ABC):
         """Retrieve LLM user general metrics based on the user, query, and previous messages."""
         pass
 
-
     @abstractmethod
     async def streaming_llm_response(
         self, user: str, query: str, all_messages: List[Dict[str, str]]
@@ -33,14 +32,12 @@ class ChatInterface(ABC):
         """Generate a streaming LLM response based on the user, query, and previous messages."""
         pass
 
-
     @abstractmethod
     async def streaming_voice_assessment_response(
         self, user: str, query: str, all_messages: List[Dict[str, str]]
     ) -> AsyncGenerator[Dict[str, Any], None]:
         """Generate a streaming voice response based on the user, query, and previous messages."""
         pass
-
 
     @abstractmethod
     def get_fhir_data(self, encoded_image: str) -> None:

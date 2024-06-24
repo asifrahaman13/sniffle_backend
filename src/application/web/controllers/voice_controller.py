@@ -45,7 +45,9 @@ async def websocket_endpoint(
             ):
                 try:
                     sentences = sentences["response"]
-                    logging.info("####################################################### Receiving llm_streaming_response")
+                    logging.info(
+                        "####################################################### Receiving llm_streaming_response"
+                    )
                     logging.info(sentences)
                     text_to_audio_base64 = voice_interface.voice_response(sentences)
                     await manager.send_personal_message(text_to_audio_base64, websocket)
@@ -85,13 +87,15 @@ async def websocket_endpoint(
             """
             logging.info("messages received")
             logging.info(messages_received)
-    
+
             async for sentences in chat_interface.streaming_voice_assessment_response(
                 user_info["sub"], message["query"], messages_received
             ):
                 try:
                     sentences = sentences["response"]
-                    logging.info("####################################################### Receiving llm_streaming_response")
+                    logging.info(
+                        "####################################################### Receiving llm_streaming_response"
+                    )
                     logging.info(sentences)
                     text_to_audio_base64 = voice_interface.voice_response(sentences)
                     await manager.send_personal_message(text_to_audio_base64, websocket)

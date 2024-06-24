@@ -56,7 +56,7 @@ async def lifespan(_: FastAPI):
 
     # Initialize Qdrant
     # search_repository.initialize_qdrant()
-    
+
     redis_connection = redis.from_url(REDIS_URL, encoding="utf8")
     await FastAPILimiter.init(
         redis=redis_connection,
@@ -146,7 +146,7 @@ scheduler.start()
 @app.get(
     "/health",
     dependencies=[
-        Depends(RateLimiter(times=3, seconds=10, identifier=client_identifier))
+        Depends(RateLimiter(times=10, seconds=10, identifier=client_identifier))
     ],
 )
 async def health_check(request: Request):

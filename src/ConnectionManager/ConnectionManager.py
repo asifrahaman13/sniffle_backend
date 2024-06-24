@@ -9,6 +9,7 @@ and is used to identify the connection in the system. The ConnectionManager uses
 the connections.
 """
 
+
 class ConnectionManager:
     def __init__(self):
         self.redis_client = redis.Redis(

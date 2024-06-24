@@ -123,7 +123,7 @@ async def websocket_endpoint(
     if user_info is None or "error" in user_info:
         await manager.send_personal_message("Invalid token", websocket)
         return
-    
+
     # Connect the websocket
     await manager.connect(websocket, client_id, "data")
 
@@ -175,7 +175,7 @@ async def websocket_general_chat(
     if user_info is None or "error" in user_info:
         await manager.send_personal_message("Invalid token", websocket)
         return
-    
+
     # Connect the websocket
     await manager.connect(websocket, client_id, "data")
 

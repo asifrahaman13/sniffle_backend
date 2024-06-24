@@ -78,7 +78,7 @@ async def get_all_json(
 ):
     # Get all the JSON files uploaded by the specified user
 
-    user=auth_interface.decode_access_token(token)
+    user = auth_interface.decode_access_token(token)
     all_json_files = database_interface.find_all_documents_from_field(
         "username", user["sub"], "json_files"
     )
@@ -89,13 +89,18 @@ async def get_all_json(
             status_code=404, detail="No JSON files found for the specified user"
         )
 
+
 @fhir_router.post("/presigned-url")
 async def get_presigned_url(
-    file_name: FileName, aws_interface: AWSInterface = Depends(aws_service),token: str = Header(..., alias="Authorization"),
+    file_name: FileName,
+    aws_interface: AWSInterface = Depends(aws_service),
+    token: str = Header(..., alias="Authorization"),
 ):
     logging.info(file_name)
     # Get the presigned URL for the specified file name
-    presigned_url = aws_interface.get_presigned_json_url(file_name=file_name.fileName + ".json")
+    presigned_url = aws_interface.get_presigned_json_url(
+        file_name=file_name.fileName + ".json"
+    )
 
     # Return the presigned URL
     if presigned_url:

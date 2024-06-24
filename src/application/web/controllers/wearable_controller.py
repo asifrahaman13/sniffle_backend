@@ -62,15 +62,15 @@ async def websocket_endpoint(
                     f"Received glucose level data from user {user_id}: {glucose_level}"
                 )
                 if glucose_monitor(glucose_level):
-                        logging.info("Glucose level alert")
-                        logging.info("Push notification sent")
-                        await manager.send_personal_message(
-                            "Hey your current glucose level: {} is unusual. Please take care.".format(
-                                data["glucoseLevel"]
-                            ),
-                            websocket,
-                        )
-                        await asyncio.sleep(1)
+                    logging.info("Glucose level alert")
+                    logging.info("Push notification sent")
+                    await manager.send_personal_message(
+                        "Hey your current glucose level: {} is unusual. Please take care.".format(
+                            data["glucoseLevel"]
+                        ),
+                        websocket,
+                    )
+                    await asyncio.sleep(1)
 
             # Heart Rate Monitoring
             if "heartRate" in data:
@@ -79,15 +79,15 @@ async def websocket_endpoint(
                     f"Received heart rate data from user {user_id}: {heart_rate}"
                 )
                 if heart_rate_monitor(heart_rate):
-                        logging.info("Heart rate alert")
-                        logging.info("Push notification sent")
-                        await manager.send_personal_message(
-                            "Hey your current heart rate level: {} is unusual. Please take care.".format(
-                                data["heartRate"]
-                            ),
-                            websocket,
-                        )
-                        await asyncio.sleep(1)
+                    logging.info("Heart rate alert")
+                    logging.info("Push notification sent")
+                    await manager.send_personal_message(
+                        "Hey your current heart rate level: {} is unusual. Please take care.".format(
+                            data["heartRate"]
+                        ),
+                        websocket,
+                    )
+                    await asyncio.sleep(1)
 
             # Blood Pressure Monitoring
             if "bloodPressure" in data:
@@ -96,15 +96,15 @@ async def websocket_endpoint(
                     f"Received blood pressure data from user {user_id}: {blood_pressure}"
                 )
                 if blood_pressure_monitor(blood_pressure):
-                        logging.info("Blood pressure alert")
-                        logging.info("Push notification sent")
-                        await manager.send_personal_message(
-                            "Hey your current blood pressure level: {} is unusual. Please take care.".format(
-                                data["bloodPressure"]
-                            ),
-                            websocket,
-                        )
-                        await asyncio.sleep(1)
+                    logging.info("Blood pressure alert")
+                    logging.info("Push notification sent")
+                    await manager.send_personal_message(
+                        "Hey your current blood pressure level: {} is unusual. Please take care.".format(
+                            data["bloodPressure"]
+                        ),
+                        websocket,
+                    )
+                    await asyncio.sleep(1)
 
             # Temperature Monitoring
             if "temperature" in data:
@@ -113,14 +113,14 @@ async def websocket_endpoint(
                     f"Received temperature data from user {user_id}: {temperature}"
                 )
                 if temperature_monitor(temperature):
-                        logging.info("Temperature alert")
-                        logging.info("Push notification sent")
-                        await manager.send_personal_message(
-                            "Hey your current temperature level: {} is unusual. Please take care.".format(
-                                data["temperature"]
-                            ),
-                            websocket,
-                        )
-                        await asyncio.sleep(1)
+                    logging.info("Temperature alert")
+                    logging.info("Push notification sent")
+                    await manager.send_personal_message(
+                        "Hey your current temperature level: {} is unusual. Please take care.".format(
+                            data["temperature"]
+                        ),
+                        websocket,
+                    )
+                    await asyncio.sleep(1)
     except Exception as e:
         await manager.disconnect(websocket, "wearable")

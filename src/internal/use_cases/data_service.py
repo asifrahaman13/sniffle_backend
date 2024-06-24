@@ -13,6 +13,8 @@ import logging
 Data Service class is responsible for handling the data related operations.
 When user requests for data, the data service interacts with the database repository.
 """
+
+
 class DataService:
 
     def __call__(self) -> DataInterface:
@@ -52,12 +54,13 @@ class DataService:
             return assessment_metrics
         except Exception as e:
             logging.error(f"Failed to get assessment metrics: {e}")
-    
+
     """
     Schedule recommendations for all users. Not binded to any API endpoint. 
     Currently this function is called every day at 10:30 AM. However we may need
     to change this to a more dynamic approach.
     """
+
     def schedule_recommendations(self):
         try:
             # Get all the users
