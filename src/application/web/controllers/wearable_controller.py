@@ -31,14 +31,14 @@ def temperature_monitor(value: float):
         return True
 
 
-@wearable_router.websocket("/ws/{id}")
+@wearable_router.websocket("/ws/{user_id}")
 async def websocket_endpoint(
-    id: str,
+    user_id: str,
     websocket: WebSocket,
     auth_interface: AuthInterface = Depends(auth_service),
 ):
 
-    user_info = auth_interface.decode_access_token(id)
+    user_info = auth_interface.decode_access_token(user_id)
     logging.info(user_info)
 
     if "error" in user_info:
@@ -46,12 +46,10 @@ async def websocket_endpoint(
         return
 
     try:
-        logging.info(f"Client #{id} connected for health metrics")
-        await manager.connect(websocket, id, connection_type="wearable")
-        last_time = int(time.time())
+        logging.info(f"Client #{user_id} connected for health metrics")
+        await manager.connect(websocket, user_id, connection_type="wearable")
         while True:
             data = await websocket.receive_json()
-            user_id = id
 
             await manager.send_personal_message(
                 "You are connected to the server",
@@ -73,7 +71,6 @@ async def websocket_endpoint(
                             websocket,
                         )
                         await asyncio.sleep(1)
-                        last_time = int(time.time())
 
             # Heart Rate Monitoring
             if "heartRate" in data:
@@ -91,7 +88,6 @@ async def websocket_endpoint(
                             websocket,
                         )
                         await asyncio.sleep(1)
-                        last_time = int(time.time())
 
             # Blood Pressure Monitoring
             if "bloodPressure" in data:
@@ -109,7 +105,6 @@ async def websocket_endpoint(
                             websocket,
                         )
                         await asyncio.sleep(1)
-                        last_time = int(time.time())
 
             # Temperature Monitoring
             if "temperature" in data:
@@ -127,7 +122,5 @@ async def websocket_endpoint(
                             websocket,
                         )
                         await asyncio.sleep(1)
-                        last_time = int(time.time())
-
     except Exception as e:
         await manager.disconnect(websocket, "wearable")
