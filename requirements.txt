@@ -25,7 +25,6 @@ fastapi==0.111.0
 fastapi-cli==0.0.4
 fastapi-limiter==0.1.6
 filelock==3.14.0
-flake8==7.0.0
 frozenlist==1.4.1
 google-auth==2.29.0
 google-auth-oauthlib==1.2.0
